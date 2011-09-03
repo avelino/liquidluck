@@ -1,0 +1,13 @@
+*.pyc
+*.pyo
+*.egg-info
+bin
+build
+develop-eggs
+dist
+eggs
+parts
+.DS_Store
+.installed.cfg
+deploy
+content

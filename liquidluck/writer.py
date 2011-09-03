@@ -16,10 +16,14 @@ import log
 
 builtin_templates = os.path.join(os.path.dirname(__file__), 'templates')
 
+
 class Writer(object):
     def __init__(self, config, projectdir):
         self.config = config
         self.projectdir = projectdir
+        self.stacks = []
+        self.folders = []
+        self.years = []
 
         tpl = os.path.join(projectdir, config.site.get('template', 'templates'))
         self.jinja = Environment(
@@ -30,16 +34,29 @@ class Writer(object):
 
     @property
     def postdir(self):
-        return os.path.join(self.projectdir, 'content')
+        _dir = self.config.get('postdir', 'content')
+        return os.path.join(self.projectdir, _dir)
 
     @property
     def deploydir(self):
-        return os.path.join(self.projectdir, 'deploy')
+        _dir = self.config.get('deploydir', 'deploy')
+        return os.path.join(self.projectdir, _dir)
 
     def walk(self):
         for root, dirs, files in os.walk(self.postdir):
             for f in files:
                 yield os.path.join(root, f)
+
+    def calc(self):
+        for f in self.walk():
+            print f
+            rst = rstReader(f).render_rst()
+            docinfo = rst['docinfo']
+            folder = docinfo.get('folder', None)
+            if folder:
+                self.folders = yield folder, rst
+
+            self.stacks = yield rst
 
 
     def mkdir_dest_folder(self, folder=None):
@@ -50,34 +67,25 @@ class Writer(object):
         if not os.path.isdir(dest):
             os.makedirs(dest)
         return dest
+    
 
-    def post_dest(self, filepath, folder=None):
-        name = filepath.split('/')[-1]
-        name = name.replace('rst', 'html')
-        if folder:
-            dest = os.path.join(self.deploydir, folder, name)
-        else:
-            dest = os.path.join(self.deploydir, name)
-        return dest
-
-    def write_post(self, filepath):
-        rst = rstReader(filepath)
-        rst_parts = rst.render_rst()
+    def write_post(self, rst_parts):
         docinfo = dict(rst_parts['docinfo'])
         public = docinfo.get('public', 'true')
         if 'false' == public.lower():
-            log.warn(filepath)
             return # this is a secret post
 
         folder = docinfo.get('folder', None)
         self.mkdir_dest_folder(folder)
 
-        f = open(self.post_dest(filepath, folder), 'w')
-        html = self._jinja_render('post.html', {'rst': rst_parts})
+        _path = rst_parts['file'].naked_slug + '.html'
+        dest = os.path.join(self.deploydir, _path)
+        f = open(dest, 'w')
+        _tpl = docinfo.get('tpl', 'post.html')
+        html = self._jinja_render(_tpl, {'rst': rst_parts})
         f.write(html)
         f.close()
-        log.info(filepath)
-        return self._calc(filepath, rst)
+        return 
 
     def write_archive(self, rsts, dest='archive.html'):
         folders = dest.split('/')
@@ -86,8 +94,7 @@ class Writer(object):
             self.mkdir_dest_folder(folder)
         dest = os.path.join(self.deploydir, dest)
 
-    def _calc(self, filepath, rst):
-        pass
+
 
     def _jinja_render(self, template, context={}):
         prepare = {'site': self.config.site, 'context': self.config.context}

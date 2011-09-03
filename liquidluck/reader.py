@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import os.path
 from xml.dom import minidom
 from docutils import nodes
 from docutils.core import publish_parts
@@ -40,6 +41,7 @@ class Pygments(Directive):
 directives.register_directive('code-block', Pygments)
 directives.register_directive('sourcecode', Pygments)
 
+
 class rstParser(object):
     def __init__(self, filepath):
         self.filepath = filepath
@@ -75,6 +77,7 @@ class rstParser(object):
 
     def read(self):
         f = open(self.filepath)
+        print 'open'
         content = f.read()
         f.close()
 
@@ -98,11 +101,28 @@ class rstParser(object):
 class rstReader(object):
     def __init__(self, filepath):
         self.filepath = filepath
+        self.parts = rstParser(filepath).read()
 
-    def get_mtitme(self):
+    def get_info(self, key, value=None):
+        docinfo = dict(self.parts['docinfo'])
+        return docinfo.get(key, value)
+
+    @property
+    def mtitme(self):
         stat = os.stat(self.filepath)
         return stat.st_mtime
 
-    def render_rst(self):
-        rst = rstParser(self.filepath)
-        return rst.read()
+    @property
+    def filename(self):
+        folder, filename = os.path.split(self.filepath)
+        return filename
+
+    @property
+    def suffix(self):
+        name, suffix = self.filename.split('.')
+        return suffix
+
+    @property
+    def slug(self):
+        name, suffix = self.filename.split('.')
+        return name

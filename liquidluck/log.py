@@ -5,6 +5,7 @@ import sys
 import os
 import datetime
 
+now = datetime.datetime.now().strftime(' %H:%M:%S ')
 
 global ANSI
 ANSI = {
@@ -35,21 +36,15 @@ class ANSIFormatter(Formatter):
     ## colors:
 
     def format(self, record):
-        return self._format(record)
+        return ANSI['white'](now) + self._format(record)
 
-    def _format(self, record):
-        if record.levelname is 'INFO':
-            return ANSI['cyan']('-> ') + unicode(record.msg)
-        elif record.levelname is 'WARNING':
-            return ANSI['yellow'](record.levelname) + ': ' + unicode(record.msg)
-        elif record.levelname is 'ERROR':
-            return ANSI['red'](record.levelname) + ': ' + unicode(record.msg)
-        elif record.levelname is 'CRITICAL':
-            return ANSI['bgred'](record.levelname) + ': ' + unicode(record.msg)
-        elif record.levelname is 'DEBUG':
-            return ANSI['bggrey'](record.levelname) + ': ' + unicode(record.msg)
+    def format(self, record):
+        _d = {'INFO': 'cyan', 'WARNING': 'yellow', 'ERROR':'red',
+              'CRITICAL': 'bgred', 'DEBUG': 'bggrey'}
+        if record.levelname in _d.keys():
+            return ANSI[_d[record.levelname]](record.levelname) + ANSI['green'](now) + unicode(record.msg)
         else:
-            return ANSI['white'](record.levelname) + ': ' + unicode(record.msg)
+            return ANSI['white'](record.levelname) + ANSI['green'](now) + unicode(record.msg)
 
 
 class TextFormatter(Formatter):
