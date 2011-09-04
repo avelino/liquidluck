@@ -92,7 +92,8 @@ class rstParser(object):
 
         # get docinfo
         docinfo = []
-        dom = minidom.parseString(parts['docinfo'].replace('\n',''))
+        content = parts['docinfo'].replace('\n','')
+        dom = minidom.parseString(content.encode('utf-8'))
         nodes = dom.getElementsByTagName('tr')
         for node in nodes:
             docinfo.append(self._node_to_pairs(node))

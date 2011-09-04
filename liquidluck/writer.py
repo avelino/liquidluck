@@ -12,7 +12,7 @@ except ImportError:
 
 from jinja2 import Environment, FileSystemLoader, Markup
 from reader import rstReader
-from config import Temp
+from utils import Temp, Pagination
 
 import logger
 
@@ -64,6 +64,9 @@ class Walker(object):
 
         return os.path.join(url, name) + '?t=' + str(stat)
 
+    def content_url(self, *args):
+        return '/{0}/'.format(os.path.join(*args).lstrip('/'))
+
     def walk(self):
         for root, dirs, files in os.walk(self.postdir):
             for f in files:
@@ -80,7 +83,6 @@ class Walker(object):
                     )
                     self.mkdir_dest_folder(dest)
                     shutil.copy(path, dest)
-                    #TODO
 
 class Cache(object):
     def __init__(self):
@@ -128,46 +130,54 @@ class Writer(Walker):
             extensions = ['jinja2.ext.autoescape', 'jinja2.ext.with_'],
         )
 
+    def _write(self, params, tpl, dest):
+        dest = os.path.join(self.deploydir, dest)
+        self.mkdir_dest_folder(dest)
+        f = open(dest, 'w')
+        html = self._jinja_render(tpl, params)
+        f.write(html.encode('utf-8'))
+        f.close()
+        return 
+
     def write_post(self, rst):
         public = rst.get_info('public', 'true')
         if 'false' == public.lower():
             return # this is a secret post
-
-        dest = os.path.join(self.deploydir, rst.destination)
-        self.mkdir_dest_folder(dest)
-
-        f = open(dest, 'w')
         _tpl = rst.get_info('tpl', 'post.html')
-        html = self._jinja_render(_tpl, {'rst': rst})
-        f.write(html)
-        f.close()
-        return 
+        self._write({'rst':rst}, _tpl, rst.destination)
+        return
 
-    def write_archive(self, rsts, title='Archive', dest='archive.html'):
-        dest = os.path.join(self.deploydir, dest)
-        self.mkdir_dest_folder(dest)
 
-        f = open(dest, 'w')
+    def write_pagination(self, rsts, title='Archive', dest='archive.html'):
+        perpage = int(self.config.get('perpage', 30))
+        paginator = Pagination(rsts, perpage)
         _tpl = self.config.get('archive_template', 'archive.html')
-        html = self._jinja_render(_tpl, {'title': title, 'rsts': rsts})
-        f.write(html)
-        f.close()
-        return 
+
+        # first page
+        folder, filename = os.path.split(dest)
+        folder = os.path.join(folder, 'page')
+
+        pagi = paginator.get_current_page(1)
+        pagi.folder = folder
+        params = {'title': title, 'pagi': pagi}
+        self._write(params, _tpl, dest)
+
+        for p in range(paginator.pages):
+            dest = os.path.join(folder, '{0}.html'.format(p+1))
+            pagi= paginator.get_current_page(p+1)
+            pagi.folder = folder
+            params = {'title': title, 'pagi': pagi}
+            self._write(params, _tpl, dest)
+
+        return
+
 
     def write_feed(self, rsts, dest='feed.xml'):
-        dest = os.path.join(self.deploydir, dest)
-        self.mkdir_dest_folder(dest)
-
-        f = open(dest, 'w')
         _tpl = self.config.get('feed_template', 'feed.xml')
-        html = self._jinja_render(_tpl, {'rsts': rsts})
-        f.write(html)
-        f.close()
-        return 
+        return self._write({'rsts': rsts}, _tpl, dest)
 
     def write_tagcloud(self, tagcloud):
-        dest = os.path.join(self.deploydir, 'tag/index.html')
-        self.mkdir_dest_folder(dest)
+        dest = 'tag/index.html'
 
         tags = []
         for k, v in tagcloud.iteritems():
@@ -177,47 +187,44 @@ class Writer(Walker):
             tag.size = 100 + log(tag.count or 1)*20
             tags.append(tag)
 
-        f = open(dest, 'w')
         _tpl = self.config.get('tagcloud_template', 'tagcloud.html')
-        html = self._jinja_render(_tpl, {'tags': tags})
-        f.write(html)
-        f.close()
-        return 
+        return self._write({'tags':tags}, _tpl, dest)
 
     def _jinja_render(self, template, context={}):
         prepare = {}
         prepare['context'] = self.config.context
-        prepare['static_url' ] = self.static_url
+        prepare['static_url'] = self.static_url
+        prepare['content_url'] = self.content_url
         context.update(prepare)
         tpl = self.jinja.get_template(template)
         return tpl.render(context)
 
     def run(self):
         rsts = sort_rsts(self.walk())
-        print rsts
+
         for rst in self._calc_single_posts(rsts):
             self.write_post(rst)
 
         for k,v in merge(self._calc_folder_posts(rsts)).iteritems():
             dest = os.path.join(k, 'index.html')
-            self.write_archive(v, k, dest)
+            self.write_pagination(v, k, dest)
             dest = os.path.join(k, 'feed.xml')
             self.write_feed(v, dest)
 
         for k, v in merge(self._calc_year_posts(rsts)).iteritems():
             dest = os.path.join(str(k), 'index.html')
-            self.write_archive(v, k, dest)
+            self.write_pagination(v, k, dest)
             dest = os.path.join(str(k), 'feed.xml')
             self.write_feed(v, dest)
 
         tagcloud = merge(self._calc_tag_posts(rsts))
         for k, v in tagcloud.iteritems():
             dest = os.path.join('tag', k + '.html')
-            self.write_archive(v, k, dest)
+            self.write_pagination(v, k, dest)
         self.write_tagcloud(tagcloud)
 
         archives = self._calc_archive_posts(rsts)
-        self.write_archive(archives)
+        self.write_pagination(archives)
         self.write_feed(archives, 'feed.xml')
 
         logger.info('finished')
