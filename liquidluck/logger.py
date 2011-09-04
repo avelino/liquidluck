@@ -5,8 +5,6 @@ import sys
 import os
 import datetime
 
-now = datetime.datetime.now().strftime(' %H:%M:%S ')
-
 global ANSI
 ANSI = {
     'gray' : lambda(text) : u'\033[1;30m' + unicode(text) + u'\033[1;m',
@@ -34,14 +32,18 @@ class ANSIFormatter(Formatter):
     Convert a `logging.LogReport' object into colored text, using ANSI escape sequences.
     """
     ## colors:
+    
+    @property
+    def now(self):
+        return datetime.datetime.now().strftime(' %H:%M:%S ')
 
     def format(self, record):
         _d = {'INFO': 'cyan', 'WARNING': 'yellow', 'ERROR':'red',
               'CRITICAL': 'bgred', 'DEBUG': 'bggrey'}
         if record.levelname in _d.keys():
-            return ANSI[_d[record.levelname]](record.levelname) + ANSI['green'](now) + unicode(record.msg)
+            return ANSI[_d[record.levelname]](record.levelname) + ANSI['green'](self.now) + unicode(record.msg)
         else:
-            return ANSI['white'](record.levelname) + ANSI['green'](now) + unicode(record.msg)
+            return ANSI['white'](record.levelname) + ANSI['green'](self.now) + unicode(record.msg)
 
 
 class TextFormatter(Formatter):
