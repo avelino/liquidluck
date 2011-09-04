@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import os
+import datetime
+import shutil
 from math import log
 from fnmatch import fnmatch
-import shutil
 try:
     from cStringIO import StringIO
 except ImportError:
     from StringIO import StringIO
 
-from jinja2 import Environment, FileSystemLoader, Markup
+from jinja2 import Environment, FileSystemLoader
 from reader import rstReader
 from utils import Temp, Pagination
 
@@ -21,6 +22,9 @@ builtin_templates = os.path.join(os.path.dirname(__file__), 'templates')
 
 def sort_rsts(rsts, reverse=True):
     return sorted(rsts, key=lambda rst: rst.get_info('date'), reverse=reverse)
+
+def xmldatetime(value):
+    return value.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 class Walker(object):
     _cache = []
@@ -64,8 +68,12 @@ class Walker(object):
 
         return os.path.join(url, name) + '?t=' + str(stat)
 
-    def content_url(self, *args):
-        return '/{0}/'.format(os.path.join(*args).lstrip('/'))
+    def content_url(self, a, *args):
+        path = os.path.join(a, *args)
+        path = '{0}/'.format(path.rstrip('/'))
+        if not path.startswith('http://'):
+            path = '/{0}'.format(path.lstrip('/'))
+        return path
 
     def walk(self):
         for root, dirs, files in os.walk(self.postdir):
@@ -132,6 +140,7 @@ class Writer(Walker):
 
     def _write(self, params, tpl, dest):
         dest = os.path.join(self.deploydir, dest)
+        logger.info('write ' + dest)
         self.mkdir_dest_folder(dest)
         f = open(dest, 'w')
         html = self._jinja_render(tpl, params)
@@ -141,8 +150,6 @@ class Writer(Walker):
 
     def write_post(self, rst):
         public = rst.get_info('public', 'true')
-        if 'false' == public.lower():
-            return # this is a secret post
         _tpl = rst.get_info('tpl', 'post.html')
         self._write({'rst':rst}, _tpl, rst.destination)
         return
@@ -172,9 +179,11 @@ class Writer(Walker):
         return
 
 
-    def write_feed(self, rsts, dest='feed.xml'):
+    def write_feed(self, rsts, extra={} , dest='feed.xml'):
+        rsts = [rst for rst in rsts][:10]
         _tpl = self.config.get('feed_template', 'feed.xml')
-        return self._write({'rsts': rsts}, _tpl, dest)
+        extra.update({'rsts': rsts})
+        return self._write(extra, _tpl, dest)
 
     def write_tagcloud(self, tagcloud):
         dest = 'tag/index.html'
@@ -195,7 +204,9 @@ class Writer(Walker):
         prepare['context'] = self.config.context
         prepare['static_url'] = self.static_url
         prepare['content_url'] = self.content_url
+        prepare['now'] = datetime.datetime.now()
         context.update(prepare)
+        self.jinja.filters['xmldatetime'] = xmldatetime
         tpl = self.jinja.get_template(template)
         return tpl.render(context)
 
@@ -205,17 +216,21 @@ class Writer(Walker):
         for rst in self._calc_single_posts(rsts):
             self.write_post(rst)
 
+        for rst in self._calc_no_posts(rsts):
+            self.write_post(rst)
+
         for k,v in merge(self._calc_folder_posts(rsts)).iteritems():
             dest = os.path.join(k, 'index.html')
             self.write_pagination(v, k, dest)
             dest = os.path.join(k, 'feed.xml')
-            self.write_feed(v, dest)
+            self.write_feed(v, {'folder':k}, dest)
 
         for k, v in merge(self._calc_year_posts(rsts)).iteritems():
-            dest = os.path.join(str(k), 'index.html')
+            k = str(k)
+            dest = os.path.join(k, 'index.html')
             self.write_pagination(v, k, dest)
-            dest = os.path.join(str(k), 'feed.xml')
-            self.write_feed(v, dest)
+            dest = os.path.join(k, 'feed.xml')
+            self.write_feed(v, {'folder':k}, dest)
 
         tagcloud = merge(self._calc_tag_posts(rsts))
         for k, v in tagcloud.iteritems():
@@ -223,17 +238,24 @@ class Writer(Walker):
             self.write_pagination(v, k, dest)
         self.write_tagcloud(tagcloud)
 
-        archives = self._calc_archive_posts(rsts)
-        self.write_pagination(archives)
-        self.write_feed(archives, 'feed.xml')
+        rsts = self._calc_archive_posts(rsts)
+        self.write_feed(rsts, {'folder':''}, 'feed.xml')
+
+        self.write_pagination(rsts)
 
         logger.info('finished')
         return
 
     def _calc_archive_posts(self, rsts):
         for rst in rsts:
-            public = rst.get_info('public', True)
-            if public:
+            public = rst.get_info('public', 'true')
+            if public != 'false':
+                yield rst
+
+    def _calc_no_posts(self, rsts):
+        for rst in rsts:
+            public = rst.get_info('public', 'true')
+            if public == 'false':
                 yield rst
 
     def _calc_single_posts(self, rsts):

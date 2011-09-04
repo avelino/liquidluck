@@ -133,7 +133,7 @@ class rstReader(Filer):
         parts['docinfo'] = docinfo
         return parts
 
-    def get_slug_and_dest(self, suffix='/'):
+    def get_slug_and_dest(self, suffix=''):
         if self.ext != '.rst':
             return self.basename, self.basename
         folder = self.get_info('folder', None)
@@ -143,10 +143,10 @@ class rstReader(Filer):
             path = self.basename
         html = path + '.html'
         if self.basename == 'index' and folder:
-            return '/{0}{1}'.format(folder, suffix), html
+            return '{0}{1}'.format(folder, suffix), html
         elif self.basename == 'index':
             return suffix, html
-        return '/{0}{1}'.format(path, suffix), html
+        return '{0}{1}'.format(path, suffix), html
 
     @property
     def slug(self):
