@@ -36,9 +36,6 @@ class ANSIFormatter(Formatter):
     ## colors:
 
     def format(self, record):
-        return ANSI['white'](now) + self._format(record)
-
-    def format(self, record):
         _d = {'INFO': 'cyan', 'WARNING': 'yellow', 'ERROR':'red',
               'CRITICAL': 'bgred', 'DEBUG': 'bggrey'}
         if record.levelname in _d.keys():

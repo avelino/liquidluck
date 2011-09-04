@@ -7,10 +7,19 @@ Your blog config file must be named as .config, and use a ini syntax.
 A example of your config file::
 
     [site]
-    name = Just lepture
-    author = lepture
-    site_url = http://lepture.com
+    postdir = content
+    deploydir = deploy
+    ignore = *tmp* *test*
+    staticdir = static
     static_prefix = http://static.lepture.com
+    template = templates
+    archive_template = archive.html
+    feed_template = feed.xml
+    tagcloud_template = tagcloud.html
+
+    [context]
+    sitename = Just lepture
+    siteurl = http://lepture.com
 
 
 :copyright: (c) 2011 by Hsiaoming Young (aka lepture)
@@ -53,7 +62,3 @@ class Config(object):
     @property
     def context(self):
         return Temp(self.config.items('context'))
-
-    @property
-    def extension(self):
-        return Temp(self.config.items('extension'))

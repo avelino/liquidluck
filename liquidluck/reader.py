@@ -12,7 +12,7 @@ from pygments.formatters import HtmlFormatter
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name, TextLexer
 
-import log
+import logger
 
 INLINESTYLES = False
 DEFAULT = HtmlFormatter(noclasses=INLINESTYLES)
@@ -80,7 +80,7 @@ class rstParser(object):
 
     def read(self):
         f = open(self.filepath)
-        log.info('open ' + self.filepath)
+        logger.info('read ' + self.filepath)
         content = f.read()
         f.close()
 
@@ -100,12 +100,20 @@ class rstParser(object):
         parts['docinfo'] = docinfo
         return parts
 
-
-class rstReader(object):
+class Filer(object):
     def __init__(self, filepath):
         self.filepath = filepath
         self.folder, self.filename = os.path.split(filepath)
         self.basename, self.ext = os.path.splitext(self.filename)
+
+    @property
+    def mtitme(self):
+        stat = os.stat(self.filepath)
+        return stat.st_mtime
+
+class rstReader(Filer):
+    def __init__(self, filepath):
+        super(rstReader, self).__init__(filepath)
         self.parts = self.create_parts()
 
     def get_info(self, key, value=None):
@@ -117,19 +125,16 @@ class rstReader(object):
         docinfo = dict(parts['docinfo'])
         create_date = docinfo.get('date', None)
         if not create_date:
-            log.error(self.filepath + ' no create date')
+            logger.error(self.filepath + ' no create date')
             return None
         create_date = datetime.datetime.strptime(create_date, '%Y-%m-%d')
         docinfo['date'] = create_date
         parts['docinfo'] = docinfo
         return parts
 
-    @property
-    def mtitme(self):
-        stat = os.stat(self.filepath)
-        return stat.st_mtime
-
     def get_slug_and_dest(self, suffix='/'):
+        if self.ext != '.rst':
+            return self.basename, self.basename
         folder = self.get_info('folder', None)
         if folder:
             path = os.path.join(folder, self.basename)

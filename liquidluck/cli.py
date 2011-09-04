@@ -1,9 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+import os
 from writer import Walker, Writer
 from config import Config
 
-config = Config('.config')
-writer = Writer(config, '.')
 
+def write():
+    cwd = os.getcwd()
+    config = Config(os.path.join(cwd, '.config'))
+    writer = Writer(config, cwd) 
+    writer.run()
 
-print writer.run()
+if '__main__' == __name__:
+    write()
