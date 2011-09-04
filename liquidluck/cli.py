@@ -1,9 +1,9 @@
 
-from writer import Writer
+from writer import Walker, Writer
 from config import Config
 
 config = Config('.config')
 writer = Writer(config, '.')
 
-for f in writer.walk():
-    writer.write_post(f)
+
+print writer.run()

@@ -3,6 +3,7 @@
 
 import os
 import os.path
+import datetime
 from xml.dom import minidom
 from docutils import nodes
 from docutils.core import publish_parts
@@ -10,6 +11,8 @@ from docutils.parsers.rst import directives, Directive
 from pygments.formatters import HtmlFormatter
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name, TextLexer
+
+import log
 
 INLINESTYLES = False
 DEFAULT = HtmlFormatter(noclasses=INLINESTYLES)
@@ -77,7 +80,7 @@ class rstParser(object):
 
     def read(self):
         f = open(self.filepath)
-        print 'open'
+        log.info('open ' + self.filepath)
         content = f.read()
         f.close()
 
@@ -101,28 +104,48 @@ class rstParser(object):
 class rstReader(object):
     def __init__(self, filepath):
         self.filepath = filepath
-        self.parts = rstParser(filepath).read()
+        self.folder, self.filename = os.path.split(filepath)
+        self.basename, self.ext = os.path.splitext(self.filename)
+        self.parts = self.create_parts()
 
     def get_info(self, key, value=None):
         docinfo = dict(self.parts['docinfo'])
         return docinfo.get(key, value)
+
+    def create_parts(self):
+        parts = rstParser(self.filepath).read()
+        docinfo = dict(parts['docinfo'])
+        create_date = docinfo.get('date', None)
+        if not create_date:
+            log.error(self.filepath + ' no create date')
+            return None
+        create_date = datetime.datetime.strptime(create_date, '%Y-%m-%d')
+        docinfo['date'] = create_date
+        parts['docinfo'] = docinfo
+        return parts
 
     @property
     def mtitme(self):
         stat = os.stat(self.filepath)
         return stat.st_mtime
 
-    @property
-    def filename(self):
-        folder, filename = os.path.split(self.filepath)
-        return filename
-
-    @property
-    def suffix(self):
-        name, suffix = self.filename.split('.')
-        return suffix
+    def get_slug_and_dest(self, suffix='/'):
+        folder = self.get_info('folder', None)
+        if folder:
+            path = os.path.join(folder, self.basename)
+        else:
+            path = self.basename
+        html = path + '.html'
+        if self.basename == 'index' and folder:
+            return '/{0}{1}'.format(folder, suffix), html
+        elif self.basename == 'index':
+            return suffix, html
+        return '/{0}{1}'.format(path, suffix), html
 
     @property
     def slug(self):
-        name, suffix = self.filename.split('.')
-        return name
+        return self.get_slug_and_dest()[0]
+
+    @property
+    def destination(self):
+        return self.get_slug_and_dest()[1]
