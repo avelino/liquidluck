@@ -44,6 +44,14 @@ class Pygments(Directive):
 directives.register_directive('code-block', Pygments)
 directives.register_directive('sourcecode', Pygments)
 
+def restructuredtext(content):
+    extra_setting = {'initial_header_level':'3'}
+    parts = publish_parts(
+        content, writer_name='html',
+        settings_overrides=extra_setting,
+    )
+    return parts['body']
+
 
 class rstParser(object):
     def __init__(self, filepath):

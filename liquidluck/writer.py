@@ -12,7 +12,7 @@ except ImportError:
     from StringIO import StringIO
 
 from jinja2 import Environment, FileSystemLoader
-from reader import rstReader
+from reader import rstReader, restructuredtext
 from utils import Temp, Pagination
 
 import logger
@@ -59,10 +59,9 @@ class Walker(object):
         stat = int(os.stat(f).st_mtime)
 
         if f not in self._cache:
-            folder = os.path.join(self.deploydir, '_static')
-            if not os.path.isdir(folder):
-                os.makedirs(folder)
-            shutil.copy(f, folder)
+            dest = os.path.join(self.deploydir, '_static', name)
+            self.mkdir_dest_folder(dest)
+            shutil.copy(f, dest)
             self._cache.append(f)
             logger.info('copy ' + f)
 
@@ -150,7 +149,7 @@ class Writer(Walker):
 
     def write_post(self, rst):
         public = rst.get_info('public', 'true')
-        _tpl = rst.get_info('tpl', 'post.html')
+        _tpl = rst.get_info('template', 'post.html')
         self._write({'rst':rst}, _tpl, rst.destination)
         return
 
@@ -162,15 +161,15 @@ class Writer(Walker):
 
         # first page
         folder, filename = os.path.split(dest)
-        folder = os.path.join(folder, 'page')
 
         pagi = paginator.get_current_page(1)
         pagi.folder = folder
+
         params = {'title': title, 'pagi': pagi}
         self._write(params, _tpl, dest)
 
         for p in range(paginator.pages):
-            dest = os.path.join(folder, '{0}.html'.format(p+1))
+            dest = os.path.join(folder, 'page', '{0}.html'.format(p+1))
             pagi= paginator.get_current_page(p+1)
             pagi.folder = folder
             params = {'title': title, 'pagi': pagi}
@@ -207,6 +206,7 @@ class Writer(Walker):
         prepare['now'] = datetime.datetime.now()
         context.update(prepare)
         self.jinja.filters['xmldatetime'] = xmldatetime
+        self.jinja.filters['restructuredtext'] = restructuredtext
         tpl = self.jinja.get_template(template)
         return tpl.render(context)
 
@@ -238,9 +238,8 @@ class Writer(Walker):
             self.write_pagination(v, k, dest)
         self.write_tagcloud(tagcloud)
 
-        rsts = self._calc_archive_posts(rsts)
+        rsts = [rst for rst in self._calc_archive_posts(rsts)]
         self.write_feed(rsts, {'folder':''}, 'feed.xml')
-
         self.write_pagination(rsts)
 
         logger.info('finished')
@@ -260,7 +259,8 @@ class Writer(Walker):
 
     def _calc_single_posts(self, rsts):
         i = 0
-        for rst in self._calc_archive_posts(rsts):
+        rsts = [rst for rst in self._calc_archive_posts(rsts)]
+        for rst in rsts:
             if i > 0:
                 rst.prev = rsts[i-1]
             i += 1

@@ -20,23 +20,22 @@ class Temp(dict):
 
 class Pagination(object):
     def __init__(self, rsts, perpage=30):
-        self.rsts = [rst for rst in rsts]
-        self.total = len(self.rsts)
+        self.allrsts = [rst for rst in rsts]
+        self.total = len(self.allrsts)
         self.pages = (self.total - 1)/perpage + 1
         self.perpage = perpage
 
     def get_current_page(self, page=1):
         start = (page-1) * self.perpage
         end = page * self.perpage
-        rsts = self.rsts[start:end]
+        self.rsts = self.allrsts[start:end]
         if page < self.pages:
-            self.next = page + 1
+            self.next = str(page + 1)
         else:
             self.next = None
         if page > 1:
-            self.prev = page - 1
+            self.prev = str(page - 1)
         else:
             self.prev = None
         self.page = page
-        self.posts = rsts
         return self
