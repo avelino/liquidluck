@@ -33,7 +33,7 @@ class Walker(object):
         self.config = config
         self.projectdir = projectdir
 
-    def mkdir_dest_folder(self, dest):
+    def make_dest_folder(self, dest):
         folder = os.path.split(dest)[0]
         if not os.path.isdir(folder):
             os.makedirs(folder)
@@ -60,7 +60,7 @@ class Walker(object):
 
         if f not in self._cache:
             dest = os.path.join(self.deploydir, '_static', name)
-            self.mkdir_dest_folder(dest)
+            self.make_dest_folder(dest)
             shutil.copy(f, dest)
             self._cache.append(f)
             logger.info('copy ' + f)
@@ -88,7 +88,7 @@ class Walker(object):
                         self.deploydir,
                         path.replace(self.postdir,'').lstrip('/')
                     )
-                    self.mkdir_dest_folder(dest)
+                    self.make_dest_folder(dest)
                     shutil.copy(path, dest)
 
 class Cache(object):
@@ -140,7 +140,7 @@ class Writer(Walker):
     def _write(self, params, tpl, dest):
         dest = os.path.join(self.deploydir, dest)
         logger.info('write ' + dest)
-        self.mkdir_dest_folder(dest)
+        self.make_dest_folder(dest)
         f = open(dest, 'w')
         html = self._jinja_render(tpl, params)
         f.write(html.encode('utf-8'))
