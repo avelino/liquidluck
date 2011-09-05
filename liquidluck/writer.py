@@ -238,13 +238,12 @@ class Writer(Walker):
             dest = os.path.join(k, 'index.html')
             self.write_pagination(v, k, dest)
             dest = os.path.join(k, 'feed.xml')
-            self.write_feed(v, {'folder':k}, dest)
 
         tagcloud = merge(self._calc_tag_posts(rsts))
+        self.write_tagcloud(tagcloud)
         for k, v in tagcloud.iteritems():
             dest = os.path.join('tag', k + '.html')
             self.write_pagination(v, k, dest)
-        self.write_tagcloud(tagcloud)
 
         rsts = [rst for rst in self._calc_archive_posts(rsts)]
         self.write_feed(rsts, {'folder':''}, 'feed.xml')
