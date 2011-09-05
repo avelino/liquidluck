@@ -16,5 +16,5 @@ setup(
     entry_points = {
         'console_scripts': ['felicis = liquidluck.cli:write'],
     },
-    install_requires=['docutils', 'Jinja2'],
+    install_requires=['docutils', 'Jinja2', 'Pygments'],
 )

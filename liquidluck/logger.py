@@ -41,9 +41,9 @@ class ANSIFormatter(Formatter):
         _d = {'INFO': 'cyan', 'WARNING': 'yellow', 'ERROR':'red',
               'CRITICAL': 'bgred', 'DEBUG': 'bggrey'}
         if record.levelname in _d.keys():
-            return ANSI[_d[record.levelname]](record.levelname) + ANSI['green'](self.now) + unicode(record.msg)
+            return ANSI[_d[record.levelname]](record.levelname) + ANSI['green'](self.now) + ANSI['white'](record.msg)
         else:
-            return ANSI['white'](record.levelname) + ANSI['green'](self.now) + unicode(record.msg)
+            return ANSI['white'](record.levelname) + ANSI['green'](self.now) + ANSI['white'](record.msg)
 
 
 class TextFormatter(Formatter):
