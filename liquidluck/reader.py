@@ -1,5 +1,31 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''
+Blog content file parser.
+
+Syntax::
+
+    title
+    ========
+
+    :date: 2011-09-01
+    :folder: life
+    :tags:
+        - tag1
+        - tag2
+
+    Your content here. And it support code highlight.
+
+    Example::
+
+        .. sourcecode:: python
+
+            def hello():
+                return 'hello'
+
+:copyright: (c) 2011 by Hsiaoming Young (aka lepture)
+:license: BSD
+'''
 
 import os
 import os.path
@@ -45,6 +71,9 @@ directives.register_directive('code-block', Pygments)
 directives.register_directive('sourcecode', Pygments)
 
 def restructuredtext(content):
+    """
+    this is a jinja filter.
+    """
     extra_setting = {'initial_header_level':'3'}
     parts = publish_parts(
         content, writer_name='html',
@@ -67,6 +96,8 @@ class rstParser(object):
 
     def _node_to_pairs(self, node):
         '''
+        parse docinfo to python object
+
         <tr><th class="docinfo-name">Date:</th>
         <td>2011-10-12</td></tr>
         '''

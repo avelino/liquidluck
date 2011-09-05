@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''
+Writer, write your content to html.
+
+:copyright: (c) 2011 by Hsiaoming Young (aka lepture)
+:license: BSD
+'''
+
 
 import os
 import datetime
@@ -24,6 +31,7 @@ def sort_rsts(rsts, reverse=True):
     return sorted(rsts, key=lambda rst: rst.get_info('date'), reverse=reverse)
 
 def xmldatetime(value):
+    """ this is a jinja filter """
     return value.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 class Walker(object):
