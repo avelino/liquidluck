@@ -21,6 +21,7 @@ except ImportError:
 from jinja2 import Environment, FileSystemLoader
 from reader import rstReader, restructuredtext
 from utils import Temp, Pagination
+from utils import merge, xmldatetime
 
 import logger
 
@@ -30,13 +31,7 @@ builtin_templates = os.path.join(os.path.dirname(__file__), 'templates')
 def sort_rsts(rsts, reverse=True):
     return sorted(rsts, key=lambda rst: rst.get_info('date'), reverse=reverse)
 
-def xmldatetime(value):
-    """ this is a jinja filter """
-    return value.strftime('%Y-%m-%dT%H:%M:%SZ')
-
-class Walker(object):
-    _cache = []
-
+class Base(object):
     def __init__(self, config, projectdir):
         self.config = config
         self.projectdir = projectdir
@@ -46,6 +41,54 @@ class Walker(object):
         if not os.path.isdir(folder):
             os.makedirs(folder)
         return folder
+
+    def copy_to(self, source, dest):
+        self.make_dest_folder(dest)
+        if not os.path.exists(dest):
+            shutil.copy(source, dest)
+            return True
+        return False
+
+    def walk(self, dest):
+        for root, dirs, files in os.walk(dest):
+            for f in files:
+                path = os.path.join(root, f)
+                yield path
+
+    @property
+    def postdir(self):
+        _dir = self.config.get('postdir', 'content')
+        return os.path.join(self.projectdir, _dir)
+
+    @property
+    def deploydir(self):
+        _dir = self.config.get('deploydir', 'deploy')
+        return os.path.join(self.projectdir, _dir)
+
+    @property
+    def staticdir(self):
+        _dir = self.config.get('staticdir', '_static')
+        return os.path.join(self.projectdir, _dir)
+
+
+
+class Walker(object):
+    def __init__(self, config, projectdir):
+        self.config = config
+        self.projectdir = projectdir
+
+    def make_dest_folder(self, dest):
+        folder = os.path.split(dest)[0]
+        if not os.path.isdir(folder):
+            os.makedirs(folder)
+        return folder
+
+    def copy_to(self, source, dest):
+        self.make_dest_folder(dest)
+        if not os.path.exists(dest):
+            shutil.copy(source, dest)
+            return True
+        return False
 
     @property
     def postdir(self):
@@ -66,11 +109,8 @@ class Walker(object):
         url = self.config.get('static_prefix', '/static')
         stat = int(os.stat(f).st_mtime)
 
-        if f not in self._cache:
-            dest = os.path.join(self.deploydir, '_static', name)
-            self.make_dest_folder(dest)
-            shutil.copy(f, dest)
-            self._cache.append(f)
+        dest = os.path.join(self.deploydir, '_static', name)
+        if self.copy_to(f, dest):
             logger.info('copy ' + f)
 
         return os.path.join(url, name) + '?t=' + str(stat)
@@ -98,41 +138,6 @@ class Walker(object):
                     )
                     self.make_dest_folder(dest)
                     shutil.copy(path, dest)
-
-class Cache(object):
-    def __init__(self):
-        self._app_cache = {}
-
-    def set(self, key, value):
-        self._app_cache[key] = value
-
-    def get(self, key):
-        value = self._app_cache.get(key, None)
-        return value
-
-    def delete(self, key):
-        if self._app_cache.has_key(key):
-            del self._app_cache[key]
-        return None
-
-    def __call__(self):
-        return self._app_cache
-
-def merge(li):
-    '''
-    [(a,b),(a,c),(a,d)] -> {a:[b,c,d]}
-    '''
-    cache = Cache()
-    try:
-        for k,v in li:
-            store = cache.get(k)
-            if not store:
-                store = []
-            store.append(v)
-            cache.set(k, store)
-    except:
-        pass
-    return cache()
 
 class Writer(Walker):
     def __init__(self, config, projectdir):

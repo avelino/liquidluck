@@ -39,3 +39,53 @@ class Pagination(object):
             self.prev = None
         self.page = page
         return self
+
+
+def xmldatetime(value):
+    """ this is a jinja filter """
+    return value.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+def content_url(self, a, *args):
+    """ jinja filter """
+    path = os.path.join(a, *args)
+    path = '{0}/'.format(path.rstrip('/'))
+    if not path.startswith('http://'):
+        path = '/{0}'.format(path.lstrip('/'))
+    return path
+
+class Cache(object):
+    def __init__(self):
+        self._app_cache = {}
+
+    def set(self, key, value):
+        self._app_cache[key] = value
+
+    def get(self, key):
+        value = self._app_cache.get(key, None)
+        return value
+
+    def delete(self, key):
+        if self._app_cache.has_key(key):
+            del self._app_cache[key]
+        return None
+
+    def __call__(self):
+        return self._app_cache
+
+def merge(li):
+    '''
+    [(a,b),(a,c),(a,d)] -> {a:[b,c,d]}
+    '''
+    cache = Cache()
+    try:
+        for k,v in li:
+            store = cache.get(k)
+            if not store:
+                store = []
+            store.append(v)
+            cache.set(k, store)
+    except:
+        pass
+    return cache()
+
+
