@@ -140,20 +140,12 @@ class rstParser(object):
         parts['docinfo'] = docinfo
         return parts
 
-class Filer(object):
+
+class rstReader(object):
     def __init__(self, filepath):
         self.filepath = filepath
         self.folder, self.filename = os.path.split(filepath)
         self.basename, self.ext = os.path.splitext(self.filename)
-
-    @property
-    def mtitme(self):
-        stat = os.stat(self.filepath)
-        return stat.st_mtime
-
-class rstReader(Filer):
-    def __init__(self, filepath):
-        super(rstReader, self).__init__(filepath)
         self.parts = self.create_parts()
 
     def get_info(self, key, value=None):

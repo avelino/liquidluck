@@ -48,3 +48,7 @@ class Config(object):
     @property
     def context(self):
         return Temp(self.config.items('context'))
+
+    @property
+    def writers(self):
+        return Temp(self.config.items('writers'))
