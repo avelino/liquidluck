@@ -4,12 +4,10 @@
 import os
 import time
 from liquidluck.config import Config
+from liquidluck import logger
 
-default_writers = [
-    'liquidluck.writers.StaticWriter',
-    'liquidluck.writers.PostWriter',
-]
 def apply_writer(writer_name):
+    logger.info('Apply writer: ' + writer_name)
     writers = writer_name.split('.')
     if len(writers) == 1:
         return __import__(writer_name)
@@ -23,13 +21,11 @@ def main():
     begin = time.time()
     cwd = os.getcwd()
     config = Config(os.path.join(cwd, '.config'))
-    writers = [name for name in config.writers.itervalues()]
-    writers.extend(default_writers)
+    writers = [apply_writer(writer) for writer in config.writers.itervalues()]
     for writer in writers:
-        writer = apply_writer(writer)
         writer(config, cwd).register()
+
     for writer in writers:
-        writer = apply_writer(writer)
         writer(config, cwd).run()
     end = time.time()
 

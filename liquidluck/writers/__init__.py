@@ -1,10 +1,127 @@
 
-import os
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+'''
+Writer, write your content to html.
 
-from liquidluck.writer import Writer
+:copyright: (c) 2011 by Hsiaoming Young (aka lepture)
+:license: BSD
+'''
+
+
+import os
+import datetime
+import shutil
+from fnmatch import fnmatch
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
+
+from jinja2 import Environment, FileSystemLoader
+
+from liquidluck.reader import restructuredtext
 from liquidluck.reader import rstReader
-from liquidluck.utils import Temp, Pagination
-from liquidluck.utils import merge, xmldatetime
+from liquidluck.utils import Pagination
+from liquidluck.utils import xmldatetime
+
+from liquidluck import logger
+
+
+builtin_templates = os.path.join(os.path.dirname(__file__), 'templates')
+
+class Writer(object):
+    _jinja_context = {}
+    _jinja_filters = {}
+
+    def __init__(self, config, projectdir):
+        self.config = config
+        self.projectdir = projectdir
+
+        tpl = os.path.join(projectdir, config.site.get('template', 'templates'))
+        self.jinja = Environment(
+            loader = FileSystemLoader([tpl, builtin_templates]),
+            autoescape = config.site.get('autoescape', False),
+            extensions = ['jinja2.ext.autoescape', 'jinja2.ext.with_'],
+        )
+
+        # init
+        self.register_context('context', config.context)
+        self.register_context('now', datetime.datetime.now())
+        self.register_filter('restructuredtext', restructuredtext)
+        self.register_filter('xmldatetime', xmldatetime)
+
+    @property
+    def postdir(self):
+        _dir = self.config.get('postdir', 'content')
+        return os.path.join(self.projectdir, _dir)
+
+    @property
+    def deploydir(self):
+        _dir = self.config.get('deploydir', 'deploy')
+        return os.path.join(self.projectdir, _dir)
+
+    @property
+    def staticdir(self):
+        _dir = self.config.get('staticdir', '_static')
+        return os.path.join(self.projectdir, _dir)
+
+    @classmethod
+    def register_context(cls, key, value):
+        cls._jinja_context[key] = value
+        return cls
+
+    @classmethod
+    def register_filter(cls, key, value):
+        cls._jinja_filters[key] = value
+        return cls
+
+    def render(self, template, context={}):
+        context.update(self._jinja_context)
+        self.jinja.filters.update(self._jinja_filters)
+        tpl = self.jinja.get_template(template)
+        return tpl.render(context)
+
+
+    def make_dest_folder(self, dest):
+        folder = os.path.split(dest)[0]
+        if not os.path.isdir(folder):
+            os.makedirs(folder)
+        return folder
+
+    def copy_to(self, source, dest):
+        self.make_dest_folder(dest)
+        if not os.path.exists(dest):
+            logger.info('copy ' + source)
+            shutil.copy(source, dest)
+            return True
+        return False
+
+    def sort_rsts(self, rsts, reverse=True):
+        return sorted(rsts, key=lambda rst: rst.get_info('date'), reverse=reverse)
+
+    def walk(self, dest):
+        for root, dirs, files in os.walk(dest):
+            for f in files:
+                path = os.path.join(root, f)
+                yield path
+
+    def write(self, params, tpl, dest):
+        dest = os.path.join(self.deploydir, dest)
+        logger.info('write ' + dest)
+        self.make_dest_folder(dest)
+        f = open(dest, 'w')
+        html = self.render(tpl, params)
+        f.write(html.encode('utf-8'))
+        f.close()
+        return 
+
+    def register(self):
+        pass
+
+    def run(self):
+        pass
+
 
 class ArchiveMixin(object):
     def calc_archive_rsts(self):
@@ -45,109 +162,3 @@ class PagerMixin(object):
             self.write({'pager': pager}, _tpl, dest)
 
 
-class StaticWriter(Writer):
-    def _static_url(self, name):
-        f = os.path.join(self.staticdir, name)
-        url = self.config.get('static_prefix', '/_static')
-        stat = int(os.stat(f).st_mtime)
-        return os.path.join(url, name) + '?t=' + str(stat)
-
-    def register(self):
-        self.register_context('static_url', self._static_url)
-
-    def run(self):
-        for source in self.walk(self.staticdir):
-            path = source.replace(self.projectdir,'').lstrip('/')
-            dest = os.path.join(self.deploydir, path)
-            self.copy_to(source, dest)
-
-class PostWriter(Writer):
-    def _content_url(self, a, *args):
-        path = os.path.join(a, *args)
-        path = '{0}/'.format(path.rstrip('/'))
-        if not path.startswith('http://'):
-            path = '/{0}'.format(path.lstrip('/'))
-        return path
-
-    def register(self):
-        self.register_context('content_url', self._content_url)
-
-    def _write_post(self, rst):
-        _tpl = rst.get_info('template', 'post.html')
-        self.write({'rst':rst}, _tpl, rst.destination)
-
-    def run(self):
-        for f in self.walk(self.postdir):
-            if f.endswith('.rst'):
-                rst = rstReader(f)
-                self._write_post(rst)
-
-class IndexFeedWriter(Writer, ArchiveMixin, FeedMixin):
-    def register(self):
-        self.register_filter('xmldatetime', xmldatetime)
-
-    def run(self):
-        rsts = self.sort_rsts(self.calc_archive_rsts())
-        self.write_feed(rsts, dest='feed.xml')
-
-class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
-    def calc_year_rsts(self):
-        for rst in self.calc_archive_rsts():
-            date = rst.get_info('date')
-            yield date.year, rst
-
-    def run(self):
-        for year, rsts in merge(self.calc_year_rsts()).iteritems():
-            rsts = self.sort_rsts(rsts)
-            year = str(year)
-            self.register_context('title', year)
-            dest = os.path.join(year, 'index.html')
-            self.write_pager(rsts, dest)
-            dest = os.path.join(year, 'feed.xml')
-            self.write_feed(rsts, dest)
-
-class TagWriter(Writer, ArchiveMixin):
-    def calc_tag_rsts(self):
-        for rst in self.calc_archive_rsts():
-            tags = rst.get_info('tags')
-            for tag in tags:
-                yield tag, rst
-
-    def write_tagcloud(self, tagcloud):
-        dest = 'tag/index.html'
-        tags = []
-        for k, v in tagcloud.iteritems():
-            tag = Temp()
-            tag.name = k
-            tag.count = len(v)
-            tag.size = 100 + log(tag.count or 1)*20
-            tags.append(tag)
-        _tpl = self.config.get('tagcloud_template', 'tagcloud.html')
-        return self.write({'tags':tags}, _tpl, dest)
-
-    def run(self):
-        tagcloud = merge(self.calc_tag_rsts())
-        self.write_tagcloud(tagcloud)
-        for tag, rsts in tagcloud.iteritems():
-            rsts = self.sort_rsts(rsts)
-            self.register_context('title', tag)
-
-            dest = os.path.join('tag', tag + '.html')
-            self.write_pager(rsts, dest)
-
-class FolderWriter(Writer, ArchiveMixin, FeedMixin):
-    def calc_folder_rsts(self):
-        for rst in self.calc_archive_rsts():
-            folder = rst.get_info('folder')
-            if folder:
-                yield folder, rst
-
-    def run(self):
-        for folder, rsts in merge(self.calc_folder_rsts()).iteritems():
-            rsts = self.sort_rsts(rsts)
-            self.register_context('title', folder)
-
-            dest = os.path.join(folder, 'index.html')
-            self.write_pager(rsts, dest)
-            dest = os.path.join(k, 'feed.xml')
-            self.write_feed(rsts, dest)
