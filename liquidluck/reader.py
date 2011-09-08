@@ -186,3 +186,11 @@ class rstReader(object):
     @property
     def destination(self):
         return self.get_slug_and_dest()[1]
+
+    @property
+    def body(self):
+        return self.parts.body
+
+    @property
+    def title(self):
+        return self.parts.title
