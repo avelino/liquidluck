@@ -189,8 +189,8 @@ class rstReader(object):
 
     @property
     def body(self):
-        return self.parts.body
+        return self.parts['body']
 
     @property
     def title(self):
-        return self.parts.title
+        return self.parts['title']
