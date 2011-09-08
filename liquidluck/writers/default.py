@@ -106,6 +106,7 @@ class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     def run(self):
         for folder, rsts in merge(self.calc_folder_rsts()).iteritems():
             rsts = self.sort_rsts(rsts)
+            self.register_context('title', folder)
             self.register_context('folder', folder)
 
             dest = os.path.join(folder, 'index.html')
