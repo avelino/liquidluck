@@ -44,10 +44,13 @@ class PostWriter(Writer):
                 rst = rstReader(f)
                 self._write_post(rst)
 
-class IndexFeedWriter(Writer, ArchiveMixin, FeedMixin):
+class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     def run(self):
         rsts = self.sort_rsts(self.calc_archive_rsts())
+        self.register_context('title', 'Archive')
         self.register_context('folder', '')
+        dest = self.config.get('index', 'archve.html')
+        self.write_pager(rsts, dest)
         self.write_feed(rsts, dest='feed.xml')
 
 class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
