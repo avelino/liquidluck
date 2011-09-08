@@ -34,15 +34,37 @@ class PostWriter(Writer):
     def register(self):
         self.register_context('content_url', self._content_url)
 
+    def _calc_rel_rsts(self):
+        public_rsts = []
+        secret_rsts = []
+        for f in self.walk(self.postdir):
+            if f.endswith('.rst'):
+                rst = rstReader(f)
+                if rst.get_info('public', 'true') != 'false':
+                    public_rsts.append(rst)
+                else:
+                    secret_rsts.append(rst)
+        public_rsts = self.sort_rsts(public_rsts)
+        i = 0
+        count = len(public_rsts)
+        for rst in public_rsts:
+            if i > 0:
+                public_rsts[i].prev = public_rsts[i-1]
+            if i + 1 < count:
+                public_rsts[i].next = public_rsts[i+1]
+            i += 1
+        rsts = public_rsts
+        rsts.extend(secret_rsts)
+        return rsts
+
+
     def _write_post(self, rst):
         _tpl = rst.get_info('template', 'post.html')
         self.write({'rst':rst}, _tpl, rst.destination)
 
     def run(self):
-        for f in self.walk(self.postdir):
-            if f.endswith('.rst'):
-                rst = rstReader(f)
-                self._write_post(rst)
+        for rst in self._calc_rel_rsts():
+            self._write_post(rst)
 
 class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     def run(self):
