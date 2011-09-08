@@ -3,7 +3,6 @@ import os
 from math import log
 
 from liquidluck.writers import Writer, ArchiveMixin, FeedMixin, PagerMixin
-from liquidluck.reader import rstReader
 from liquidluck.utils import Temp
 from liquidluck.utils import merge
 
@@ -37,13 +36,11 @@ class PostWriter(Writer):
     def _calc_rel_rsts(self):
         public_rsts = []
         secret_rsts = []
-        for f in self.walk(self.postdir):
-            if f.endswith('.rst'):
-                rst = rstReader(f)
-                if rst.get_info('public', 'true') != 'false':
-                    public_rsts.append(rst)
-                else:
-                    secret_rsts.append(rst)
+        for rst in self.total_rsts:
+            if rst.get_info('public', 'true') != 'false':
+                public_rsts.append(rst)
+            else:
+                secret_rsts.append(rst)
         public_rsts = self.sort_rsts(public_rsts)
         i = 0
         count = len(public_rsts)

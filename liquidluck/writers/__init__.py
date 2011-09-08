@@ -45,8 +45,8 @@ class Writer(object):
             extensions = ['jinja2.ext.autoescape', 'jinja2.ext.with_'],
         )
 
-        # init
-        self.register_context('context', config.context)
+        #init
+        self.register_context('context', self.config.context)
         self.register_context('now', datetime.datetime.now())
         self.register_filter('restructuredtext', restructuredtext)
         self.register_filter('xmldatetime', xmldatetime)
@@ -65,6 +65,12 @@ class Writer(object):
     def staticdir(self):
         _dir = self.config.get('staticdir', '_static')
         return os.path.join(self.projectdir, _dir)
+
+    @property
+    def total_rsts(self):
+        for f in self.walk(self.postdir):
+            if f.endswith('.rst'):
+                yield rstReader(f)
 
     @classmethod
     def register_context(cls, key, value):
@@ -105,7 +111,7 @@ class Writer(object):
             for f in files:
                 path = os.path.join(root, f)
                 yield path
-
+    
     def write(self, params, tpl, dest):
         dest = os.path.join(self.deploydir, dest)
         logger.info('write ' + dest)
@@ -125,11 +131,9 @@ class Writer(object):
 
 class ArchiveMixin(object):
     def calc_archive_rsts(self):
-        for f in self.walk(self.postdir):
-            if f.endswith('.rst'):
-                rst = rstReader(f)
-                if rst.get_info('public', 'true') != 'false':
-                    yield rst
+        for rst in self.total_rsts:
+            if rst.get_info('public', 'true') != 'false':
+                yield rst
 
 class FeedMixin(object):
     def write_feed(self, rsts, dest='feed.xml'):
