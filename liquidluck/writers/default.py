@@ -49,7 +49,7 @@ class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
         rsts = self.sort_rsts(self.calc_archive_rsts())
         self.register_context('title', 'Archive')
         self.register_context('folder', '')
-        dest = self.config.get('index', 'archve.html')
+        dest = self.config.get('index', 'archive.html')
         self.write_pager(rsts, dest)
         self.write_feed(rsts, dest='feed.xml')
 
