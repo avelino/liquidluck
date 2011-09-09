@@ -28,8 +28,6 @@ from liquidluck.utils import xmldatetime
 from liquidluck import logger
 
 
-builtin_templates = os.path.join(os.path.dirname(__file__), 'templates')
-
 class Writer(object):
     _jinja_context = {}
     _jinja_filters = {}
@@ -40,7 +38,7 @@ class Writer(object):
 
         tpl = os.path.join(projectdir, config.site.get('template', 'templates'))
         self.jinja = Environment(
-            loader = FileSystemLoader([tpl, builtin_templates]),
+            loader = FileSystemLoader([tpl]),
             autoescape = config.site.get('autoescape', False),
             extensions = ['jinja2.ext.autoescape', 'jinja2.ext.with_'],
         )
