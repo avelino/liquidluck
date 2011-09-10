@@ -34,14 +34,9 @@ folder = liquidluck.writers.default.FolderWriter
 
 def apply_writer(writer_name):
     logger.info('Apply writer: ' + writer_name)
-    writers = writer_name.split('.')
-    if len(writers) == 1:
-        return __import__(writer_name)
-
-    package = __import__('.'.join(writers[:-1]))
-    for module in writers[1:]:
-        package = getattr(package, module)
-    return package
+    parts = writer_name.split('.')
+    obj = __import__('.'.join(parts[:-1]), None, None, [parts[-1]], 0)
+    return getattr(obj, parts[-1])
 
 def build(config):
     cwd = os.getcwd()

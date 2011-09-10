@@ -27,6 +27,7 @@ from liquidluck.utils import xmldatetime
 
 from liquidluck import logger
 
+_total_rsts = []
 
 class Writer(object):
     _jinja_context = {}
@@ -66,9 +67,13 @@ class Writer(object):
 
     @property
     def total_rsts(self):
+        global _total_rsts
+        if _total_rsts:
+            return _total_rsts
         for f in self.walk(self.postdir):
             if f.endswith('.rst'):
-                yield rstReader(f)
+                _total_rsts.append(rstReader(f))
+        return _total_rsts
 
     @classmethod
     def register_context(cls, key, value):
