@@ -38,7 +38,7 @@ from pygments.formatters import HtmlFormatter
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name, TextLexer
 
-import logger
+from liquidluck import logger
 
 INLINESTYLES = False
 DEFAULT = HtmlFormatter(noclasses=INLINESTYLES)
@@ -147,6 +147,7 @@ class rstReader(object):
         self.folder, self.filename = os.path.split(filepath)
         self.basename, self.ext = os.path.splitext(self.filename)
         self.parts = self.create_parts()
+        self.mtime = os.stat(filepath).st_mtime
 
     def get_info(self, key, value=None):
         docinfo = dict(self.parts['docinfo'])

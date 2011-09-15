@@ -5,6 +5,7 @@ from math import log
 from liquidluck.writers import Writer, ArchiveMixin, FeedMixin, PagerMixin
 from liquidluck.utils import Temp
 from liquidluck.utils import merge
+from liquidluck import logger
 
 class StaticWriter(Writer):
     def _static_url(self, name):
@@ -57,6 +58,10 @@ class PostWriter(Writer):
 
     def _write_post(self, rst):
         _tpl = rst.get_info('template', 'post.html')
+        dest = os.path.join(self.deploydir, rst.destination)
+        if os.path.exists(dest) and rst.mtime < os.stat(dest).st_mtime:
+            logger.info('Ignore ' + dest)
+            return
         self.write({'rst':rst}, _tpl, rst.destination)
 
     def run(self):

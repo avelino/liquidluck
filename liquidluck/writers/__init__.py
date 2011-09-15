@@ -103,12 +103,13 @@ class Writer(object):
         return folder
 
     def copy_to(self, source, dest):
+        if os.path.exists(dest) and os.stat(source).st_mtime < os.stat(dest).st_mtime:
+            logger.info('Ignore ' + source)
+            return False
         self.make_dest_folder(dest)
-        if not os.path.exists(dest):
-            logger.info('copy ' + source)
-            shutil.copy(source, dest)
-            return True
-        return False
+        logger.info('copy ' + source)
+        shutil.copy(source, dest)
+        return True
 
     def sort_rsts(self, rsts, reverse=True):
         return sorted(rsts, key=lambda rst: rst.get_info('date'), reverse=reverse)
