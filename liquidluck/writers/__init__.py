@@ -28,6 +28,7 @@ from liquidluck.utils import xmldatetime
 from liquidluck import logger
 
 _total_rsts = []
+_not_rsts = []
 
 class Writer(object):
     _jinja_context = {}
@@ -66,14 +67,17 @@ class Writer(object):
         return os.path.join(self.projectdir, _dir)
 
     @property
-    def total_rsts(self):
+    def total_files(self):
         global _total_rsts
-        if _total_rsts:
-            return _total_rsts
+        global _not_rsts
+        if _total_rsts or _not_rsts:
+            return _total_rsts, _not_rsts
         for f in self.walk(self.postdir):
             if f.endswith('.rst'):
                 _total_rsts.append(rstReader(f))
-        return _total_rsts
+            else:
+                _not_rsts.append(f)
+        return _total_rsts, _not_rsts
 
     @classmethod
     def register_context(cls, key, value):
@@ -134,7 +138,7 @@ class Writer(object):
 
 class ArchiveMixin(object):
     def calc_archive_rsts(self):
-        for rst in self.total_rsts:
+        for rst in self.total_files[0]:
             if rst.get_info('public', 'true') != 'false':
                 yield rst
 

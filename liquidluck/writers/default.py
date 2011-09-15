@@ -36,7 +36,7 @@ class PostWriter(Writer):
     def _calc_rel_rsts(self):
         public_rsts = []
         secret_rsts = []
-        for rst in self.total_rsts:
+        for rst in self.total_files[0]:
             if rst.get_info('public', 'true') != 'false':
                 public_rsts.append(rst)
             else:
@@ -62,6 +62,13 @@ class PostWriter(Writer):
     def run(self):
         for rst in self._calc_rel_rsts():
             self._write_post(rst)
+
+class FileWriter(Writer):
+    def run(self):
+        for source in self.total_files[1]:
+            path = source.replace(self.postdir,'').lstrip('/')
+            dest = os.path.join(self.deploydir, path)
+            self.copy_to(source, dest)
 
 class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     def run(self):
