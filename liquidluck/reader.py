@@ -123,7 +123,7 @@ class rstParser(object):
         content = f.read()
         f.close()
 
-        extra_setting = {'initial_header_level':'3'}
+        extra_setting = {'initial_header_level':'2'}
         parts = publish_parts(
             content, writer_name='html',
             settings_overrides=extra_setting,
