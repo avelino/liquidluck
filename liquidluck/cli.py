@@ -70,12 +70,12 @@ def create(config='config.ini'):
     os.makedirs(os.path.join(cwd, config.get('staticdir')))
     os.makedirs(os.path.join(cwd, config.get('postdir')))
     os.makedirs(os.path.join(cwd, config.get('template')))
-    print 'Felix Felici Repo Created'
+    print 'Felix Felicis Repo Created'
     return
 
 def main():
     parser = argparse.ArgumentParser(
-        prog='felicis',
+        prog='liquidluck',
         description='Felix Felicis, aka liquidluck, is a static weblog generator',
     )
     parser.add_argument('-f', '--config', dest='config', default='config.ini', metavar='config.ini')

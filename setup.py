@@ -14,7 +14,7 @@ setup(
     long_description='a static weblog generator',
     license='BSD License',
     entry_points = {
-        'console_scripts': ['felicis = liquidluck.cli:main'],
+        'console_scripts': ['liquidluck= liquidluck.cli:main'],
     },
     install_requires=['docutils', 'Jinja2', 'Pygments'],
 )
