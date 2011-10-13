@@ -48,8 +48,11 @@ class Writer(object):
         #init
         self.register_context('context', self.config.context)
         self.register_context('now', datetime.datetime.now())
-        self.register_filter('restructuredtext', restructuredtext)
-        self.register_filter('xmldatetime', xmldatetime)
+
+        for k, v in config.filters.items():
+            if k not in self._jinja_filters:
+                logger.info('Register filter: %s' % v)
+                self.register_filter(k, import_module(v))
 
     def reader(self):
         if hasattr(self, '_reader'):
@@ -96,7 +99,8 @@ class Writer(object):
 
     @classmethod
     def register_filter(cls, key, value):
-        cls._jinja_filters[key] = value
+        if key not in cls._jinja_filters:
+            cls._jinja_filters[key] = value
         return cls
 
     def render(self, template, context={}):

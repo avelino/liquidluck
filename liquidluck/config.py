@@ -52,3 +52,7 @@ class Config(object):
     @property
     def writers(self):
         return Temp(self.config.items('writers'))
+
+    @property
+    def filters(self):
+        return Temp(self.config.items('filters'))

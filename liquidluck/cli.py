@@ -13,27 +13,35 @@ from liquidluck import logger
 ROOT = os.path.dirname(__file__)
 
 default_config = """[site]
+reader = liquidluck.readers.rst.RstReader
 postdir = content
 deploydir = deploy
-template = _templates
+template = _template
 staticdir = _static
 static_prefix = /_static
+index = index.html
 perpage = 20
+slug = html
+author = lepture
 
 [context]
 author = lepture
+disqus = lepture
 sitename = Just lepture
 siteurl = http://lepture.com
-feed = http://feeds.lepture.com/lepture
-gcse = 017842580319746762888:cqrgmcc2vg0
 
 [writers]
 static = liquidluck.writers.default.StaticWriter
 post = liquidluck.writers.default.PostWriter
+file = liquidluck.writers.default.FileWriter
 archive = liquidluck.writers.default.IndexWriter
 year = liquidluck.writers.default.YearWriter
 tag = liquidluck.writers.default.TagWriter
 folder = liquidluck.writers.default.FolderWriter
+
+[filters]
+restructuredtext = liquidluck.readers.rst.restructuredtext
+xmldatetime = liquidluck.utils.xmldatetime
 """
 
 def apply_writer(writer_name):
