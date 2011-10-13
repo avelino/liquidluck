@@ -9,7 +9,7 @@ setup(
     author='Hsiaoming Young',
     author_email = 'sopheryoung@gmail.com',
     url = 'http://github.com/lepture/liquidluck',
-    packages=['liquidluck', 'liquidluck.writers'],
+    packages=['liquidluck', 'liquidluck.writers', 'liquidluck.readers'],
     description='a static weblog generator',
     long_description='a static weblog generator',
     license='BSD License',

@@ -20,15 +20,15 @@ except ImportError:
 
 from jinja2 import Environment, FileSystemLoader
 
-from liquidluck.reader import restructuredtext
-from liquidluck.reader import rstReader
+from liquidluck.readers.rst import restructuredtext
 from liquidluck.utils import Pagination
 from liquidluck.utils import xmldatetime
+from liquidluck.utils import import_module
 
 from liquidluck import logger
 
-_total_rsts = []
-_not_rsts = []
+_total_posts = []
+_not_posts = []
 
 class Writer(object):
     _jinja_context = {}
@@ -51,6 +51,14 @@ class Writer(object):
         self.register_filter('restructuredtext', restructuredtext)
         self.register_filter('xmldatetime', xmldatetime)
 
+    def reader(self):
+        if hasattr(self, '_reader'):
+            return self._reader
+        reader = self.config.get('reader', 'liquidluck.readers.rst.RstReader')
+        logger.info('Apply Reader: %s' % reader)
+        self._reader = import_module(reader)
+        return self._reader
+
     @property
     def postdir(self):
         _dir = self.config.get('postdir', 'content')
@@ -68,16 +76,18 @@ class Writer(object):
 
     @property
     def total_files(self):
-        global _total_rsts
-        global _not_rsts
-        if _total_rsts or _not_rsts:
-            return _total_rsts, _not_rsts
+        global _total_posts
+        global _not_posts
+        if _total_posts or _not_posts:
+            return _total_posts, _not_posts
         for f in self.walk(self.postdir):
-            if f.endswith('.rst'):
-                _total_rsts.append(rstReader(f))
+            reader = self.reader()
+            parsed = reader(f, self.config)
+            if parsed.support():
+                _total_posts.append(parsed.render())
             else:
-                _not_rsts.append(f)
-        return _total_rsts, _not_rsts
+                _not_posts.append(f)
+        return _total_posts, _not_posts
 
     @classmethod
     def register_context(cls, key, value):
@@ -111,8 +121,8 @@ class Writer(object):
         shutil.copy(source, dest)
         return True
 
-    def sort_rsts(self, rsts, reverse=True):
-        return sorted(rsts, key=lambda rst: rst.get_info('date'), reverse=reverse)
+    def sort_posts(self, posts, reverse=True):
+        return sorted(posts, key=lambda post: post.date, reverse=reverse)
 
     def walk(self, dest):
         for root, dirs, files in os.walk(dest):
@@ -138,25 +148,25 @@ class Writer(object):
 
 
 class ArchiveMixin(object):
-    def calc_archive_rsts(self):
-        for rst in self.total_files[0]:
-            if rst.get_info('public', 'true') != 'false':
-                yield rst
+    def calc_archive_posts(self):
+        for post in self.total_files[0]:
+            if not hasattr(post, 'public') or post.public != 'false':
+                yield post
 
 class FeedMixin(object):
-    def write_feed(self, rsts, dest='feed.xml'):
+    def write_feed(self, posts, dest='feed.xml'):
         count = int(self.config.get('feed_count',10))
-        rsts = rsts[:count]
+        posts = posts[:count]
         _tpl = self.config.get('feed_template', 'feed.xml')
-        return self.write({'rsts':rsts}, _tpl, dest)
+        return self.write({'posts':posts}, _tpl, dest)
 
     def register(self):
         self.register_filter('xmldatetime', xmldatetime)
 
 class PagerMixin(object):
-    def write_pager(self, rsts, dest='archive.html'):
+    def write_pager(self, posts, dest='archive.html'):
         perpage = int(self.config.get('perpage', 30))
-        paginator = Pagination(rsts, perpage)
+        paginator = Pagination(posts, perpage)
         _tpl = self.config.get('archive_template', 'archive.html')
 
         # first page

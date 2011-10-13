@@ -25,8 +25,7 @@ class StaticWriter(Writer):
 
 class PostWriter(Writer):
     def _content_url(self, a, *args):
-        path = os.path.join(a, *args)
-        path = '{0}/'.format(path.rstrip('/'))
+        path = os.path.join(str(a), *args)
         if not path.startswith('http://'):
             path = '/{0}'.format(path.lstrip('/'))
         return path
@@ -34,39 +33,39 @@ class PostWriter(Writer):
     def register(self):
         self.register_context('content_url', self._content_url)
 
-    def _calc_rel_rsts(self):
-        public_rsts = []
-        secret_rsts = []
-        for rst in self.total_files[0]:
-            if rst.get_info('public', 'true') != 'false':
-                public_rsts.append(rst)
+    def _calc_rel_posts(self):
+        public_posts = []
+        secret_posts = []
+        for post in self.total_files[0]:
+            if post.get('public', 'true') != 'false':
+                public_posts.append(post)
             else:
-                secret_rsts.append(rst)
-        public_rsts = self.sort_rsts(public_rsts)
+                secret_posts.append(post)
+        public_posts = self.sort_posts(public_posts)
         i = 0
-        count = len(public_rsts)
-        for rst in public_rsts:
+        count = len(public_posts)
+        for post in public_posts:
             if i > 0:
-                public_rsts[i].prev = public_rsts[i-1]
+                public_posts[i].prev = public_posts[i-1]
             if i + 1 < count:
-                public_rsts[i].next = public_rsts[i+1]
+                public_posts[i].next = public_posts[i+1]
             i += 1
-        rsts = public_rsts
-        rsts.extend(secret_rsts)
-        return rsts
+        posts = public_posts
+        posts.extend(secret_posts)
+        return posts
 
 
-    def _write_post(self, rst):
-        _tpl = rst.get_info('template', 'post.html')
-        dest = os.path.join(self.deploydir, rst.destination)
-        if os.path.exists(dest) and rst.mtime < os.stat(dest).st_mtime:
+    def _write_post(self, post):
+        _tpl = post.get('template', 'post.html')
+        dest = os.path.join(self.deploydir, post.destination)
+        if os.path.exists(dest) and post.mtime < os.stat(dest).st_mtime:
             logger.info('Ignore ' + dest)
             return
-        self.write({'rst':rst}, _tpl, rst.destination)
+        self.write({'post':post}, _tpl, post.destination)
 
     def run(self):
-        for rst in self._calc_rel_rsts():
-            self._write_post(rst)
+        for post in self._calc_rel_posts():
+            self._write_post(post)
 
 class FileWriter(Writer):
     def run(self):
@@ -77,33 +76,32 @@ class FileWriter(Writer):
 
 class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     def run(self):
-        rsts = self.sort_rsts(self.calc_archive_rsts())
+        posts = self.sort_posts(self.calc_archive_posts())
         self.register_context('title', 'Archive')
         self.register_context('folder', '')
         dest = self.config.get('index', 'index.html')
-        self.write_pager(rsts, dest)
-        self.write_feed(rsts, dest='feed.xml')
+        self.write_pager(posts, dest)
+        self.write_feed(posts, dest='feed.xml')
 
 class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
-    def calc_year_rsts(self):
-        for rst in self.calc_archive_rsts():
-            date = rst.get_info('date')
-            yield date.year, rst
+    def calc_year_posts(self):
+        for post in self.calc_archive_posts():
+            yield post.date.year, post
 
     def run(self):
-        for year, rsts in merge(self.calc_year_rsts()).iteritems():
-            rsts = self.sort_rsts(rsts)
+        for year, posts in merge(self.calc_year_posts()).iteritems():
+            posts = self.sort_posts(posts)
             year = str(year)
             self.register_context('title', year)
             dest = os.path.join(year, 'index.html')
-            self.write_pager(rsts, dest)
+            self.write_pager(posts, dest)
 
 class TagWriter(Writer, ArchiveMixin, PagerMixin):
-    def calc_tag_rsts(self):
-        for rst in self.calc_archive_rsts():
-            tags = rst.get_info('tags')
+    def calc_tag_posts(self):
+        for post in self.calc_archive_posts():
+            tags = post.get('tags')
             for tag in tags:
-                yield tag, rst
+                yield tag, post
 
     def write_tagcloud(self, tagcloud):
         dest = 'tag/index.html'
@@ -118,29 +116,29 @@ class TagWriter(Writer, ArchiveMixin, PagerMixin):
         return self.write({'tags':tags}, _tpl, dest)
 
     def run(self):
-        tagcloud = merge(self.calc_tag_rsts())
+        tagcloud = merge(self.calc_tag_posts())
         self.write_tagcloud(tagcloud)
-        for tag, rsts in tagcloud.iteritems():
-            rsts = self.sort_rsts(rsts)
+        for tag, posts in tagcloud.iteritems():
+            posts = self.sort_posts(posts)
             self.register_context('title', tag)
 
             dest = os.path.join('tag', tag + '.html')
-            self.write_pager(rsts, dest)
+            self.write_pager(posts, dest)
 
 class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
-    def calc_folder_rsts(self):
-        for rst in self.calc_archive_rsts():
-            folder = rst.get_info('folder')
+    def calc_folder_posts(self):
+        for post in self.calc_archive_posts():
+            folder = post.get('folder', None)
             if folder:
-                yield folder, rst
+                yield folder, post
 
     def run(self):
-        for folder, rsts in merge(self.calc_folder_rsts()).iteritems():
-            rsts = self.sort_rsts(rsts)
+        for folder, posts in merge(self.calc_folder_posts()).iteritems():
+            posts = self.sort_posts(posts)
             self.register_context('title', folder)
             self.register_context('folder', folder)
 
             dest = os.path.join(folder, 'index.html')
-            self.write_pager(rsts, dest)
+            self.write_pager(posts, dest)
             dest = os.path.join(folder, 'feed.xml')
-            self.write_feed(rsts, dest)
+            self.write_feed(posts, dest)
