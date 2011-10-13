@@ -182,5 +182,9 @@ class RstReader(Reader):
         post.title = parts['title'] 
         post.content = parts['body']
         post.date = create_date
+        if post.get('public', 'true') == 'false':
+            post.public = False
+        else:
+            post.public = True
         self.post = post
         return post

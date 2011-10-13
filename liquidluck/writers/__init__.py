@@ -154,7 +154,7 @@ class Writer(object):
 class ArchiveMixin(object):
     def calc_archive_posts(self):
         for post in self.total_files[0]:
-            if not hasattr(post, 'public') or post.public != 'false':
+            if post.public:
                 yield post
 
 class FeedMixin(object):

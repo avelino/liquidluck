@@ -37,7 +37,7 @@ class PostWriter(Writer):
         public_posts = []
         secret_posts = []
         for post in self.total_files[0]:
-            if post.get('public', 'true') != 'false':
+            if post.public:
                 public_posts.append(post)
             else:
                 secret_posts.append(post)
