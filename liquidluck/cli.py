@@ -4,14 +4,18 @@
 import os
 import sys
 import time
+import shutil
 import argparse
 from liquidluck.config import Config
+from liquidluck.utils import import_module
 from liquidluck import logger
+
+ROOT = os.path.dirname(__file__)
 
 default_config = """[site]
 postdir = content
 deploydir = deploy
-template = templates
+template = _templates
 staticdir = _static
 static_prefix = /_static
 perpage = 20
@@ -34,9 +38,7 @@ folder = liquidluck.writers.default.FolderWriter
 
 def apply_writer(writer_name):
     logger.info('Apply writer: ' + writer_name)
-    parts = writer_name.split('.')
-    obj = __import__('.'.join(parts[:-1]), None, None, [parts[-1]], 0)
-    return getattr(obj, parts[-1])
+    return import_module(writer_name)
 
 def build(config):
     cwd = os.getcwd()
@@ -67,9 +69,9 @@ def create(config='config.ini'):
     f.write(default_config)
     f.close()
     config = Config(config_file)
-    os.makedirs(os.path.join(cwd, config.get('staticdir')))
+    shutil.copytree(os.path.join(ROOT, '_static'), os.path.join(cwd, config.get('staticdir')))
+    shutil.copytree(os.path.join(ROOT, '_templates'), os.path.join(cwd, config.get('template')))
     os.makedirs(os.path.join(cwd, config.get('postdir')))
-    os.makedirs(os.path.join(cwd, config.get('template')))
     print 'Felix Felicis Repo Created'
     return
 

@@ -89,3 +89,8 @@ def merge(li):
     return cache()
 
 
+
+def import_module(module):
+    parts = module.split('.')
+    obj = __import__('.'.join(parts[:-1]), None, None, [parts[-1]], 0)
+    return getattr(obj, parts[-1])

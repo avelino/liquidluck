@@ -17,4 +17,5 @@ setup(
         'console_scripts': ['liquidluck= liquidluck.cli:main'],
     },
     install_requires=['docutils', 'Jinja2', 'Pygments'],
+    include_package_data = True,
 )
