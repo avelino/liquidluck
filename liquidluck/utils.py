@@ -5,14 +5,6 @@ def xmldatetime(value):
     """ this is a jinja filter """
     return value.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-def content_url(self, a, *args):
-    """ jinja filter """
-    path = os.path.join(a, *args)
-    path = '{0}/'.format(path.rstrip('/'))
-    if not path.startswith('http://'):
-        path = '/{0}'.format(path.lstrip('/'))
-    return path
-
 class Cache(object):
     def __init__(self):
         self._app_cache = {}
