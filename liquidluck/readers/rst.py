@@ -40,7 +40,7 @@ from pygments.lexers import get_lexer_by_name, TextLexer
 
 from liquidluck import logger
 from liquidluck.readers import Reader
-from liquidluck.utils import Temp
+from liquidluck.ns import namespace, NameSpace
 
 INLINESTYLES = False
 DEFAULT = HtmlFormatter(noclasses=INLINESTYLES)
@@ -143,8 +143,8 @@ class rstParser(object):
         return parts
 
 class RstReader(Reader):
-    def support(self):
-        return self.filepath.endswith('.rst')
+    def support_type(self):
+        return 'rst'
 
     def get_resource_destination(self):
         #TODO
@@ -161,7 +161,7 @@ class RstReader(Reader):
         post.destination = self.get_resource_destination()
         post.slug = self.get_resource_slug()
         if not post.get('author', None):
-            post.author = self.config.get('author', 'admin')
+            post.author = namespace.context.get('author', 'admin')
         return post
 
     def parse_post(self):
@@ -176,7 +176,7 @@ class RstReader(Reader):
             return None
         create_date = datetime.datetime.strptime(create_date, '%Y-%m-%d')
 
-        post = Temp()
+        post = NameSpace()
         for k, v in docinfo.items():
             post[k] = v
         post.title = parts['title'] 

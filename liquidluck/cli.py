@@ -6,47 +6,27 @@ import sys
 import time
 import shutil
 import argparse
-from liquidluck.config import Config
+try:
+    from configparser import ConfigParser
+except ImportError:
+    from ConfigParser import ConfigParser
+
 from liquidluck.utils import import_module
+from liquidluck.ns import namespace
 from liquidluck import logger
 
 ROOT = os.path.dirname(__file__)
 
-default_config = """[site]
-reader = liquidluck.readers.rst.RstReader
-postdir = content
-deploydir = deploy
-template = _template
-staticdir = _static
-static_prefix = /_static
-index = index.html
-perpage = 20
-slug = html
-author = lepture
-
-[context]
-author = lepture
-disqus = lepture
-sitename = Just lepture
-siteurl = http://lepture.com
-
-[writers]
-static = liquidluck.writers.default.StaticWriter
-post = liquidluck.writers.default.PostWriter
-file = liquidluck.writers.default.FileWriter
-archive = liquidluck.writers.default.IndexWriter
-year = liquidluck.writers.default.YearWriter
-tag = liquidluck.writers.default.TagWriter
-folder = liquidluck.writers.default.FolderWriter
-
-[filters]
-restructuredtext = liquidluck.readers.rst.restructuredtext
-xmldatetime = liquidluck.utils.xmldatetime
-"""
-
-def apply_writer(writer_name):
-    logger.info('Apply writer: ' + writer_name)
-    return import_module(writer_name)
+def init(filepath):
+    config = ConfigParser()
+    config.read(filepath)
+    namespace.site.update(config.items('site'))
+    namespace.context.update({'context': config.items('context')})
+    for sec in ('writers', 'readers', 'filters'):
+        if config.has_section(sec):
+            namespace[sec].update(config.items(sec))
+    namespace.projectdir = os.getcwd()
+    return namespace
 
 def build(config):
     cwd = os.getcwd()
@@ -58,18 +38,23 @@ def build(config):
             return
         return create()
 
-    config = Config(config_file)
-    begin = time.time()
-    writers = [apply_writer(writer) for writer in config.writers.itervalues()]
-    for writer in writers:
-        writer(config, cwd).register()
+    init(config_file)
 
-    for writer in writers:
-        writer(config, cwd).run()
+    begin = time.time()
+    for reader in namespace.readers.values():
+        namespace.filters.update(import_module(reader).get_filters())
+        namespace.context.update(import_module(reader).get_context())
+    for writer in namespace.writers.values():
+        namespace.filters.update(import_module(writer).get_filters())
+        namespace.context.update(import_module(writer).get_context())
+
+    for writer in namespace.writers.values():
+        import_module(writer)().run()
     end = time.time()
 
-    print end - begin
+    logger.info('Total time: %s' % (end - begin))
 
+#TODO
 def create(config='config.ini'):
     cwd = os.getcwd()
     config_file = os.path.join(cwd, config)

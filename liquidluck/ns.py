@@ -28,6 +28,7 @@ namespace = NameSpace.instance()
 
 #defaults 
 namespace.site = NameSpace()
+namespace.context = NameSpace()
 namespace.readers = NameSpace({
     'rst': 'liquidluck.readers.rst.RstReader',
 })

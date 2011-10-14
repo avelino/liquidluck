@@ -12,10 +12,10 @@ A example of your config file::
     ignore = *tmp* *test*
     staticdir = static
     static_prefix = http://static.lepture.com
-    template = templates
-    archive_template = archive.html
-    feed_template = feed.xml
-    tagcloud_template = tagcloud.html
+    NameSpacelate = NameSpacelates
+    archive_NameSpacelate = archive.html
+    feed_NameSpacelate = feed.xml
+    tagcloud_NameSpacelate = tagcloud.html
 
     [context]
     sitename = Just lepture
@@ -31,7 +31,7 @@ try:
 except ImportError:
     from ConfigParser import ConfigParser
 
-from utils import Temp
+from liquidluck.ns import NameSpace
 
 class Config(object):
     def __init__(self, filepath):
@@ -43,16 +43,16 @@ class Config(object):
 
     @property
     def site(self):
-        return Temp(self.config.items('site'))
+        return NameSpace(self.config.items('site'))
 
     @property
     def context(self):
-        return Temp(self.config.items('context'))
+        return NameSpace(self.config.items('context'))
 
     @property
     def writers(self):
-        return Temp(self.config.items('writers'))
+        return NameSpace(self.config.items('writers'))
 
     @property
     def filters(self):
-        return Temp(self.config.items('filters'))
+        return NameSpace(self.config.items('filters'))
