@@ -18,29 +18,6 @@ class Temp(dict):
             raise AttributeError
 
 
-class Pagination(object):
-    def __init__(self, posts, perpage=30):
-        self.allposts = [post for post in posts]
-        self.total = len(self.allposts)
-        self.pages = (self.total - 1)/perpage + 1
-        self.perpage = perpage
-
-    def get_current_page(self, page=1):
-        start = (page-1) * self.perpage
-        end = page * self.perpage
-        self.posts = self.allposts[start:end]
-        if page < self.pages:
-            self.next = str(page + 1)
-        else:
-            self.next = None
-        if page > 1:
-            self.prev = str(page - 1)
-        else:
-            self.prev = None
-        self.page = page
-        return self
-
-
 def xmldatetime(value):
     """ this is a jinja filter """
     return value.strftime('%Y-%m-%dT%H:%M:%SZ')
