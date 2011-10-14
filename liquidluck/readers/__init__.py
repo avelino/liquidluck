@@ -3,6 +3,19 @@ import os
 from liquidluck.ns import namespace
 
 class Reader(object):
+    """
+    Base Reader, all readers must inherit this module. e.g.:
+
+        ``RstReader(Reader)``
+
+    New reader required:
+        - ``support_type``
+        - ``parse_post``
+
+    New reader optional:
+        - ``get_filters``
+        - ``get_context``
+    """
     def __init__(self, filepath=None):
         self.filepath = filepath
 
@@ -25,15 +38,25 @@ class Reader(object):
         basename, ext = os.path.splitext(filename)
         return basename
 
+    def get_resource_destination(self):
+        _format = namespace.site.get('format', 'folder')
+        post = self.parse_post()
+        filename = self.get_resource_basename() + '.html'
+        year = str(post.date.year)
+        month = str(post.date.month)
+        day = str(post.date.day)
+        if _format == 'year':
+            return os.path.join(year, filename)
+        if _format == 'month':
+            return os.path.join(year, month, filename)
+        if _format == 'day':
+            return os.path.join(year, month, day, filename)
+        if hasattr(post, 'folder'):
+            return os.path.join(post.folder, filename)
+        return filename
+
     def get_resource_slug(self):
-        slug = namespace.site.get('slug', 'html')
-        source = self.get_resource_destination()
-        basename, ext = os.path.splitext(source)
-        if slug == 'clean':
-            return basename
-        if slug == 'slash':
-            return basename + '/'
-        return source
+        return self.get_resource_destination()
 
     def support_type(self):
         return None
@@ -48,8 +71,16 @@ class Reader(object):
                     return True
         return False
 
-    def get_resource_destination(self):
-        raise NotImplementedError
 
     def render(self):
+        post = self.parse_post()
+
+        post.mtime = self.get_resource_mtime()
+        post.destination = self.get_resource_destination()
+        post.slug = self.get_resource_slug()
+        if not post.get('author', None):
+            post.author = namespace.context.get('author', 'admin')
+        return post
+
+    def parse_post(self):
         raise NotImplementedError

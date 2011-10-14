@@ -28,7 +28,19 @@ class StaticWriter(Writer):
             copy_to(source, dest)
 
 def content_url(a, *args):
+    slug = namespace.site.get('slug', 'html')
+    
+    args = [str(arg) for arg in args]
     path = os.path.join(str(a), *args)
+    basename, ext = os.path.splitext(path)
+    if not ext:
+        path = basename + '.html'
+
+    if slug == 'clean':
+        path = basename
+    if slug == 'slash':
+        path = basename + '/'
+
     if not path.startswith('http://'):
         path = '/{0}'.format(path.lstrip('/'))
     return path

@@ -56,7 +56,6 @@ def _walk(dest):
 
 def detect_reader(filepath):
     for reader in namespace.readers.values():
-        print reader
         reader = import_module(reader)(filepath)
         if reader.support():
             return reader
@@ -192,6 +191,7 @@ class PagerMixin(object):
 
         pager = paginator.get_current_page(1)
         pager.folder = folder
+        pager.sub_folder = sub_folder
 
         params.update({'pager': pager})
         self.write(params, _tpl, dest)

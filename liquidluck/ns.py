@@ -39,7 +39,6 @@ namespace.writers = NameSpace({
     'archive': 'liquidluck.writers.default.IndexWriter',
     'year': 'liquidluck.writers.default.YearWriter',
     'tag': 'liquidluck.writers.default.TagWriter',
-    'folder': 'liquidluck.writers.default.FolderWriter',
 })
 namespace.filters = NameSpace({
     'restructuredtext': 'liquidluck.readers.rst.restructuredtext',
