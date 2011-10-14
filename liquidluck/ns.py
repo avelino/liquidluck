@@ -30,6 +30,7 @@ namespace = NameSpace.instance()
 namespace.site = NameSpace()
 namespace.context = NameSpace()
 namespace.readers = NameSpace({
+    'mkd': 'liquidluck.readers.mkd.MarkdownReader',
     'rst': 'liquidluck.readers.rst.RstReader',
 })
 namespace.writers = NameSpace({
