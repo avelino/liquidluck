@@ -68,7 +68,11 @@ class Writer(object):
 
     All Writers must has ``run()`` function.
     """
+    first_runing = True
+    writer_type = 'Writer'
     def __init__(self):
+        if self.first_runing:
+            logger.info('Load Writer: %s' % self.writer_type)
         # calc all posts
         if not namespace.allposts:
             for f in _walk(self.postdir):
@@ -181,6 +185,10 @@ class PagerMixin(object):
 
         # first page
         folder, filename = os.path.split(dest)
+        if filename == 'index.html' or filename == namespace.site.get('index', 'index.html'):
+            sub_folder = 'page'
+        else:
+            sub_folder, ext = os.path.splitext(filename)
 
         pager = paginator.get_current_page(1)
         pager.folder = folder
@@ -189,7 +197,7 @@ class PagerMixin(object):
         self.write(params, _tpl, dest)
 
         for p in range(paginator.pages):
-            dest = os.path.join(folder, 'page', '{0}.html'.format(p+1))
+            dest = os.path.join(folder, sub_folder, '{0}.html'.format(p+1))
             pager = paginator.get_current_page(p+1)
             pager.folder = folder
             self.write(params, _tpl, dest)

@@ -21,7 +21,7 @@ def init(filepath):
     config = ConfigParser()
     config.read(filepath)
     namespace.site.update(config.items('site'))
-    namespace.context.update({'context': config.items('context')})
+    namespace.context.update({'context': dict(config.items('context'))})
     for sec in ('writers', 'readers', 'filters'):
         if config.has_section(sec):
             namespace[sec].update(config.items(sec))

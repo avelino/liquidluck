@@ -15,6 +15,8 @@ def static_url(name):
     return os.path.join(url, name) + '?t=' + str(stat)
 
 class StaticWriter(Writer):
+    writer_type = 'Static Writer'
+
     @classmethod
     def get_context(self):
         return {'static_url': static_url}
@@ -32,6 +34,8 @@ def content_url(a, *args):
     return path
 
 class PostWriter(Writer):
+    writer_type = 'Post Writer'
+
     @classmethod
     def get_context(self):
         return {'content_url': content_url}
@@ -71,6 +75,8 @@ class PostWriter(Writer):
             self._write_post(post)
 
 class FileWriter(Writer):
+    writer_type = 'File Writer'
+
     def run(self):
         for source in namespace.allfiles:
             path = source.replace(self.postdir,'').lstrip('/')
@@ -78,6 +84,8 @@ class FileWriter(Writer):
             copy_to(source, dest)
 
 class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
+    writer_type = 'Index Writer'
+
     def run(self):
         posts = sort_posts(self.calc_archive_posts())
         dest = namespace.site.get('index', 'index.html')
@@ -85,6 +93,8 @@ class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
         self.write_feed(posts, dest='feed.xml', folder='')
 
 class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
+    writer_type = 'Year Writer'
+
     def calc_year_posts(self):
         for post in self.calc_archive_posts():
             yield post.date.year, post
@@ -97,6 +107,8 @@ class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
             self.write_pager(posts, dest, title=year)
 
 class TagWriter(Writer, ArchiveMixin, PagerMixin):
+    writer_type = 'Tag Writer'
+
     def calc_tag_posts(self):
         for post in self.calc_archive_posts():
             tags = post.get('tags', [])
@@ -119,12 +131,14 @@ class TagWriter(Writer, ArchiveMixin, PagerMixin):
     def run(self):
         tagcloud = merge(self.calc_tag_posts())
         self.write_tagcloud(tagcloud)
-        for tag, posts in tagcloud.iteritems():
+        for tag, posts in tagcloud.items():
             posts = sort_posts(posts)
             dest = os.path.join('tag', tag + '.html')
             self.write_pager(posts, dest, title=tag)
 
 class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
+    writer_type = 'Folder Writer'
+
     def calc_folder_posts(self):
         for post in self.calc_archive_posts():
             folder = post.get('folder', None)
