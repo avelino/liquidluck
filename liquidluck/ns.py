@@ -27,8 +27,22 @@ namespace = NameSpace.instance()
 
 
 #defaults 
-namespace.site = NameSpace()
 namespace.context = NameSpace()
+namespace.site = NameSpace({
+    'postdir': 'content',
+    'deploydir': 'deploy',
+    'staticdir': '_static',
+    'template': '_templates',
+    'format': 'year',
+    'slug': 'html',
+    'autoescape': 'false',
+    'feed_count': 10,
+    'perpage': 30,
+    'index': 'index.html',
+    'feed_template': 'feed.xml',
+    'archive_template': 'archive.html',
+    'tagcloud_template': 'tagcloud.html',
+})
 namespace.readers = NameSpace({
     'mkd': 'liquidluck.readers.mkd.MarkdownReader',
     'rst': 'liquidluck.readers.rst.RstReader',

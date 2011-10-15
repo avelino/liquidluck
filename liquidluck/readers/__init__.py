@@ -39,7 +39,7 @@ class Reader(object):
         return basename
 
     def get_resource_destination(self):
-        _format = namespace.site.get('format', 'folder')
+        _format = namespace.site.get('format', 'year')
         post = self.parse_post()
         filename = self.get_resource_basename() + '.html'
         year = str(post.date.year)
