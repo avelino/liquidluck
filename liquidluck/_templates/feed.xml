@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>{{ context.sitename }}</title>
+    <link href="{{ content_url(context.siteurl, folder, 'feed.xml') }}" rel="self" />
+    <link href="{{ content_url(context.siteurl, folder) }}" />
+    <updated>{{now|xmldatetime}}</updated>
+    <id>{{ context.siteurl }}</id>
+    {% for post in posts -%}
+    <entry>
+        <title type="html"><![CDATA[{{ post.title }}]]></title>
+        <author><name>{{ post.author }}</name><uri>{{ context.siteurl }}</uri></author>
+        <link href="{{ content_url(context.siteurl, post.slug) }}"/>
+        <updated>{{ post.date|xmldatetime }}</updated>
+        <published>{{ post.date|xmldatetime }}</published>
+        <id>{{ content_url(context.siteurl, post.slug) }}</id>
+        {% for tag in post.get('tags', []) -%}
+        <category scheme="{{ content_url(context.siteurl, 'tag', tag) }}" term="{{tag}}" label="{{ tag|title }}" />
+        {% endfor -%}
+        <content type="html" xml:base="{{ context.siteurl }}" xml:lang="en">
+            <![CDATA[ {{ post.content }} ]]>
+        </content>
+    </entry>
+    {% endfor -%}
+</feed>

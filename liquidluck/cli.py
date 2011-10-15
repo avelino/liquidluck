@@ -53,18 +53,33 @@ def build(config):
     end = time.time()
 
     logger.info('Total time: %s' % (end - begin))
+    return
 
-#TODO
+default_config = '''[site]
+perpage = 20
+postdir = content
+
+[context]
+author = admin
+sitename = my blog
+siteurl = http://www.example.com
+'''
 def create(config='config.ini'):
     cwd = os.getcwd()
     config_file = os.path.join(cwd, config)
     f = open(config_file, 'w')
     f.write(default_config)
     f.close()
-    config = Config(config_file)
-    shutil.copytree(os.path.join(ROOT, '_static'), os.path.join(cwd, config.get('staticdir')))
-    shutil.copytree(os.path.join(ROOT, '_templates'), os.path.join(cwd, config.get('template')))
-    os.makedirs(os.path.join(cwd, config.get('postdir')))
+    config = init(config_file)
+    shutil.copytree(
+        os.path.join(ROOT, '_static'),
+        os.path.join(cwd, config.get('staticdir', '_static'))
+    )
+    shutil.copytree(
+        os.path.join(ROOT, '_templates'),
+        os.path.join(cwd, config.get('template', '_templates'))
+    )
+    os.makedirs(os.path.join(cwd, config.get('postdir', 'content')))
     print 'Felix Felicis Repo Created'
     return
 

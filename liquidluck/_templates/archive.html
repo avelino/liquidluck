@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}{{context.sitename}} - {{title|capitalize}}{% endblock %}
+
+{% block container %}
+<h1 id="page-title">{{title|upper}}</h1>
+<ul id="article-list" class="ui-list fn-clear">
+    {% for post in pager.posts %}
+    <li class="ui-list-item">
+    <h3 class="ui-article-title"><a href="{{content_url(post.slug)}}">{{post.title}}</a></h3>
+    </li>
+    {% endfor %}
+</ul>
+{% if pager.pages > 1 %}
+<div id="pagination">
+    {% if pager.prev %}
+    <a class="prev" href="{{ content_url(pager.folder, pager.sub_folder, pager.prev) }}">«Prev</a>
+    {% else %}
+    <span class="prev">«Prev</span>
+    {% endif %}
+    <span class="fn-current">{{pager.page}}</span>
+    {% if pager.next %}
+    <a class="next" href="{{ content_url(pager.folder, pager.sub_folder, pager.next) }}">Next»</a>
+    {% else %}
+    <span class="next">Next»</span>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

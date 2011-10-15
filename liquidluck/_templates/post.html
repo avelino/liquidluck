@@ -1,1 +1,56 @@
-{{post.title}}
+{% extends "layout.html" %}
+
+{% block title %}{{context.sitename}} - {{post.title}}{% endblock %}
+
+{% block author %}
+<meta name="author" content="{{ post.author }}" />
+{% endblock %}
+
+{% block afterstyle %}
+<link rel="stylesheet" href="{{ static_url('syntax.css') }}" />
+{% endblock %}
+
+
+{% block container %}
+<h1 class="ui-article-title">
+    <a href="{{content_url(post.slug)}}" rel="self">{{post.title}}</a>
+</h1>
+<small><a href="{{content_url(post.date.year)}}" rel=archive"><time class="ui-article-time" datetime="{{post.date}}">{{post.date.strftime("%a, %b %d, %Y")}}</time></a></small>
+<div class="ui-article">
+    <div class="ui-article-content">
+        {{ post.content }}
+    </div>
+    <div class="ui-article-meta fn-clear">
+        <p class="ui-tags fn-left">
+            {% for tag in post.get('tags',[]) %}
+            <a href="{{content_url('tag', tag)}}" class="ui-tag" rel="tag">{{tag}}</a>
+            {% endfor %}
+        </p>
+        <p class="ui-article-rel fn-right">
+        {% if post.prev %}
+        <a id="prev-article" href="{{content_url(post.prev.slug)}}" title="{{post.prev.title}}" rel="prev">«Prev</a>
+        {% endif %}
+        {% if post.next %}
+        <a id="next-article" href="{{content_url(post.next.slug)}}" title="{{post.next.title}}" rel="next">Next»</a>
+        {% endif %}
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block afterjquery %}
+<script type="text/javascript">
+    $(function(){$(document).keydown(function(e){
+            var tagName = e.target.tagName.toLowerCase();
+            if("input" == tagName|| "textarea" == tagName){return ;}
+            if(37 == e.keyCode || 72 == e.keyCode){
+                var url = $('#prev-article').attr('href');
+            }else if(39 == e.keyCode || 76 == e.keyCode){
+                var url = $('#next-article').attr('href');
+            }
+            var url = url || '';
+            if(url){location.assign(url);}
+        });
+    });
+</script>
+{% endblock %}

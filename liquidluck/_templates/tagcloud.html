@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}{{context.sitename}} - Tags{% endblock %}
+
+{% block container %}
+<h1 id="page-title">TAGS</h1>
+<ul class="tagcloud fn-clear">
+    {% for tag in tags %}
+    <li><a href="{{ content_url('tag', tag.name) }}" style="font-size: {{tag.size}}%" title="{{tag.count}} posts">{{ tag.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -93,7 +93,8 @@ class Writer(object):
     def jinja(self):
         if hasattr(self, '_jinja'):
             return self._jinja
-        tpl = os.path.join(namespace.projectdir, namespace.site.get('template', 'templates'))
+        tpl = os.path.join(namespace.projectdir,
+                           namespace.site.get('template', '_templates'))
         autoescape = namespace.site.get('autoescape', 'false')
         autoescape = True if autoescape == 'true' else False
         jinja = Environment(
