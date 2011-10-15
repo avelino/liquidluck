@@ -40,7 +40,12 @@ def merge(li):
         pass
     return cache()
 
-
+def to_unicode(value):
+    if isinstance(value, unicode):
+        return value
+    if isinstance(value, basestring):
+        return value.decode('utf-8')
+    return value
 
 def import_module(module):
     parts = module.split('.')

@@ -40,6 +40,7 @@ from pygments.lexers import get_lexer_by_name, TextLexer
 
 from liquidluck import logger
 from liquidluck.readers import Reader
+from liquidluck.utils import to_unicode
 from liquidluck.ns import NameSpace
 
 INLINESTYLES = False
@@ -93,7 +94,8 @@ class rstParser(object):
         if not child:
             return None
         if child.nodeType == node.TEXT_NODE:
-            return child.data
+            return to_unicode(child.data)
+
         return None
 
     def _node_to_pairs(self, node):

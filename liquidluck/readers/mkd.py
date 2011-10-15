@@ -11,6 +11,7 @@ from markdown import Markdown
 
 from liquidluck.readers import Reader
 from liquidluck.ns import NameSpace
+from liquidluck.utils import to_unicode
 from liquidluck import logger
 
 INLINESTYLES = False
@@ -67,8 +68,8 @@ class MarkdownParser(object):
         for meta in meta.split('\n'):
             k, v = meta.split(':')
             k, v = k.rstrip(), v.lstrip()
-            tmp[k] = v.decode('utf-8')
-        text = content[match.end():]
+            tmp[k] = to_unicode(v)
+        text = to_unicode(content[match.end():])
         tmp['content'] = md.convert(text)
         return tmp
 
