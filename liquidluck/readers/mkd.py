@@ -94,6 +94,9 @@ class MarkdownReader(Reader):
             logger.error(self.filepath + ' no create date')
             return None
         post.date = datetime.datetime.strptime(create_date, '%Y-%m-%d')
+        tags = post.get('tags', None)
+        if tags:
+            post.tags = [tag.strip() for tag in tags.split(',')]
         if post.get('public', 'true') == 'false':
             post.public = False
         else:
