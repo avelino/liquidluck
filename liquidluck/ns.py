@@ -28,6 +28,7 @@ namespace = NameSpace.instance()
 
 #defaults 
 namespace.context = NameSpace()
+namespace.status = NameSpace()
 namespace.site = NameSpace({
     'postdir': 'content',
     'deploydir': 'deploy',

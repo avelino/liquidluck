@@ -31,7 +31,7 @@ def init(filepath):
 def build(config):
     cwd = os.getcwd()
     config_file = os.path.join(cwd, config)
-    if  not os.path.exists(config_file):
+    if not os.path.exists(config_file):
         answer = raw_input('This is not a Felix Felicis repo, would you like to create one?(Y/n) ')
         if 'n' == answer.lower():
             sys.exit(1)
@@ -42,11 +42,9 @@ def build(config):
 
     begin = time.time()
     for reader in namespace.readers.values():
-        namespace.filters.update(import_module(reader).get_filters())
-        namespace.context.update(import_module(reader).get_context())
+        import_module(reader)().start()
     for writer in namespace.writers.values():
-        namespace.filters.update(import_module(writer).get_filters())
-        namespace.context.update(import_module(writer).get_context())
+        import_module(writer)().start()
 
     for writer in namespace.writers.values():
         import_module(writer)().run()
@@ -71,15 +69,15 @@ def create(config='config.ini'):
     f.write(default_config)
     f.close()
     config = init(config_file)
-    shutil.copytree(
-        os.path.join(ROOT, '_static'),
-        os.path.join(cwd, config.get('staticdir', '_static'))
-    )
-    shutil.copytree(
-        os.path.join(ROOT, '_templates'),
-        os.path.join(cwd, config.get('template', '_templates'))
-    )
-    os.makedirs(os.path.join(cwd, config.get('postdir', 'content')))
+    dest = os.path.join(cwd, config.get('staticdir', '_static'))
+    if not os.path.exists(dest):
+        shutil.copytree(os.path.join(ROOT, '_static'), dest)
+    dest = os.path.join(cwd, config.get('template', '_templates'))
+    if not os.path.exists(dest):
+        shutil.copytree(os.path.join(ROOT, '_templates'), dest)
+    dest = os.path.join(cwd, config.get('postdir', 'content'))
+    if not os.path.exists(dest):
+        os.makedirs(dest)
     print 'Felix Felicis Repo Created'
     return
 

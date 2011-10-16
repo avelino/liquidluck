@@ -81,13 +81,8 @@ class Writer(object):
                 else:
                     namespace.allfiles.append(f)
 
-    @classmethod
-    def get_filters(self):
-        return {}
-
-    @classmethod
-    def get_context(self):
-        return {}
+    def start(self):
+        return
 
     @property
     def jinja(self):
@@ -123,6 +118,7 @@ class Writer(object):
     def render(self, template, params={}):
         params.update({'now': datetime.datetime.now()})
         params.update(dict(namespace.context))
+        params.update(dict(namespace.status))
         tpl = self.jinja.get_template(template)
         return tpl.render(params)
     

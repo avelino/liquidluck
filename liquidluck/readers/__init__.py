@@ -13,19 +13,13 @@ class Reader(object):
         - ``parse_post``
 
     New reader optional:
-        - ``get_filters``
-        - ``get_context``
+        - ``start``
     """
     def __init__(self, filepath=None):
         self.filepath = filepath
 
-    @classmethod
-    def get_filters(self):
-        return {}
-
-    @classmethod
-    def get_context(self):
-        return {}
+    def start(self):
+        return None
 
     def get_resource_path(self):
         return self.filepath

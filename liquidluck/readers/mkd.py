@@ -80,12 +80,6 @@ class MarkdownReader(Reader):
     def parse_post(self):
         if hasattr(self, 'post'):
             return self.post
-        self.post = post
-        return post
-
-    def parse_post(self):
-        if hasattr(self, 'post'):
-            return self.post
         parts = MarkdownParser(self.filepath).read()
 
         post = NameSpace(parts)

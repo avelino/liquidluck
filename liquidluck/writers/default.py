@@ -17,9 +17,9 @@ def static_url(name):
 class StaticWriter(Writer):
     writer_type = 'Static Writer'
 
-    @classmethod
-    def get_context(self):
-        return {'static_url': static_url}
+    def start(self):
+        namespace.context.update({'static_url': static_url})
+        return
 
     def run(self):
         for source in _walk(self.staticdir):
@@ -48,9 +48,8 @@ def content_url(a, *args):
 class PostWriter(Writer):
     writer_type = 'Post Writer'
 
-    @classmethod
-    def get_context(self):
-        return {'content_url': content_url}
+    def start(self):
+        return namespace.context.update({'content_url': content_url})
 
     def _calc_rel_posts(self):
         public_posts = []
