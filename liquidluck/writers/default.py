@@ -110,6 +110,13 @@ class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
         for post in self.calc_archive_posts():
             yield post.date.year, post
 
+    def start(self):
+        namespace.status.years = []
+        for year, posts in self.calc_year_posts():
+            namespace.status.years.append(year)
+        namespace.status.years = sorted(set(namespace.status.years))
+        return 
+
     def run(self):
         for year, posts in merge(self.calc_year_posts()).iteritems():
             posts = sort_posts(posts)
@@ -125,6 +132,14 @@ class TagWriter(Writer, ArchiveMixin, PagerMixin):
             tags = post.get('tags', [])
             for tag in tags:
                 yield tag, post
+
+    def start(self):
+        namespace.status.tags = []
+
+        for tag, posts in self.calc_tag_posts():
+            namespace.status.tags.append(tag)
+        namespace.status.tags = set(namespace.status.tags)
+        return 
 
     def write_tagcloud(self, tagcloud):
         dest = 'tag/index.html'
@@ -155,6 +170,13 @@ class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
             folder = post.get('folder', None)
             if folder:
                 yield folder, post
+
+    def start(self):
+        namespace.status.folders = []
+        for folder, posts in self.calc_folder_posts():
+            namespace.status.folders.append(folder)
+        namespace.status.folders = set(namespace.status.folders)
+        return 
 
     def run(self):
         for folder, posts in merge(self.calc_folder_posts()).iteritems():

@@ -118,7 +118,7 @@ class Writer(object):
     def render(self, template, params={}):
         params.update({'now': datetime.datetime.now()})
         params.update(dict(namespace.context))
-        params.update(dict(namespace.status))
+        params.update({'status': namespace.status})
         tpl = self.jinja.get_template(template)
         return tpl.render(params)
     
