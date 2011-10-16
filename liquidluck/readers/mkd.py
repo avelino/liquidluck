@@ -6,7 +6,6 @@ import datetime
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, TextLexer
-from markdown.preprocessors import Preprocessor
 from markdown import Markdown
 
 from liquidluck.readers import Reader
@@ -36,7 +35,10 @@ def codeblock(text):
         return '\n\n<div class="code">%s</div>\n\n' % code
     return pattern.sub(repl, text)
 
-md = Markdown()
+def markdown(text):
+    text = codeblock(text)
+    md = Markdown()
+    return md.convert(text)
 
 class MarkdownParser(object):
     def __init__(self, filepath):
@@ -64,8 +66,7 @@ class MarkdownParser(object):
             k, v = k.rstrip(), v.lstrip()
             tmp[k] = to_unicode(v)
         text = to_unicode(content[match.end():])
-        text = codeblock(text)
-        tmp['content'] = md.convert(text)
+        tmp['content'] = markdown(text)
         return tmp
 
 class MarkdownReader(Reader):

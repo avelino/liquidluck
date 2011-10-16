@@ -58,5 +58,6 @@ namespace.writers = NameSpace({
 })
 namespace.filters = NameSpace({
     'restructuredtext': 'liquidluck.readers.rst.restructuredtext',
+    'markdown': 'liquidluck.readers.mkd.markdown',
     'xmldatetime': 'liquidluck.utils.xmldatetime',
 })
