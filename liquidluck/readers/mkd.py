@@ -22,27 +22,21 @@ some code
 [/sourcecode]
 """
 
-class CodeBlockPreprocessor(Preprocessor):
-
+def codeblock(text):
     pattern = re.compile(
         r'\[sourcecode:(.+?)\](.+?)\[/sourcecode\]', re.S)
-
     formatter = HtmlFormatter(noclasses=INLINESTYLES)
-
-    def run(self, lines):
-        def repl(m):
-            try:
-                lexer = get_lexer_by_name(m.group(1))
-            except ValueError:
-                lexer = TextLexer()
-            code = highlight(m.group(2), lexer, self.formatter)
-            code = code.replace('\n\n', '\n&nbsp;\n').replace('\n', '<br />')
-            return '\n\n<div class="code">%s</div>\n\n' % code
-        return self.pattern.sub(repl, ''.join(lines))
+    def repl(m):
+        try:
+            lexer = get_lexer_by_name(m.group(1))
+        except ValueError:
+            lexer = TextLexer()
+        code = highlight(m.group(2), lexer, formatter)
+        code = code.replace('\n\n', '\n&nbsp;\n').replace('\n', '<br />')
+        return '\n\n<div class="code">%s</div>\n\n' % code
+    return pattern.sub(repl, text)
 
 md = Markdown()
-#md.preprocessors["sourcecode"] = CodeBlockPreprocessor(md)
-#TODO code block
 
 class MarkdownParser(object):
     def __init__(self, filepath):
@@ -70,6 +64,7 @@ class MarkdownParser(object):
             k, v = k.rstrip(), v.lstrip()
             tmp[k] = to_unicode(v)
         text = to_unicode(content[match.end():])
+        text = codeblock(text)
         tmp['content'] = md.convert(text)
         return tmp
 
