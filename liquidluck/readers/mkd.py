@@ -1,5 +1,31 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''
+Blog content file parser.
+
+Syntax::
+
+    -----------------
+    title: Title
+    date: 2011-09-01
+    folder: life
+    tags: tag1, tag2
+    -----------------
+
+    Your content here. And it support code highlight.
+
+    [sourcecode:python]
+
+    def hello():
+        return 'Hello World'
+
+    [/sourcecode]
+
+
+:copyright: (c) 2011 by Hsiaoming Young (aka lepture)
+:license: BSD
+'''
+
 
 import re
 import datetime

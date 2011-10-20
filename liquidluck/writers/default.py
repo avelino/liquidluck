@@ -58,6 +58,7 @@ class PostWriter(Writer):
             if post.public:
                 public_posts.append(post)
             else:
+                logger.info('Secrect Post: %s' % post.destination)
                 secret_posts.append(post)
         public_posts = sort_posts(public_posts)
         i = 0

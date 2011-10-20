@@ -12,11 +12,6 @@ Writer, write your content to html.
 import os
 import datetime
 import shutil
-from fnmatch import fnmatch
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
 
 from jinja2 import Environment, FileSystemLoader
 
