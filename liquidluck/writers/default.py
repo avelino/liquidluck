@@ -1,5 +1,6 @@
 
 import os
+import hashlib
 from math import log
 
 from liquidluck.writers import Writer, ArchiveMixin, FeedMixin, PagerMixin
@@ -10,9 +11,13 @@ from liquidluck import logger
 
 def static_url(name):
     f = os.path.join(namespace.projectdir, namespace.site.get('staticdir','_static'), name)
-    stat = int(os.stat(f).st_mtime)
     url = namespace.site.get('static_prefix', '/_static')
-    return os.path.join(url, name) + '?t=' + str(stat)
+    if not os.path.exists(f):
+        logger.warn('No such static file: %s' % f)
+        return os.path.join(url, name)
+    f = open(f, 'rb')
+    stat = hashlib.md5(f.read()).hexdigest()
+    return os.path.join(url, name) + '?v=' + stat[:5]
 
 class StaticWriter(Writer):
     writer_type = 'Static Writer'
