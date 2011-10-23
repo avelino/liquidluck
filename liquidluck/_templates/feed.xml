@@ -2,7 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>{{ context.sitename }}</title>
     <link href="{{ content_url(context.siteurl, folder, 'feed.xml') }}" rel="self" />
+    {% if folder %}
     <link href="{{ content_url(context.siteurl, folder) }}" />
+    {% else %}
+    <link href="{{ content_url(context.siteurl) }}" />
+    {% end %}
     <updated>{{now|xmldatetime}}</updated>
     <id>{{ context.siteurl }}</id>
     {% for post in posts -%}
