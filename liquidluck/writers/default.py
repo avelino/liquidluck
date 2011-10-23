@@ -23,7 +23,7 @@ class StaticWriter(Writer):
     writer_type = 'Static Writer'
 
     def start(self):
-        namespace.context.update({'static_url': static_url})
+        namespace.functions.update({'static_url': static_url})
         return
 
     def run(self):
@@ -54,7 +54,7 @@ class PostWriter(Writer):
     writer_type = 'Post Writer'
 
     def start(self):
-        return namespace.context.update({'content_url': content_url})
+        return namespace.functions.update({'content_url': content_url})
 
     def _calc_rel_posts(self):
         public_posts = []
