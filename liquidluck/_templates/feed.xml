@@ -5,7 +5,7 @@
     {% if folder %}
     <link href="{{ content_url(context.siteurl, folder) }}" />
     {% else %}
-    <link href="{{ content_url(context.siteurl) }}" />
+    <link href="{{ context.siteurl }}" />
     {% end %}
     <updated>{{now|xmldatetime}}</updated>
     <id>{{ context.siteurl }}</id>
