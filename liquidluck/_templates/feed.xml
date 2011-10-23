@@ -6,7 +6,7 @@
     <link href="{{ content_url(context.siteurl, folder) }}" />
     {% else %}
     <link href="{{ context.siteurl }}" />
-    {% end %}
+    {% endif %}
     <updated>{{now|xmldatetime}}</updated>
     <id>{{ context.siteurl }}</id>
     {% for post in posts -%}
