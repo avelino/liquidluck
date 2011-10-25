@@ -138,31 +138,30 @@ class TagWriter(Writer, ArchiveMixin, PagerMixin):
             tags = post.get('tags', [])
             for tag in tags:
                 yield tag, post
-
-    def start(self):
-        namespace.status.tags = []
-
-        for tag, posts in self.calc_tag_posts():
-            namespace.status.tags.append(tag)
-        namespace.status.tags = set(namespace.status.tags)
-        return 
-
-    def write_tagcloud(self, tagcloud):
-        dest = 'tag/index.html'
-        tags = []
+    
+    def calc_tagcloud(self):
+        tagcloud = merge(self.calc_tag_posts())
         for k, v in tagcloud.iteritems():
             tag = NameSpace(
                 name = k,
                 count = len(v),
                 size = 100 + log(len(v) or 1)*20,
             )
-            tags.append(tag)
+            yield tag
+
+    def start(self):
+        namespace.status.tags = [tag for tag in self.calc_tagcloud()]
+        return 
+
+    def write_tagcloud(self):
+        dest = 'tag/index.html'
         _tpl = namespace.site.get('tagcloud_template', 'tagcloud.html')
-        return self.write({'tags':tags}, _tpl, dest)
+        return self.write({'tags':namespace.status.tags}, _tpl, dest)
 
     def run(self):
+        self.write_tagcloud()
+
         tagcloud = merge(self.calc_tag_posts())
-        self.write_tagcloud(tagcloud)
         for tag, posts in tagcloud.items():
             posts = sort_posts(posts)
             dest = os.path.join('tag', tag + '.html')
