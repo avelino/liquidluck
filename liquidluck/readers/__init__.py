@@ -1,5 +1,6 @@
 
 import os
+import datetime
 from liquidluck.ns import namespace
 
 class Reader(object):
@@ -68,12 +69,25 @@ class Reader(object):
 
     def render(self):
         post = self.parse_post()
+        if not post.get('author', None):
+            post.author = namespace.context.get('author', 'admin')
+
+        dateformat = namespace.site.get('dateformat', '%Y-%m-%d')
+        timeformat = namespace.site.get('timeformat', '%Y-%m-%d %H:%M:%S')
+        for key in post.keys():
+            if 'date' in key:
+                post[key] = datetime.datetime.strptime(post[key], dateformat)
+            elif 'time' in key:
+                post[key] = datetime.datetime.strptime(post[key], timeformat)
+
+        if post.get('public', 'true') == 'false':
+            post.public = False
+        else:
+            post.public = True
 
         post.mtime = self.get_resource_mtime()
         post.destination = self.get_resource_destination()
         post.slug = self.get_resource_slug()
-        if not post.get('author', None):
-            post.author = namespace.context.get('author', 'admin')
         return post
 
     def parse_post(self):

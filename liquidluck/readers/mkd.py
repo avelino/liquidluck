@@ -28,7 +28,6 @@ Syntax::
 
 
 import re
-import datetime
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, TextLexer
@@ -108,17 +107,8 @@ class MarkdownReader(Reader):
         parts = MarkdownParser(self.filepath).read()
 
         post = NameSpace(parts)
-        create_date = post.get('date', None)
-        if not create_date:
-            logger.error(self.filepath + ' no create date')
-            return None
-        post.date = datetime.datetime.strptime(create_date, '%Y-%m-%d')
         tags = post.get('tags', None)
         if tags:
             post.tags = [tag.strip() for tag in tags.split(',')]
-        if post.get('public', 'true') == 'false':
-            post.public = False
-        else:
-            post.public = True
         self.post = post
         return post

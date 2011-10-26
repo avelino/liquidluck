@@ -36,6 +36,8 @@ namespace.site = NameSpace({
     'staticdir': '_static',
     'template': '_templates',
     'format': 'year',
+    'dateformat': '%Y-%m-%d',
+    'timeformat': '%Y-%m-%d %H:%M:%S',
     'slug': 'html',
     'syntax': 'class',
     'autoescape': 'false',

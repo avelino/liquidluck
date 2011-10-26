@@ -29,7 +29,6 @@ Syntax::
 
 import os
 import os.path
-import datetime
 from xml.dom import minidom
 from docutils import nodes
 from docutils.core import publish_parts
@@ -157,21 +156,11 @@ class RstReader(Reader):
         parts = rstParser(self.filepath).read()
 
         docinfo = dict(parts['docinfo'])
-        create_date = docinfo.get('date', None)
-        if not create_date:
-            logger.error(self.filepath + ' no create date')
-            return None
-        create_date = datetime.datetime.strptime(create_date, '%Y-%m-%d')
 
         post = NameSpace()
         for k, v in docinfo.items():
             post[k] = v
         post.title = parts['title'] 
         post.content = parts['body']
-        post.date = create_date
-        if post.get('public', 'true') == 'false':
-            post.public = False
-        else:
-            post.public = True
         self.post = post
         return post
