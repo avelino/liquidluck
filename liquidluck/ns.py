@@ -37,6 +37,7 @@ namespace.site = NameSpace({
     'template': '_templates',
     'format': 'year',
     'slug': 'html',
+    'syntax': 'class',
     'autoescape': 'false',
     'feed_count': 10,
     'perpage': 30,

@@ -35,11 +35,14 @@ from pygments.lexers import get_lexer_by_name, TextLexer
 from markdown import Markdown
 
 from liquidluck.readers import Reader
-from liquidluck.ns import NameSpace
+from liquidluck.ns import namespace, NameSpace
 from liquidluck.utils import to_unicode
 from liquidluck import logger
 
-INLINESTYLES = False
+if namespace.site.get('syntax', 'class') == 'class':
+    INLINESTYLES = False
+else:
+    INLINESTYLES = True
 
 """
 [sourcecode:lexer]

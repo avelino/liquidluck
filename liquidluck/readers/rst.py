@@ -41,9 +41,12 @@ from pygments.lexers import get_lexer_by_name, TextLexer
 from liquidluck import logger
 from liquidluck.readers import Reader
 from liquidluck.utils import to_unicode
-from liquidluck.ns import NameSpace
+from liquidluck.ns import namespace, NameSpace
 
-INLINESTYLES = False
+if namespace.site.get('syntax', 'class') == 'class':
+    INLINESTYLES = False
+else:
+    INLINESTYLES = True
 DEFAULT = HtmlFormatter(noclasses=INLINESTYLES)
 VARIANTS = {
     'linenos': HtmlFormatter(noclasses=INLINESTYLES, linenos=True),
