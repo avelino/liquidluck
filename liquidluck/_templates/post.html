@@ -37,20 +37,3 @@
     </div>
 </div>
 {% endblock %}
-
-{% block afterjquery %}
-<script type="text/javascript">
-    $(function(){$(document).keydown(function(e){
-            var tagName = e.target.tagName.toLowerCase();
-            if("input" == tagName|| "textarea" == tagName){return ;}
-            if(37 == e.keyCode || 72 == e.keyCode){
-                var url = $('#prev-article').attr('href');
-            }else if(39 == e.keyCode || 76 == e.keyCode){
-                var url = $('#next-article').attr('href');
-            }
-            var url = url || '';
-            if(url){location.assign(url);}
-        });
-    });
-</script>
-{% endblock %}
