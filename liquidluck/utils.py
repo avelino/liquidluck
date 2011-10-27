@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def xmldatetime(value):
-    """ this is a jinja filter """
-    return value.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 class Cache(object):
     def __init__(self):

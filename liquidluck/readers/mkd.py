@@ -36,6 +36,7 @@ from markdown import Markdown
 from liquidluck.readers import Reader
 from liquidluck.ns import namespace, NameSpace
 from liquidluck.utils import to_unicode
+from liquidluck.filters import embed
 from liquidluck import logger
 
 if namespace.site.get('syntax', 'class') == 'class':
@@ -65,6 +66,7 @@ def codeblock(text):
 
 def markdown(text):
     text = codeblock(text)
+    text = embed(text)
     md = Markdown()
     return md.convert(text)
 
