@@ -25,9 +25,6 @@ class Reader(object):
     def get_resource_path(self):
         return self.filepath
 
-    def get_resource_mtime(self):
-        return os.stat(self.filepath).st_mtime
-
     def get_resource_basename(self):
         folder, filename = os.path.split(self.filepath)
         basename, ext = os.path.splitext(filename)
@@ -85,7 +82,6 @@ class Reader(object):
         else:
             post.public = True
 
-        post.mtime = self.get_resource_mtime()
         post.destination = self.get_resource_destination()
         post.slug = self.get_resource_slug()
         return post

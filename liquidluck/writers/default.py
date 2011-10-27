@@ -82,9 +82,6 @@ class PostWriter(Writer):
     def _write_post(self, post):
         _tpl = post.get('template', 'post.html')
         dest = os.path.join(self.deploydir, post.destination)
-        if os.path.exists(dest) and post.mtime < os.stat(dest).st_mtime:
-            logger.info('Ignore ' + dest)
-            return
         self.write({'post':post}, _tpl, post.destination)
 
     def run(self):
