@@ -10,8 +10,8 @@ from liquidluck.ns import namespace, NameSpace
 from liquidluck import logger
 
 def static_url(name):
-    f = os.path.join(namespace.projectdir, namespace.site.get('staticdir','_static'), name)
-    url = namespace.site.get('static_prefix', '/_static')
+    f = os.path.join(namespace.projectdir, namespace.site.get('staticdir','static'), name)
+    url = namespace.site.get('static_prefix', '/static')
     if not os.path.exists(f):
         logger.warn('No such static file: %s' % f)
         return os.path.join(url, name)

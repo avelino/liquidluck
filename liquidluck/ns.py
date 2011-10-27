@@ -33,7 +33,8 @@ namespace.functions = NameSpace()
 namespace.site = NameSpace({
     'postdir': 'content',
     'deploydir': 'deploy',
-    'staticdir': '_static',
+    'staticdir': 'static',
+    'static_prefix': '/static',
     'template': '_templates',
     'format': 'year',
     'dateformat': '%Y-%m-%d',

@@ -69,7 +69,7 @@ def create(config='config.ini'):
     f.write(default_config)
     f.close()
     config = init(config_file)
-    dest = os.path.join(cwd, config.get('staticdir', '_static'))
+    dest = os.path.join(cwd, config.get('staticdir', 'static'))
     if not os.path.exists(dest):
         shutil.copytree(os.path.join(ROOT, '_static'), dest)
     dest = os.path.join(cwd, config.get('template', '_templates'))
