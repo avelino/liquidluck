@@ -190,7 +190,7 @@ class PagerMixin(object):
         self.write(params, _tpl, dest)
 
         for p in range(paginator.pages):
-            dest = os.path.join(folder, sub_folder, '{0}.html'.format(p+1))
+            dest = os.path.join(folder, sub_folder, '%s.html' % (p+1))
             pager = paginator.get_current_page(p+1)
             pager.folder = folder
             self.write(params, _tpl, dest)

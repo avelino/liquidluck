@@ -78,7 +78,7 @@ def create(config='config.ini'):
     dest = os.path.join(cwd, config.get('postdir', 'content'))
     if not os.path.exists(dest):
         os.makedirs(dest)
-    print 'Felix Felicis Repo Created'
+    print('Felix Felicis Repo Created')
     return
 
 def main():

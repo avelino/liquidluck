@@ -47,7 +47,7 @@ def content_url(a, *args):
         path = basename + '/'
 
     if not path.startswith('http://'):
-        path = '/{0}'.format(path.lstrip('/'))
+        path = '/%s' % path.lstrip('/')
     return path
 
 class PostWriter(Writer):

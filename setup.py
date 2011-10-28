@@ -2,6 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup
+install_requires=['docutils', 'Jinja2', 'Pygments', 'markdown']
+try:
+    import argparse # python 2.7+ support argparse
+except ImportError:
+    install_requires.append('argparse')
+
 
 version = '0.1'
 
@@ -17,7 +23,7 @@ setup(
     entry_points = {
         'console_scripts': ['liquidluck= liquidluck.cli:main'],
     },
-    install_requires=['docutils', 'Jinja2', 'Pygments', 'markdown'],
+    install_requires=install_requires,
     include_package_data = True,
     classifiers = [
         'Development Status :: 3 - Alpha',
