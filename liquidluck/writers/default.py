@@ -5,7 +5,7 @@ from math import log
 
 from liquidluck.writers import Writer, ArchiveMixin, FeedMixin, PagerMixin
 from liquidluck.writers import sort_posts, make_folder, copy_to, _walk
-from liquidluck.utils import merge
+from liquidluck.utils import merge, to_unicode
 from liquidluck.ns import namespace, NameSpace
 from liquidluck import logger
 
@@ -35,8 +35,8 @@ class StaticWriter(Writer):
 def content_url(a, *args):
     slug = namespace.site.get('slug', 'html')
     
-    args = [str(arg) for arg in args]
-    path = os.path.join(str(a), *args)
+    args = [to_unicode(arg) for arg in args]
+    path = os.path.join(to_unicode(a), *args)
     basename, ext = os.path.splitext(path)
     if not ext:
         path = basename + '.html'
