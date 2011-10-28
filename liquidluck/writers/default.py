@@ -187,3 +187,29 @@ class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
             self.write_pager(posts, dest, title=folder, folder=folder)
             dest = os.path.join(folder, 'feed.xml')
             self.write_feed(posts, dest, title=folder, folder=folder)
+
+class CategoryWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
+    writer_type = 'Category Writer'
+
+    def calc_category_posts(self):
+        key = namespace.site.get('category', 'category')
+        for post in self.calc_archive_posts():
+            category = post.get(key, None)
+            if category:
+                yield category, post
+
+    def start(self):
+        namespace.status.categories = []
+        for cat, posts in self.calc_category_posts():
+            namespace.status.categories.append(cat)
+        namespace.status.categories = set(namespace.status.categories)
+        return
+
+    def run(self):
+        key = namespace.site.get('category', 'category')
+        for cat, posts in merge(self.calc_category_posts()).iteritems():
+            posts = sort_posts(posts)
+            dest = os.path.join(key, cat, 'index.html')
+            self.write_pager(posts, dest, title=cat)
+            dest = os.path.join(key, cat, 'feed.xml')
+            self.write_feed(posts, dest, title=cat, folder='')
