@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+from liquidluck.utils import to_unicode
 
 def xmldatetime(value):
     """ this is a jinja filter """
@@ -20,3 +21,12 @@ def embed(value):
     #tudou
     value = re.sub(r'http://www.tudou.com/programs/view/([a-zA-z0-9\-\=]+)/',r'<small><a rel="nofollow" href="http://www.tudou.com/programs/view/\1/">Tudou Source</a></small><br /><embed src="http://www.tudou.com/v/\1/v.swf" width="480" height="400" allowScriptAccess="sameDomain" wmode="opaque" type="application/x-shockwave-flash" />', value)
     return value
+
+
+
+def first_paragraph(value):
+    regex = re.compile(r'<p>(.*?)</p>', re.U|re.S)
+    m = regex.findall(value)
+    if not m:
+        return ''
+    return '<p>%s</p>' % m[0]
