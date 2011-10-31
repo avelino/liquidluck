@@ -15,7 +15,7 @@
 <h1 class="ui-article-title">
     <a href="{{content_url(post.slug)}}" rel="self">{{post.title}}</a>
 </h1>
-<small><a href="{{content_url(post.date.year)}}" rel=archive"><time class="ui-article-time" datetime="{{post.date}}">{{post.date.strftime("%a, %b %d, %Y")}}</time></a></small>
+<small><a href="/{{post.date.year}}/" rel=archive"><time class="ui-article-time" datetime="{{post.date}}">{{post.date.strftime("%a, %b %d, %Y")}}</time></a></small>
 <div class="ui-article">
     <div class="ui-article-content">
         {{ post.content }}
