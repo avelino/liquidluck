@@ -90,14 +90,20 @@ class MarkdownParser(object):
             return None
         meta = match.group(1)
         meta = re.sub(r'\r\n|\r|\n', '\n', meta)
-        tmp = {}
+        dct = {}
+        last_key = None
         for meta in meta.split('\n'):
-            k, v = meta.split(':')
-            k, v = k.rstrip(), v.lstrip()
-            tmp[k] = to_unicode(v)
+            if meta.startswith('  ') and last_key:
+                dct[last_key] = dct[last_key] + '\n' + meta.lstrip()
+            if ':' in meta:
+                index = meta.find(':')
+                last_key = k = meta[:index]
+                v = meta[index+1:]
+                k, v = k.rstrip(), v.lstrip()
+                dct[k] = to_unicode(v)
         text = to_unicode(content[match.end():])
-        tmp['content'] = markdown(text)
-        return tmp
+        dct['content'] = markdown(text)
+        return dct
 
 class MarkdownReader(Reader):
     def support_type(self):
