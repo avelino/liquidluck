@@ -91,14 +91,14 @@ class MarkdownParser(object):
         meta = match.group(1)
         meta = re.sub(r'\r\n|\r|\n', '\n', meta)
         dct = {}
-        last_key = None
+        k = v = None
         for meta in meta.split('\n'):
-            if meta.startswith('  ') and last_key:
-                dct[last_key] = dct[last_key] + '\n' + meta.lstrip()
-            if ':' in meta:
+            meta = meta.replace('\t', '    ')
+            if meta.startswith('  ') and k:
+                dct[k] = dct[k] + '\n' + meta.lstrip()
+            if ':' in meta and not meta.startswith(' '):
                 index = meta.find(':')
-                last_key = k = meta[:index]
-                v = meta[index+1:]
+                k, v = meta[:index], meta[index+1:]
                 k, v = k.rstrip(), v.lstrip()
                 dct[k] = to_unicode(v)
         text = to_unicode(content[match.end():])
