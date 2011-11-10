@@ -100,11 +100,21 @@ class FileWriter(Writer):
 class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     writer_type = 'Index Writer'
 
+    def start(self):
+        namespace.status.posts = sort_posts(self.calc_archive_posts())
+        return
+
     def run(self):
         posts = sort_posts(self.calc_archive_posts())
         dest = namespace.site.get('index', 'index.html')
-        self.write_pager(posts, dest, title='Archive')
-        self.write_feed(posts, dest='feed.xml', folder='')
+        _archive_tpl = namespace.site.get('index_archive_template', None)
+        _feed_tpl = namespace.site.get('index_feed_template', None)
+        params = {'title': 'Archive'}
+        if _archive_tpl: params.update({'tpl': _archive_tpl})
+        self.write_pager(posts, dest, **params)
+        params = {'folder':''}
+        if _feed_tpl: params.update({'tpl': _feed_tpl})
+        self.write_feed(posts, dest='feed.xml', **params)
 
 class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     writer_type = 'Year Writer'
@@ -121,11 +131,14 @@ class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
         return 
 
     def run(self):
+        _tpl = namespace.site.get('year_archive_template', None)
         for year, posts in merge(self.calc_year_posts()).iteritems():
             posts = sort_posts(posts)
             year = str(year)
             dest = os.path.join(year, 'index.html')
-            self.write_pager(posts, dest, title=year)
+            params = {'title': year}
+            if _tpl: params.update({'tpl': _tpl})
+            self.write_pager(posts, dest, **params)
 
 class TagWriter(Writer, ArchiveMixin, PagerMixin):
     writer_type = 'Tag Writer'
@@ -159,10 +172,13 @@ class TagWriter(Writer, ArchiveMixin, PagerMixin):
         self.write_tagcloud()
 
         tagcloud = merge(self.calc_tag_posts())
+        _tpl = namespace.site.get('tag_archive_template', None)
         for tag, posts in tagcloud.items():
             posts = sort_posts(posts)
             dest = os.path.join('tag', tag + '.html')
-            self.write_pager(posts, dest, title=tag)
+            params = {'title': tag}
+            if _tpl: params.update({'tpl': _tpl})
+            self.write_pager(posts, dest, **params)
 
 class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     writer_type = 'Folder Writer'
@@ -181,12 +197,19 @@ class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
         return 
 
     def run(self):
+        _archive_tpl = namespace.site.get('folder_archive_template', None)
+        _feed_tpl = namespace.site.get('folder_feed_template', None)
         for folder, posts in merge(self.calc_folder_posts()).iteritems():
             posts = sort_posts(posts)
             dest = os.path.join(folder, 'index.html')
-            self.write_pager(posts, dest, title=folder, folder=folder)
+            params = {'title': folder, 'folder': folder}
+            if _archive_tpl: params.update({'tpl': _archive_tpl})
+            self.write_pager(posts, dest, **params)
+
             dest = os.path.join(folder, 'feed.xml')
-            self.write_feed(posts, dest, title=folder, folder=folder)
+            params = {'title': folder, 'folder': folder}
+            if _feed_tpl: params.update({'tpl': _feed_tpl})
+            self.write_feed(posts, dest, **params)
 
 class CategoryWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     writer_type = 'Category Writer'
@@ -207,9 +230,15 @@ class CategoryWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
 
     def run(self):
         key = namespace.site.get('category', 'category')
+        _archive_tpl = namespace.site.get('category_archive_template', None)
+        _feed_tpl = namespace.site.get('category_feed_template', None)
         for cat, posts in merge(self.calc_category_posts()).iteritems():
             posts = sort_posts(posts)
             dest = os.path.join(key, cat, 'index.html')
-            self.write_pager(posts, dest, title=cat)
+            params = {'title': cat}
+            if _archive_tpl: params.update({'tpl': _archive_tpl})
+            self.write_pager(posts, dest, **params)
             dest = os.path.join(key, cat, 'feed.xml')
-            self.write_feed(posts, dest, title=cat, folder='')
+            params = {'title': cat, 'folder':''}
+            if _feed_tpl: params.update({'tpl': _feed_tpl})
+            self.write_feed(posts, dest, **params)

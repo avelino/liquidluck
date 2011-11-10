@@ -143,6 +143,7 @@ class FeedMixin(object):
         count = int(namespace.site.get('feed_count',10))
         posts = posts[:count]
         _tpl = namespace.site.get('feed_template', 'feed.xml')
+        _tpl = params.pop('tpl', _tpl)
         params.update({'posts': posts})
         return self.write(params, _tpl, dest)
 
@@ -174,6 +175,7 @@ class PagerMixin(object):
         perpage = int(namespace.site.get('perpage', 30))
         paginator = Pagination(posts, perpage)
         _tpl = namespace.site.get('archive_template', 'archive.html')
+        _tpl = params.pop('tpl', _tpl)
 
         # first page
         folder, filename = os.path.split(dest)
