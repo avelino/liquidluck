@@ -1,17 +1,21 @@
 Felix Felicis
 ==============
 
-Felix Felicis (aka ``liquidluck``) is a simple lightweight static blog generator. It support markup of restructedText_ and markdown_ .
+Felix Felicis (aka ``liquidluck``) is a simple lightweight static blog generator. It supports markup of restructedText_ and markdown_ .
 
 Tested on:
 
-- python2.5
-- python2.6
-- python2.7
+- python2.5 (Linux/Mac)
+- python2.6 (Linux/Mac)
+- python2.7 (Linux/Mac)
 
 Getting Started
 ----------------
 Take a look at `Wiki <https://github.com/lepture/liquidluck/wiki>`_
+
+Check my blog for preview: http://lepture.com
+
+Contact me with `Email <lepture@me.com>`_ . Join #liquidluck on irc://freenode.org
 
 Useful Tips
 ---------------

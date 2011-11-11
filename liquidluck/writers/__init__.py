@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
@@ -171,7 +170,7 @@ class Pagination(object):
 
 
 class PagerMixin(object):
-    def write_pager(self, posts, dest='archive.html', **params):
+    def write_pager(self, posts, dest='index.html', **params):
         perpage = int(namespace.site.get('perpage', 30))
         paginator = Pagination(posts, perpage)
         _tpl = namespace.site.get('archive_template', 'archive.html')
