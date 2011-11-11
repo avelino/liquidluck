@@ -16,6 +16,7 @@ from liquidluck.ns import namespace
 from liquidluck import logger
 
 ROOT = os.path.dirname(__file__)
+namespace.root = ROOT
 
 def init(filepath):
     config = ConfigParser()

@@ -5,7 +5,7 @@
         <title>{% block title %}{{context.sitename}}{% endblock %}</title>
         <script>if (top !== self) top.location = self.location;</script>
         <meta name="HandheldFriendly" content="True" />
-        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <meta name="viewport" content="initial-scale=1; maximum-scale=1; user-scalable=0;" />
         {% block author %}
         <meta name="author" content="{{ context.author }}" />
         {% endblock %}
@@ -34,7 +34,7 @@
                 {% block container %}{% endblock %}
             </div>
             <div id="footer">
-                <div class="copyrith ft-right">Copyright by <a href="{{context.siteurl}}">{{context.sitename}}</a> | Powered by <a href="http://github.com/lepture/liquidluck">Felix Felicis</a></div>
+                <div class="copyright ft-right">Copyright by <a href="{{context.siteurl}}">{{context.sitename}}</a> | Powered by <a href="http://lepture.com/#felix-felicis">Felix Felicis</a></div>
             </div>
         </div>
     </body>

@@ -88,7 +88,7 @@ class Writer(object):
         autoescape = namespace.site.get('autoescape', 'false')
         autoescape = True if autoescape == 'true' else False
         jinja = Environment(
-            loader = FileSystemLoader([tpl]),
+            loader = FileSystemLoader([tpl, os.path.join(namespace.root, '_templates')]),
             autoescape = autoescape,
             extensions = ['jinja2.ext.autoescape', 'jinja2.ext.with_'],
         )

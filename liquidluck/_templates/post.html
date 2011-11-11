@@ -12,21 +12,26 @@
 
 
 {% block container %}
-<h1 class="ui-article-title">
+<h1 class="article-title">
     <a href="{{content_url(post.slug)}}" rel="self">{{post.title}}</a>
 </h1>
-<small><a href="/{{post.date.year}}/" rel=archive"><time class="ui-article-time" datetime="{{post.date}}">{{post.date.strftime("%a, %b %d, %Y")}}</time></a></small>
-<div class="ui-article">
-    <div class="ui-article-content">
+<div class="article-meta fn-clear">
+    <p class="article-time fn-left">
+    Created at: <a href="/{{post.date.year}}/" rel="archive"><time datetime="{{post.date}}">{{post.date.strftime("%a, %b %d, %Y")}}</a>
+    </p>
+    <p class="article-tags fn-left">
+    Tagged in:
+    {% for tag in post.get('tags', []) %}
+    <a href="{{content_url('tag', tag)}}" class="tag" rel="tag">{{tag}}</a>
+    {% endfor %}
+    </p>
+</div>
+<div class="article">
+    <div class="article-content">
         {{ post.content }}
     </div>
-    <div class="ui-article-meta fn-clear">
-        <p class="ui-tags fn-left">
-            {% for tag in post.get('tags',[]) %}
-            <a href="{{content_url('tag', tag)}}" class="ui-tag" rel="tag">{{tag}}</a>
-            {% endfor %}
-        </p>
-        <p class="ui-article-rel fn-right">
+    <div class="fn-clear">
+        <p class="article-rel fn-right">
         {% if post.prev %}
         <a id="prev-article" href="{{content_url(post.prev.slug)}}" title="{{post.prev.title}}" rel="prev">«Prev</a>
         {% endif %}

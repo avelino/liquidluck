@@ -251,37 +251,49 @@ blockquote::after {
 /* @end layout */
 
 /* @begin article */
-.ui-article-title {
+.article-title {
     margin-bottom: 10px;
 }
-.ui-article-title a {
+.article-title a {
     color: #e3513b;
 }
-.ui-article-time {
-    font: normal 12px/1.6 Helvetica,arial,sans-serif;
-    opacity: .4;
+.article-time {
+    padding-right: 6px;
+    border-right: 1px solid #dfdfdf;
 }
-.ui-article-time:hover {
+.article-time:hover {
     opacity: 1;
 }
-.ui-article-meta {
-    color: #999;
-    font-size: 12px;
+.article-meta {
+    font-style: italic;
+    font-family: Georgia, serif;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 1px 0 #fff, 0 1px 0 #fff inset;
+    margin-bottom: 24px;
 }
-.ui-tags a {
-    font-size: 12px;
+.article-meta p {
+    margin: 6px 0;
+}
+.article-tags {
+    padding-left: 6px;
+    border-left: 1px solid #fff;
+}
+.article-tags a {
     margin-right: 8px;
 }
-.ui-tags a::before {
+.article-tags a::before {
     content: "#";
 }
-.ui-article-rel a {
+.article-rel {
+}
+.article-rel a {
     margin-left: 8px;
 }
 #article-list p {
     margin-bottom: 5px;
 }
-#article-list .ui-article-title {
+#article-list .article-title {
     margin-bottom: 3px;
 }
 .ui-list {
@@ -294,7 +306,7 @@ blockquote::after {
     border-top: 1px solid #ffffff;
     box-shadow: 0 1px 0 #ffffff;
 }
-.ui-article-type {
+.article-type {
     position: absolute;
     display: inline-block;
     top: -5px;
@@ -304,24 +316,24 @@ blockquote::after {
     border: 1px dashed #ddd;
     padding: 1px 5px 3px 1px;
 }
-.ui-article-content .section {
+.article-content .section {
     padding: 9px 0;
 }
-.ui-article-content h3 {
+.article-content h3 {
     font-size: 14px;
 }
-.ui-article-content p {
+.article-content p {
     margin: 8px 0;
 }
-.ui-article-content ul {
+.article-content ul {
     list-style-type: square;
     margin: 6px 0 6px 18px;
 }
-.ui-article-content ol {
+.article-content ol {
     list-style-type: decimal;
     margin: 6px 0 6px 18px;
 }
-.ui-article-content img {
+.article-content img {
     max-width: 90%;
     border-radius: 6px;
     box-shadow: 1px 1px 3px #aeaeae;
