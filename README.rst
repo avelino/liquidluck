@@ -15,7 +15,7 @@ Take a look at `Wiki <https://github.com/lepture/liquidluck/wiki>`_
 
 Check my blog for preview: http://lepture.com
 
-Contact me with `Email <lepture@me.com>`_ . Join #liquidluck on irc://freenode.org
+Contact me with `Email <lepture@me.com>`_ . Join #liquidluck on `IRC <irc://irc.freenode.net/#liquidluck>`_ .
 
 Useful Tips
 ---------------
