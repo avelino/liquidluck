@@ -39,7 +39,7 @@ def content_url(a, *args):
     path = os.path.join(to_unicode(a), *args)
     basename, ext = os.path.splitext(path)
     if not ext:
-        path = basename + '.html'
+        path = basename + '/'
 
     if slug == 'clean':
         path = basename
@@ -175,7 +175,7 @@ class TagWriter(Writer, ArchiveMixin, PagerMixin):
         _tpl = namespace.site.get('tag_archive_template', None)
         for tag, posts in tagcloud.items():
             posts = sort_posts(posts)
-            dest = os.path.join('tag', tag + '.html')
+            dest = os.path.join('tag', tag, 'index.html')
             params = {'title': tag}
             if _tpl: params.update({'tpl': _tpl})
             self.write_pager(posts, dest, **params)
