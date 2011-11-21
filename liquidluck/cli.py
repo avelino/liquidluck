@@ -27,11 +27,9 @@ def init(filepath):
         if config.has_section(sec):
             namespace[sec].update(config.items(sec))
     namespace.projectdir = os.getcwd()
-    return namespace
+    return config
 
-def build(config):
-    cwd = os.getcwd()
-    config_file = os.path.join(cwd, config)
+def build(config_file):
     if not os.path.exists(config_file):
         answer = raw_input('This is not a Felix Felicis repo, would you like to create one?(Y/n) ')
         if 'n' == answer.lower():
@@ -63,20 +61,19 @@ author = admin
 sitename = my blog
 siteurl = http://www.example.com
 '''
-def create(config='config.ini'):
-    cwd = os.getcwd()
-    config_file = os.path.join(cwd, config)
+def create(config_file='config.ini'):
     f = open(config_file, 'w')
     f.write(default_config)
     f.close()
     config = init(config_file)
-    dest = os.path.join(cwd, config.get('staticdir', 'static'))
+    cwd = os.getcwd()
+    dest = os.path.join(cwd, namespace.site.get('staticdir', 'static'))
     if not os.path.exists(dest):
         shutil.copytree(os.path.join(ROOT, '_static'), dest)
-    dest = os.path.join(cwd, config.get('template', '_templates'))
+    dest = os.path.join(cwd, namespace.site.get('template', '_templates'))
     if not os.path.exists(dest):
         shutil.copytree(os.path.join(ROOT, '_templates'), dest)
-    dest = os.path.join(cwd, config.get('postdir', 'content'))
+    dest = os.path.join(cwd, namespace.site.get('postdir', 'content'))
     if not os.path.exists(dest):
         os.makedirs(dest)
     print('Felix Felicis Repo Created')
@@ -87,14 +84,31 @@ def main():
         prog='liquidluck',
         description='Felix Felicis, aka liquidluck, is a static weblog generator',
     )
-    parser.add_argument('-f', '--config', dest='config', default='config.ini', metavar='config.ini')
-    parser.add_argument('-c', '--command', dest='command', default='build', metavar='build')
+    parser.add_argument('command', nargs='*', type=str, default='build', metavar='command',
+                        help='liquidluck commands: create, build etc.'
+                       )
+    parser.add_argument('-f', '--config', dest='config', default='config.ini',
+                        metavar='config.ini')
     args = parser.parse_args()
 
-    if 'build' == args.command:
-        build(args.config)
-    elif 'create' == args.command: 
-        create(args.config)
+    def run_command(cmd):
+        if cmd == 'build':
+            return build(args.config)
+        if cmd == 'create':
+            return create(args.config)
+        config = init(args.config)
+        if not config.has_section('commands'):
+            return
+        for k, v in config.items('commands'):
+            if args.command == k:
+                return import_module(v)(args.config)
+
+    if isinstance(args.command, basestring):
+        return run_command(args.command)
+    if isinstance(args.command, list):
+        for cmd in args.command:
+            run_command(cmd)
+
 
 if '__main__' == __name__:
     main()
