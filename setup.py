@@ -9,7 +9,7 @@ except ImportError:
     install_requires.append('argparse')
 
 
-version = '0.1'
+from liquidluck import __version__ as version
 
 setup(
     name = 'liquidluck',
