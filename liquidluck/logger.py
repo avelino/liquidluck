@@ -1,114 +1,57 @@
-from logging import CRITICAL, ERROR,  WARN, INFO, DEBUG
-from logging import critical, error, info, warning, warn, debug
-from logging import Formatter, getLogger, StreamHandler
 import sys
-import os
 import datetime
 
-def utf8(text):
-    try:
-        return text.decode('utf-8')
-    except:
-        return text
+class Logger(object):
+    DEBUG = "\033[35m"
+    INFO = "\033[32m"
+    WARN = "\033[33m"
+    ERROR = "\033[31m"
+    TEXT = "\033[37m"
+    ENDC = "\033[0m"
 
-global ANSI
-ANSI = {
-    'gray' : lambda text: '\033[1;30m' + utf8(text) + '\033[1;m',
-    'red' : lambda text: '\033[1;31m' + utf8(text) + '\033[1;m',
-    'green' : lambda text: '\033[1;32m' + utf8(text) + '\033[1;m',
-    'yellow' : lambda text: '\033[1;33m' + utf8(text) + '\033[1;m',
-    'blue' : lambda text: '\033[1;34m' + utf8(text) + '\033[1;m',
-    'magenta' : lambda text: '\033[1;35m' + utf8(text) + '\033[1;m',
-    'cyan' : lambda text: '\033[1;36m' + utf8(text) + '\033[1;m',
-    'white' : lambda text: '\033[1;37m' + utf8(text) + '\033[1;m',
-    'bgred' : lambda text: '\033[1;41m' + utf8(text) + '\033[1;m',
-    'bggreen' : lambda text: '\033[1;42m' + utf8(text) + '\033[1;m',
-    'bgbrown' : lambda text: '\033[1;43m' + utf8(text) + '\033[1;m',
-    'bgblue' : lambda text: '\033[1;44m' + utf8(text) + '\033[1;m',
-    'bgmagenta' : lambda text: '\033[1;45m' + utf8(text) + '\033[1;m',
-    'bgcyan' : lambda text: '\033[1;46m' + utf8(text) + '\033[1;m',
-    'bggray' : lambda text: '\033[1;47m' + utf8(text) + '\033[1;m',
-    'bgyellow' : lambda text: '\033[1;43m' + utf8(text) + '\033[1;m',
-    'bggrey' : lambda text: '\033[1;100m' + utf8(text) + '\033[1;m'
-}
+    @classmethod
+    def _deco(cls, msg, color):
+        return '%s%s%s' % (color, msg, cls.ENDC)
 
-
-class ANSIFormatter(Formatter):
-    """
-    Convert a `logging.LogReport' object into colored text, using ANSI escape sequences.
-    """
-    ## colors:
+    @classmethod
+    def _echo(cls, msg, color):
+        now = datetime.datetime.now().strftime(' %H:%M:%S ')
+        return '%s %s' % (cls._deco(now, color), cls._deco(msg, cls.TEXT))
     
-    @property
-    def now(self):
-        return datetime.datetime.now().strftime(' %H:%M:%S ')
+    @classmethod
+    def _stdout(cls, msg):
+        sys.stdout.write('%s\n' % msg)
+        sys.stdout.flush()
 
-    def format(self, record):
-        _d = {'INFO': 'cyan', 'WARNING': 'yellow', 'ERROR':'red',
-              'CRITICAL': 'bgred', 'DEBUG': 'bggrey'}
-        if record.levelname in _d.keys():
-            return ANSI[_d[record.levelname]](record.levelname) + ANSI['green'](self.now) + ANSI['white'](record.msg)
-        else:
-            return ANSI['white'](record.levelname) + ANSI['green'](self.now) + ANSI['white'](record.msg)
+    @classmethod
+    def _stderr(cls, msg):
+        sys.stderr.write('%s\n' % msg)
+        sys.stderr.flush()
 
+    @classmethod
+    def instance(cls):
+        if not hasattr(cls, "_instance"):
+            cls._instance = cls()
+        return cls._instance
 
-class TextFormatter(Formatter):
-    """
-    Convert a `logging.LogReport' object into text.
-    """
+    def debug(self, msg):
+        now = datetime.datetime.now().strftime(' %H:%M:%S ')
+        self._stdout(self._deco('%s %s' % (now, msg), self.DEBUG))
 
-    def format(self, record):
-        if not record.levelname or record.levelname is 'INFO':
-            return record.msg
-        else:
-            return record.levelname + ': ' + record.msg
+    def info(self, msg):
+        now = datetime.datetime.now().strftime(' %H:%M:%S ')
+        self._stdout('%s %s' % (self._deco(now, self.INFO), self._deco(msg, self.TEXT)))
 
+    def warn(self, msg):
+        now = datetime.datetime.now().strftime(' %H:%M:%S ')
+        self._stdout(self._deco('%s %s' % (now, msg), self.WARN))
 
-class DummyFormatter(object):
-    """
-    A dummy class.
-    Return an instance of the appropriate formatter (ANSIFormatter if sys.stdout.isatty() is True, else TextFormatter)
-    """
+    def error(self, msg):
+        now = datetime.datetime.now().strftime(' %H:%M:%S ')
+        self._stderr(self._deco('%s %s' % (now, msg), self.ERROR))
 
-    def __new__(cls, *args, **kwargs):
-        if os.isatty(sys.stdout.fileno()): # thanks to http://stackoverflow.com/questions/2086961/how-can-i-determine-if-a-python-script-is-executed-from-crontab/2087031#2087031
-            return ANSIFormatter(*args, **kwargs)
-        else:
-            return TextFormatter( *args, **kwargs)
-
-
-
-
-
-def init(level=None, logger=getLogger(), handler=StreamHandler()):
-    fmt = DummyFormatter()
-    handler.setFormatter(fmt)
-    logger.addHandler(handler)
-    if level:
-        logger.setLevel(level)
-
-
-init(level=DEBUG)
-
-if __name__ == '__main__':
-    init(level=DEBUG)
-    debug('debug')
-    info('info')
-    warning('warning')
-    error('error')
-    critical('critical')
-
-
-__all__ = [
-    "debug", 
-    "info", 
-    "warn", 
-    "warning",
-    "error", 
-    "critical", 
-    "DEBUG", 
-    "INFO", 
-    "WARN", 
-    "ERROR", 
-    "CRITICAL"
-] 
+_logger = Logger.instance()
+debug = _logger.debug
+info = _logger.info
+warn = _logger.warn
+error = _logger.error
