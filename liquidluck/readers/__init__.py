@@ -3,6 +3,7 @@ import os
 import datetime
 from liquidluck.ns import namespace
 
+
 class Reader(object):
     """
     Base Reader, all readers must inherit this module. e.g.:
@@ -59,10 +60,10 @@ class Reader(object):
             return self.filepath.endswith('.' + _type)
         if isinstance(_type, list) or isinstance(_type, tuple):
             for _t in _type:
-                if isinstance(_t, basestring) and self.filepath.endswith('.' + _t):
+                if isinstance(_t, basestring) and \
+                   self.filepath.endswith('.' + _t):
                     return True
         return False
-
 
     def render(self):
         post = self.parse_post()

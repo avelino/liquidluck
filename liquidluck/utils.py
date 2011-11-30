@@ -14,12 +14,13 @@ class Cache(object):
         return value
 
     def delete(self, key):
-        if self._app_cache.has_key(key):
+        if key in self._app_cache:
             del self._app_cache[key]
         return None
 
     def __call__(self):
         return self._app_cache
+
 
 def merge(li):
     '''
@@ -27,7 +28,7 @@ def merge(li):
     '''
     cache = Cache()
     try:
-        for k,v in li:
+        for k, v in li:
             store = cache.get(k)
             if not store:
                 store = []
@@ -37,6 +38,7 @@ def merge(li):
         pass
     return cache()
 
+
 def to_unicode(value):
     if isinstance(value, unicode):
         return value
@@ -45,6 +47,7 @@ def to_unicode(value):
     if isinstance(value, int):
         return str(value)
     return value
+
 
 def import_module(module):
     parts = module.split('.')

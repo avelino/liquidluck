@@ -1,6 +1,7 @@
 import sys
 import datetime
 
+
 class Logger(object):
     DEBUG = "\033[35m"
     INFO = "\033[32m"
@@ -17,7 +18,7 @@ class Logger(object):
     def _echo(cls, msg, color):
         now = datetime.datetime.now().strftime(' %H:%M:%S ')
         return '%s %s' % (cls._deco(now, color), cls._deco(msg, cls.TEXT))
-    
+
     @classmethod
     def _stdout(cls, msg):
         sys.stdout.write('%s\n' % msg)
@@ -40,7 +41,9 @@ class Logger(object):
 
     def info(self, msg):
         now = datetime.datetime.now().strftime(' %H:%M:%S ')
-        self._stdout('%s %s' % (self._deco(now, self.INFO), self._deco(msg, self.TEXT)))
+        self._stdout('%s %s' % (
+            self._deco(now, self.INFO), self._deco(msg, self.TEXT)
+        ))
 
     def warn(self, msg):
         now = datetime.datetime.now().strftime(' %H:%M:%S ')

@@ -18,6 +18,7 @@ from liquidluck import logger
 ROOT = os.path.dirname(__file__)
 namespace.root = ROOT
 
+
 def init(filepath):
     config = ConfigParser()
     config.read(filepath)
@@ -29,9 +30,11 @@ def init(filepath):
     namespace.projectdir = os.getcwd()
     return config
 
+
 def build(config_file):
     if not os.path.exists(config_file):
-        answer = raw_input('This is not a Felix Felicis repo, would you like to create one?(Y/n) ')
+        answer = raw_input('This is not a Felix Felicis repo, '
+                           'would you like to create one?(Y/n) ')
         if 'n' == answer.lower():
             sys.exit(1)
             return
@@ -61,6 +64,8 @@ author = admin
 sitename = my blog
 siteurl = http://www.example.com
 '''
+
+
 def create(config_file='config.ini'):
     f = open(config_file, 'w')
     f.write(default_config)
@@ -79,12 +84,15 @@ def create(config_file='config.ini'):
     print('Felix Felicis Repo Created')
     return
 
+
 def main():
     parser = argparse.ArgumentParser(
         prog='liquidluck',
-        description='Felix Felicis, aka liquidluck, is a static weblog generator',
+        description=('Felix Felicis, aka liquidluck,'
+                     'is a static weblog generator'),
     )
-    parser.add_argument('command', nargs='*', type=str, default='build', metavar='command',
+    parser.add_argument('command', nargs='*', type=str, default='build',
+                        metavar='command',
                         help='liquidluck commands: create, build etc.'
                        )
     parser.add_argument('-f', '--config', dest='config', default='config.ini',

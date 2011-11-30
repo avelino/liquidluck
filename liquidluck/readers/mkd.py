@@ -50,10 +50,12 @@ some code
 [/sourcecode]
 """
 
+
 def codeblock(text):
     pattern = re.compile(
         r'\[sourcecode:(.+?)\](.+?)\[/sourcecode\]', re.S)
     formatter = HtmlFormatter(noclasses=INLINESTYLES)
+
     def repl(m):
         try:
             lexer = get_lexer_by_name(m.group(1))
@@ -64,11 +66,13 @@ def codeblock(text):
         return '\n\n<div class="code">%s</div>\n\n' % code
     return pattern.sub(repl, text)
 
+
 def markdown(text):
     text = codeblock(text)
     text = embed(text)
     md = Markdown()
     return md.convert(text)
+
 
 class MarkdownParser(object):
     def __init__(self, filepath):
@@ -98,12 +102,13 @@ class MarkdownParser(object):
                 dct[k] = dct[k] + '\n' + meta.lstrip()
             if ':' in meta and not meta.startswith(' '):
                 index = meta.find(':')
-                k, v = meta[:index], meta[index+1:]
+                k, v = meta[:index], meta[index + 1:]
                 k, v = k.rstrip(), v.lstrip()
                 dct[k] = to_unicode(v)
         text = to_unicode(content[match.end():])
         dct['content'] = markdown(text)
         return dct
+
 
 class MarkdownReader(Reader):
     def support_type(self):

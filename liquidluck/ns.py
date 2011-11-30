@@ -1,6 +1,7 @@
 
 __all__ = ['NameSpace', 'namespace']
 
+
 class NameSpace(dict):
     @classmethod
     def instance(cls):
@@ -26,7 +27,7 @@ class NameSpace(dict):
 namespace = NameSpace.instance()
 
 
-#defaults 
+#defaults
 namespace.context = NameSpace()
 namespace.status = NameSpace()
 namespace.functions = NameSpace()

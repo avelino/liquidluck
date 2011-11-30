@@ -9,8 +9,10 @@ from liquidluck.utils import merge, to_unicode
 from liquidluck.ns import namespace, NameSpace
 from liquidluck import logger
 
+
 def static_url(name):
-    f = os.path.join(namespace.projectdir, namespace.site.get('staticdir','static'), name)
+    f = os.path.join(namespace.projectdir,
+                     namespace.site.get('staticdir', 'static'), name)
     url = namespace.site.get('static_prefix', '/static')
     if not os.path.exists(f):
         logger.warn('No such static file: %s' % f)
@@ -18,6 +20,7 @@ def static_url(name):
     f = open(f, 'rb')
     stat = hashlib.md5(f.read()).hexdigest()
     return os.path.join(url, name) + '?v=' + stat[:5]
+
 
 class StaticWriter(Writer):
     writer_type = 'Static Writer'
@@ -28,13 +31,13 @@ class StaticWriter(Writer):
 
     def run(self):
         for source in _walk(self.staticdir):
-            path = source.replace(namespace.projectdir,'').lstrip('/')
+            path = source.replace(namespace.projectdir, '').lstrip('/')
             dest = os.path.join(self.deploydir, path)
             copy_to(source, dest)
 
+
 def content_url(a, *args):
     slug = namespace.site.get('slug', 'html')
-    
     args = [to_unicode(arg) for arg in args]
     path = os.path.join(to_unicode(a), *args)
     basename, ext = os.path.splitext(path)
@@ -49,6 +52,7 @@ def content_url(a, *args):
     if not path.startswith('http://'):
         path = '/%s' % path.lstrip('/')
     return path
+
 
 class PostWriter(Writer):
     writer_type = 'Post Writer'
@@ -70,32 +74,33 @@ class PostWriter(Writer):
         count = len(public_posts)
         for post in public_posts:
             if i > 0:
-                public_posts[i].prev = public_posts[i-1]
+                public_posts[i].prev = public_posts[i - 1]
             if i + 1 < count:
-                public_posts[i].next = public_posts[i+1]
+                public_posts[i].next = public_posts[i + 1]
             i += 1
         posts = public_posts
         posts.extend(secret_posts)
         return posts
 
-
     def _write_post(self, post):
         _tpl = post.get('template', 'post.html')
         dest = os.path.join(self.deploydir, post.destination)
-        self.write({'post':post}, _tpl, post.destination)
+        self.write({'post': post}, _tpl, post.destination)
 
     def run(self):
         for post in self._calc_rel_posts():
             self._write_post(post)
+
 
 class FileWriter(Writer):
     writer_type = 'File Writer'
 
     def run(self):
         for source in namespace.allfiles:
-            path = source.replace(self.postdir,'').lstrip('/')
+            path = source.replace(self.postdir, '').lstrip('/')
             dest = os.path.join(self.deploydir, path)
             copy_to(source, dest)
+
 
 class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     writer_type = 'Index Writer'
@@ -110,11 +115,14 @@ class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
         _archive_tpl = namespace.site.get('index_archive_template', None)
         _feed_tpl = namespace.site.get('index_feed_template', None)
         params = {'title': 'Archive'}
-        if _archive_tpl: params.update({'tpl': _archive_tpl})
+        if _archive_tpl:
+            params.update({'tpl': _archive_tpl})
         self.write_pager(posts, dest, **params)
-        params = {'folder':''}
-        if _feed_tpl: params.update({'tpl': _feed_tpl})
+        params = {'folder': ''}
+        if _feed_tpl:
+            params.update({'tpl': _feed_tpl})
         self.write_feed(posts, dest='feed.xml', **params)
+
 
 class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     writer_type = 'Year Writer'
@@ -128,7 +136,7 @@ class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
         for year, posts in self.calc_year_posts():
             namespace.status.years.append(year)
         namespace.status.years = sorted(set(namespace.status.years))
-        return 
+        return
 
     def run(self):
         _tpl = namespace.site.get('year_archive_template', None)
@@ -137,8 +145,10 @@ class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
             year = str(year)
             dest = os.path.join(year, 'index.html')
             params = {'title': year}
-            if _tpl: params.update({'tpl': _tpl})
+            if _tpl:
+                params.update({'tpl': _tpl})
             self.write_pager(posts, dest, **params)
+
 
 class TagWriter(Writer, ArchiveMixin, PagerMixin):
     writer_type = 'Tag Writer'
@@ -148,25 +158,25 @@ class TagWriter(Writer, ArchiveMixin, PagerMixin):
             tags = post.get('tags', [])
             for tag in tags:
                 yield tag, post
-    
+
     def calc_tagcloud(self):
         tagcloud = merge(self.calc_tag_posts())
         for k, v in tagcloud.iteritems():
             tag = NameSpace(
-                name = k,
-                count = len(v),
-                size = 100 + log(len(v) or 1)*20,
+                name=k,
+                count=len(v),
+                size=100 + log(len(v) or 1) * 20,
             )
             yield tag
 
     def start(self):
         namespace.status.tags = [tag for tag in self.calc_tagcloud()]
-        return 
+        return
 
     def write_tagcloud(self):
         dest = 'tag/index.html'
         _tpl = namespace.site.get('tagcloud_template', 'tagcloud.html')
-        return self.write({'tags':namespace.status.tags}, _tpl, dest)
+        return self.write({'tags': namespace.status.tags}, _tpl, dest)
 
     def run(self):
         self.write_tagcloud()
@@ -177,8 +187,10 @@ class TagWriter(Writer, ArchiveMixin, PagerMixin):
             posts = sort_posts(posts)
             dest = os.path.join('tag', tag, 'index.html')
             params = {'title': tag}
-            if _tpl: params.update({'tpl': _tpl})
+            if _tpl:
+                params.update({'tpl': _tpl})
             self.write_pager(posts, dest, **params)
+
 
 class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     writer_type = 'Folder Writer'
@@ -194,7 +206,7 @@ class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
         for folder, posts in self.calc_folder_posts():
             namespace.status.folders.append(folder)
         namespace.status.folders = set(namespace.status.folders)
-        return 
+        return
 
     def run(self):
         _archive_tpl = namespace.site.get('folder_archive_template', None)
@@ -203,13 +215,16 @@ class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
             posts = sort_posts(posts)
             dest = os.path.join(folder, 'index.html')
             params = {'title': folder, 'folder': folder}
-            if _archive_tpl: params.update({'tpl': _archive_tpl})
+            if _archive_tpl:
+                params.update({'tpl': _archive_tpl})
             self.write_pager(posts, dest, **params)
 
             dest = os.path.join(folder, 'feed.xml')
             params = {'title': folder, 'folder': folder}
-            if _feed_tpl: params.update({'tpl': _feed_tpl})
+            if _feed_tpl:
+                params.update({'tpl': _feed_tpl})
             self.write_feed(posts, dest, **params)
+
 
 class CategoryWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     writer_type = 'Category Writer'
@@ -236,9 +251,11 @@ class CategoryWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
             posts = sort_posts(posts)
             dest = os.path.join(key, cat, 'index.html')
             params = {'title': cat}
-            if _archive_tpl: params.update({'tpl': _archive_tpl})
+            if _archive_tpl:
+                params.update({'tpl': _archive_tpl})
             self.write_pager(posts, dest, **params)
             dest = os.path.join(key, cat, 'feed.xml')
-            params = {'title': cat, 'folder':''}
-            if _feed_tpl: params.update({'tpl': _feed_tpl})
+            params = {'title': cat, 'folder': ''}
+            if _feed_tpl:
+                params.update({'tpl': _feed_tpl})
             self.write_feed(posts, dest, **params)

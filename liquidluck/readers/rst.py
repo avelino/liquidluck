@@ -75,11 +75,12 @@ class Pygments(Directive):
 directives.register_directive('code-block', Pygments)
 directives.register_directive('sourcecode', Pygments)
 
+
 def restructuredtext(content):
     """
     this is a jinja filter.
     """
-    extra_setting = {'initial_header_level':'3'}
+    extra_setting = {'initial_header_level': '3'}
     parts = publish_parts(
         content, writer_name='html',
         settings_overrides=extra_setting,
@@ -109,7 +110,7 @@ class rstParser(object):
         '''
         keyNode = node.firstChild
         key = self._plain_text(keyNode)
-        key = key.lower().replace(':','')
+        key = key.lower().replace(':', '')
 
         valueNode = node.lastChild
 
@@ -129,7 +130,7 @@ class rstParser(object):
         content = f.read()
         f.close()
 
-        extra_setting = {'initial_header_level':'2'}
+        extra_setting = {'initial_header_level': '2'}
         parts = publish_parts(
             content, writer_name='html',
             settings_overrides=extra_setting,
@@ -137,7 +138,7 @@ class rstParser(object):
 
         # get docinfo
         docinfo = []
-        content = parts['docinfo'].replace('\n','')
+        content = parts['docinfo'].replace('\n', '')
         dom = minidom.parseString(content.encode('utf-8'))
         nodes = dom.getElementsByTagName('tr')
         for node in nodes:
@@ -145,6 +146,7 @@ class rstParser(object):
 
         parts['docinfo'] = docinfo
         return parts
+
 
 class RstReader(Reader):
     def support_type(self):
@@ -160,7 +162,7 @@ class RstReader(Reader):
         post = NameSpace()
         for k, v in docinfo.items():
             post[k] = v
-        post.title = parts['title'] 
+        post.title = parts['title']
         post.content = parts['body']
         self.post = post
         return post
