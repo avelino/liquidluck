@@ -19,9 +19,6 @@ from liquidluck.ns import namespace
 
 from liquidluck import logger
 
-namespace.allposts = []
-namespace.allfiles = []
-
 
 def make_folder(dest):
     folder = os.path.split(dest)[0]
@@ -45,21 +42,6 @@ def sort_posts(posts, reverse=True):
     return sorted(posts, key=lambda post: post.date, reverse=reverse)
 
 
-def _walk(dest):
-    for root, dirs, files in os.walk(dest):
-        for f in files:
-            path = os.path.join(root, f)
-            yield path
-
-
-def detect_reader(filepath):
-    for reader in namespace.readers.values():
-        reader = import_module(reader)(filepath)
-        if reader.support():
-            return reader
-    return None
-
-
 class Writer(object):
     """
     All Writers must inherit this class. e.g. StaticWriter(Writer)
@@ -70,16 +52,7 @@ class Writer(object):
     writer_type = 'Writer'
 
     def __init__(self):
-        if self.first_runing:
-            logger.info('Load Writer: %s' % self.writer_type)
-        # calc all posts
-        if not namespace.allposts:
-            for f in _walk(self.postdir):
-                reader = detect_reader(f)
-                if reader:
-                    namespace.allposts.append(reader.render())
-                else:
-                    namespace.allfiles.append(f)
+        logger.info('Load Writer: %s' % self.writer_type)
 
     def start(self):
         return
@@ -144,7 +117,7 @@ class Writer(object):
 
 class ArchiveMixin(object):
     def calc_archive_posts(self):
-        for post in namespace.allposts:
+        for post in namespace.posts:
             if post.public:
                 yield post
 
@@ -161,15 +134,15 @@ class FeedMixin(object):
 
 class Pagination(object):
     def __init__(self, posts, perpage=30):
-        self.allposts = [post for post in posts]
-        self.total = len(self.allposts)
+        self.posts = [post for post in posts]
+        self.total = len(self.posts)
         self.pages = (self.total - 1) / perpage + 1
         self.perpage = perpage
 
     def get_current_page(self, page=1):
         start = (page - 1) * self.perpage
         end = page * self.perpage
-        self.posts = self.allposts[start:end]
+        self.posts = self.posts[start:end]
         if page < self.pages:
             self.next = str(page + 1)
         else:

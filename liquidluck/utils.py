@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+
 
 class Cache(object):
     def __init__(self):
@@ -53,3 +55,10 @@ def import_module(module):
     parts = module.split('.')
     obj = __import__('.'.join(parts[:-1]), None, None, [parts[-1]], 0)
     return getattr(obj, parts[-1])
+
+
+def walk_dir(dest):
+    for root, dirs, files in os.walk(dest):
+        for f in files:
+            path = os.path.join(root, f)
+            yield path

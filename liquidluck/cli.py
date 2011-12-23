@@ -11,12 +11,15 @@ try:
 except ImportError:
     from ConfigParser import ConfigParser
 
-from liquidluck.utils import import_module
+from liquidluck.utils import import_module, walk_dir
 from liquidluck.ns import namespace
 from liquidluck import logger
+from liquidluck.readers import detect_reader
 
 ROOT = os.path.dirname(__file__)
 namespace.root = ROOT
+namespace.posts = []
+namespace.files = []
 
 
 def init(filepath):
@@ -28,6 +31,16 @@ def init(filepath):
         if config.has_section(sec):
             namespace[sec].update(config.items(sec))
     namespace.projectdir = os.getcwd()
+
+    postdir = os.path.join(namespace.projectdir,
+                           namespace.site.get('postdir','content'))
+    for f in walk_dir(postdir):
+        reader = detect_reader(f)
+        if reader:
+            namespace.posts.append(reader.render())
+        else:
+            namespace.files.append(f)
+
     return config
 
 
@@ -35,7 +48,7 @@ def build(config_file):
     if not os.path.exists(config_file):
         answer = raw_input('This is not a Felix Felicis repo, '
                            'would you like to create one?(Y/n) ')
-        if 'n' == answer.lower():
+        if answer.lower() == 'n':
             sys.exit(1)
             return
         return create()

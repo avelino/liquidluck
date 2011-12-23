@@ -1,11 +1,13 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import os
 import hashlib
 from math import log
 
 from liquidluck.writers import Writer, ArchiveMixin, FeedMixin, PagerMixin
-from liquidluck.writers import sort_posts, make_folder, copy_to, _walk
-from liquidluck.utils import merge, to_unicode
+from liquidluck.writers import sort_posts, make_folder, copy_to
+from liquidluck.utils import merge, to_unicode, walk_dir
 from liquidluck.ns import namespace, NameSpace
 from liquidluck import logger
 
@@ -30,7 +32,7 @@ class StaticWriter(Writer):
         return
 
     def run(self):
-        for source in _walk(self.staticdir):
+        for source in walk_dir(self.staticdir):
             path = source.replace(namespace.projectdir, '').lstrip('/')
             dest = os.path.join(self.deploydir, path)
             copy_to(source, dest)
@@ -63,7 +65,7 @@ class PostWriter(Writer):
     def _calc_rel_posts(self):
         public_posts = []
         secret_posts = []
-        for post in namespace.allposts:
+        for post in namespace.posts:
             if post.public:
                 public_posts.append(post)
             else:
@@ -96,7 +98,7 @@ class FileWriter(Writer):
     writer_type = 'File Writer'
 
     def run(self):
-        for source in namespace.allfiles:
+        for source in namespace.files:
             path = source.replace(self.postdir, '').lstrip('/')
             dest = os.path.join(self.deploydir, path)
             copy_to(source, dest)

@@ -1,7 +1,16 @@
 
 import os
 import datetime
+from liquidluck.utils import import_module
 from liquidluck.ns import namespace
+
+
+def detect_reader(filepath):
+    for reader in namespace.readers.values():
+        reader = import_module(reader)(filepath)
+        if reader.support():
+            return reader
+    return None
 
 
 class Reader(object):
