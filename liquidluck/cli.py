@@ -55,21 +55,9 @@ def build(config_file):
     logger.info('Total time: %s' % (end - begin))
     return
 
-default_config = '''[site]
-perpage = 20
-postdir = content
-
-[context]
-author = admin
-sitename = my blog
-siteurl = http://www.example.com
-'''
-
 
 def create(config_file='config.ini'):
-    f = open(config_file, 'w')
-    f.write(default_config)
-    f.close()
+    shutil.copy(os.path.join(ROOT, 'config.ini'), config_file)
     config = init(config_file)
     cwd = os.getcwd()
     dest = os.path.join(cwd, namespace.site.get('staticdir', 'static'))
@@ -77,7 +65,8 @@ def create(config_file='config.ini'):
         shutil.copytree(os.path.join(ROOT, '_static'), dest)
     dest = os.path.join(cwd, namespace.site.get('template', '_templates'))
     if not os.path.exists(dest):
-        shutil.copytree(os.path.join(ROOT, '_templates'), dest)
+        #shutil.copytree(os.path.join(ROOT, '_templates'), dest)
+        os.makedirs(dest)
     dest = os.path.join(cwd, namespace.site.get('postdir', 'content'))
     if not os.path.exists(dest):
         os.makedirs(dest)
