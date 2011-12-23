@@ -1,44 +1,58 @@
 {% extends "layout.html" %}
 
-{% block title %}{{context.sitename}} - {{post.title}}{% endblock %}
+{% block title %}{{post.title}} | {{context.sitename}}{% endblock %}
 
 {% block author %}
 <meta name="author" content="{{ post.author }}" />
 {% endblock %}
 
 {% block afterstyle %}
+<link rel="canonical" href="{{ content_url(post.slug) }}" />
 <link rel="stylesheet" href="{{ static_url('syntax.css') }}" />
 {% endblock %}
 
+{% block entrytitle%}<a href="{{content_url(post.slug)}}" rel="self">{{post.title}}</a>{% endblock %}
 
 {% block container %}
-<h1 class="article-title">
-    <a href="{{content_url(post.slug)}}" rel="self">{{post.title}}</a>
-</h1>
-<div class="article-meta fn-clear">
-    <p class="article-time fn-left">
-    Created at: <a href="/{{post.date.year}}/" rel="archive"><time datetime="{{post.date}}">{{post.date.strftime("%a, %b %d, %Y")}}</a>
-    </p>
-    <p class="article-tags fn-left">
-    Tagged in:
-    {% for tag in post.get('tags', []) %}
-    <a href="{{content_url('tag', tag)}}" class="tag" rel="tag">{{tag}}</a>
-    {% endfor %}
-    </p>
-</div>
-<div class="article">
-    <div class="article-content">
+<div class="entry">
+    <div class="entry-content">
         {{ post.content }}
     </div>
     <div class="fn-clear">
-        <p class="article-rel fn-right">
+        <p class="entry-rel fn-right">
         {% if post.prev %}
-        <a id="prev-article" href="{{content_url(post.prev.slug)}}" title="{{post.prev.title}}" rel="prev">«Prev</a>
+        <a id="prev-entry" href="{{content_url(post.prev.slug)}}" title="{{post.prev.title}}" rel="prev">«Prev</a>
         {% endif %}
         {% if post.next %}
-        <a id="next-article" href="{{content_url(post.next.slug)}}" title="{{post.next.title}}" rel="next">Next»</a>
+        <a id="next-entry" href="{{content_url(post.next.slug)}}" title="{{post.next.title}}" rel="next">Next»</a>
         {% endif %}
         </p>
     </div>
 </div>
+<div class="entry-meta fn-clear">
+    <p class="entry-time fn-left">
+    Created at: 
+    <a href="/{{post.date.year}}/" rel="archive"><time class="updated" datetime="{{post.date}}" pubdate>{{post.date.strftime("%a, %b %d, %Y")}}</time></a>
+    </p>
+    {% if post.tags %}
+    <p class="entry-tags fn-left">
+    Tagged in:
+    {% for tag in post.get('tags',[]) %}
+    <a href="{{content_url('tag', tag)}}" class="tag" rel="tag">{{tag}}</a>
+    {% endfor %}
+    </p>
+    {% endif %}
+</div>
+{% if context.disqus and post.public %}
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '{{context.disqus}}';
+    var disqus_title = '{{post.title}}';
+    (function() {
+     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+     dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+{% endif %}
 {% endblock %}
