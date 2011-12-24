@@ -45,6 +45,7 @@ def init(filepath):
 
 
 def build(config_file):
+    begin = time.time()
     if not os.path.exists(config_file):
         answer = raw_input('This is not a Felix Felicis repo, '
                            'would you like to create one?(Y/n) ')
@@ -55,12 +56,15 @@ def build(config_file):
 
     init(config_file)
 
-    begin = time.time()
+    logger.info('Starting readers')
     for reader in namespace.readers.values():
         import_module(reader)().start()
+
+    logger.info('Starting writters')
     for writer in namespace.writers.values():
         import_module(writer)().start()
 
+    logger.info('Running writters')
     for writer in namespace.writers.values():
         import_module(writer)().run()
     end = time.time()
