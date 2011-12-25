@@ -37,7 +37,10 @@ def init(filepath):
     for f in walk_dir(postdir):
         reader = detect_reader(f)
         if reader:
-            namespace.posts.append(reader.render())
+            post = reader.render()
+            if post:
+                # ignore invalid post
+                namespace.posts.append(post)
         else:
             namespace.files.append(f)
 
@@ -67,8 +70,11 @@ def build(config_file):
     logger.info('Running writters')
     for writer in namespace.writers.values():
         import_module(writer)().run()
-    end = time.time()
+    
+    for error in namespace.errors:
+        logger.error('Invalid Post: %s' % error)
 
+    end = time.time()
     logger.info('Total time: %s' % (end - begin))
     return
 

@@ -139,6 +139,9 @@ class rstParser(object):
         # get docinfo
         docinfo = []
         content = parts['docinfo'].replace('\n', '')
+        if not content:
+            return parts
+
         dom = minidom.parseString(content.encode('utf-8'))
         nodes = dom.getElementsByTagName('tr')
         for node in nodes:
@@ -155,8 +158,8 @@ class RstReader(Reader):
     def parse_post(self):
         if hasattr(self, 'post'):
             return self.post
-        parts = rstParser(self.filepath).read()
 
+        parts = rstParser(self.filepath).read()
         docinfo = dict(parts['docinfo'])
 
         post = NameSpace()

@@ -1,6 +1,6 @@
 
 import os
-import datetime
+from datetime import datetime
 from liquidluck.utils import import_module
 from liquidluck.ns import namespace
 
@@ -41,7 +41,7 @@ class Reader(object):
         return basename
 
     def get_resource_destination(self):
-        _format = namespace.site.get('format', 'year')
+        _format = namespace.site.format
         post = self.parse_post()
         filename = self.get_resource_basename() + '.html'
         year = str(post.date.year)
@@ -75,17 +75,32 @@ class Reader(object):
         return False
 
     def render(self):
-        post = self.parse_post()
+        try:
+            post = self.parse_post()
+        except:
+            namespace.errors.append(self.filepath)
+            return None
+        if not post or not post.get('date', None):
+            namespace.errors.append(self.filepath)
+            return None
+
         if not post.get('author', None):
             post.author = namespace.context.get('author', 'admin')
 
-        dateformat = namespace.site.get('dateformat', '%Y-%m-%d')
-        timeformat = namespace.site.get('timeformat', '%Y-%m-%d %H:%M:%S')
+        dateformat = namespace.site.dateformat
+        timeformat = namespace.site.timeformat
+        try:
+            post.date = datetime.strptime(post.get('date'), dateformat)
+        except ValueError:
+            post.date = datetime.strptime(post.get('date'), timeformat)
+        except ValueError:
+            namespace.errors.append(self.filepath)
+            return None
         for key in post.keys():
-            if 'date' in key:
-                post[key] = datetime.datetime.strptime(post[key], dateformat)
-            elif 'time' in key:
-                post[key] = datetime.datetime.strptime(post[key], timeformat)
+            if '_date' in key:
+                post[key] = datetime.strptime(post[key], dateformat)
+            elif '_time' in key:
+                post[key] = datetime.strptime(post[key], timeformat)
 
         if post.get('public', 'true') == 'false':
             post.public = False

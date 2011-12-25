@@ -28,6 +28,7 @@ namespace = NameSpace.instance()
 
 
 #defaults
+namespace.errors = []
 namespace.context = NameSpace()
 namespace.status = NameSpace()
 namespace.functions = NameSpace()
@@ -39,7 +40,7 @@ namespace.site = NameSpace({
     'template': '_templates',
     'format': 'year',
     'dateformat': '%Y-%m-%d',
-    'timeformat': '%Y-%m-%d %H:%M:%S',
+    'timeformat': '%Y-%m-%d %H:%M',
     'slug': 'html',
     'syntax': 'class',
     'autoescape': 'false',
