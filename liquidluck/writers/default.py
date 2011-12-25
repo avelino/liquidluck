@@ -14,8 +14,8 @@ from liquidluck import logger
 
 def static_url(name):
     f = os.path.join(namespace.projectdir,
-                     namespace.site.get('staticdir', 'static'), name)
-    url = namespace.site.get('static_prefix', '/static')
+                     namespace.site.staticdir, name)
+    url = namespace.site.static_prefix
     if not os.path.exists(f):
         logger.warn('No such static file: %s' % f)
         return os.path.join(url, name)
@@ -39,7 +39,7 @@ class StaticWriter(Writer):
 
 
 def content_url(a, *args):
-    slug = namespace.site.get('slug', 'html')
+    slug = namespace.site.slug
     args = [to_unicode(arg) for arg in args]
     path = os.path.join(to_unicode(a), *args)
     basename, ext = os.path.splitext(path)
@@ -69,7 +69,7 @@ class PostWriter(Writer):
             if post.public:
                 public_posts.append(post)
             else:
-                logger.info('Secrect Post: %s' % post.destination)
+                logger.warn('Non-indexed Post: %s' % post.filepath)
                 secret_posts.append(post)
         public_posts = sort_posts(public_posts)
         i = 0
@@ -113,7 +113,7 @@ class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
 
     def run(self):
         posts = sort_posts(self.calc_archive_posts())
-        dest = namespace.site.get('index', 'index.html')
+        dest = namespace.site.index
         _archive_tpl = namespace.site.get('index_archive_template', None)
         _feed_tpl = namespace.site.get('index_feed_template', None)
         params = {'title': 'Archive'}
@@ -177,7 +177,7 @@ class TagWriter(Writer, ArchiveMixin, PagerMixin):
 
     def write_tagcloud(self):
         dest = 'tag/index.html'
-        _tpl = namespace.site.get('tagcloud_template', 'tagcloud.html')
+        _tpl = namespace.site.tagcloud_template
         return self.write({'tags': namespace.status.tags}, _tpl, dest)
 
     def run(self):

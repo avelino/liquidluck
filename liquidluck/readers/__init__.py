@@ -109,6 +109,7 @@ class Reader(object):
 
         post.destination = self.get_resource_destination()
         post.slug = self.get_resource_slug()
+        post.filepath = self.filepath
         return post
 
     def parse_post(self):

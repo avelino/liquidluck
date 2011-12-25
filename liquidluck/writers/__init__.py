@@ -62,9 +62,8 @@ class Writer(object):
         if hasattr(self, '_jinja'):
             return self._jinja
         tpl = os.path.join(namespace.projectdir,
-                           namespace.site.get('template', '_templates'))
-        autoescape = namespace.site.get('autoescape', 'false')
-        autoescape = True if autoescape == 'true' else False
+                           namespace.site.template)
+        autoescape = namespace.site.autoescape == 'true'
         jinja = Environment(
             loader=FileSystemLoader([
                 tpl, os.path.join(namespace.root, '_templates')
@@ -81,17 +80,17 @@ class Writer(object):
     @property
     def postdir(self):
         return os.path.join(
-            namespace.projectdir, namespace.site.get('postdir', 'content'))
+            namespace.projectdir, namespace.site.postdir)
 
     @property
     def deploydir(self):
         return os.path.join(
-            namespace.projectdir, namespace.site.get('deploydir', 'deploy'))
+            namespace.projectdir, namespace.site.deploydir)
 
     @property
     def staticdir(self):
         return os.path.join(namespace.projectdir,
-                            namespace.site.get('staticdir', '_static'))
+                            namespace.site.staticdir)
 
     def render(self, template, params={}):
         params.update(dict(namespace.functions))
@@ -124,9 +123,9 @@ class ArchiveMixin(object):
 
 class FeedMixin(object):
     def write_feed(self, posts, dest='feed.xml', **params):
-        count = int(namespace.site.get('feed_count', 10))
+        count = int(namespace.site.feed_count)
         posts = posts[:count]
-        _tpl = namespace.site.get('feed_template', 'feed.xml')
+        _tpl = namespace.site.feed_template
         _tpl = params.pop('tpl', _tpl)
         params.update({'posts': posts})
         return self.write(params, _tpl, dest)
@@ -157,15 +156,15 @@ class Pagination(object):
 
 class PagerMixin(object):
     def write_pager(self, posts, dest='index.html', **params):
-        perpage = int(namespace.site.get('perpage', 30))
+        perpage = int(namespace.site.perpage)
         paginator = Pagination(posts, perpage)
-        _tpl = namespace.site.get('archive_template', 'archive.html')
+        _tpl = namespace.site.archive_template
         _tpl = params.pop('tpl', _tpl)
 
         # first page
         folder, filename = os.path.split(dest)
         if filename == 'index.html' or \
-           filename == namespace.site.get('index', 'index.html'):
+           filename == namespace.site.index:
             sub_folder = 'page'
         else:
             sub_folder, ext = os.path.splitext(filename)
