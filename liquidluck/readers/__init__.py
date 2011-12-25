@@ -2,11 +2,11 @@
 import os
 from datetime import datetime
 from liquidluck.utils import import_module
-from liquidluck.ns import namespace
+from liquidluck.namespace import ns
 
 
 def detect_reader(filepath):
-    for reader in namespace.readers.values():
+    for reader in ns.readers.values():
         reader = import_module(reader)(filepath)
         if reader.support():
             return reader
@@ -41,7 +41,7 @@ class Reader(object):
         return basename
 
     def get_resource_destination(self):
-        _format = namespace.site.format
+        _format = ns.site.format
         post = self.parse_post()
         filename = self.get_resource_basename() + '.html'
         year = str(post.date.year)
@@ -78,23 +78,23 @@ class Reader(object):
         try:
             post = self.parse_post()
         except:
-            namespace.errors.append(self.filepath)
+            ns.storage.errors.append(self.filepath)
             return None
         if not post or not post.get('date', None):
-            namespace.errors.append(self.filepath)
+            ns.storage.errors.append(self.filepath)
             return None
 
         if not post.get('author', None):
-            post.author = namespace.context.get('author', 'admin')
+            post.author = ns.context.get('author', 'admin')
 
-        dateformat = namespace.site.dateformat
-        timeformat = namespace.site.timeformat
+        dateformat = ns.site.dateformat
+        timeformat = ns.site.timeformat
         try:
             post.date = datetime.strptime(post.get('date'), dateformat)
         except ValueError:
             post.date = datetime.strptime(post.get('date'), timeformat)
         except ValueError:
-            namespace.errors.append(self.filepath)
+            ns.storage.errors.append(self.filepath)
             return None
         for key in post.keys():
             if '_date' in key:

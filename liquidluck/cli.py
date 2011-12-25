@@ -12,37 +12,34 @@ except ImportError:
     from ConfigParser import ConfigParser
 
 from liquidluck.utils import import_module, walk_dir
-from liquidluck.ns import namespace
+from liquidluck.namespace import ns, NameSpace
 from liquidluck import logger
 from liquidluck.readers import detect_reader
 
-ROOT = os.path.dirname(__file__)
-namespace.root = ROOT
-namespace.posts = []
-namespace.files = []
+ns.storage.root = os.path.dirname(__file__)
 
 
 def init(filepath):
     config = ConfigParser()
     config.read(filepath)
-    namespace.site.update(config.items('site'))
-    namespace.context.update(config.items('context'))
-    for sec in ('writers', 'readers', 'filters'):
-        if config.has_section(sec):
-            namespace[sec].update(config.items(sec))
-    namespace.projectdir = os.getcwd()
+    for sec in config.sections():
+        if sec in ('site', 'context', 'writers', 'readers', 'filters'):
+            ns[sec].update(config.items(sec))
+        elif sec not in ('title', 'post', 'status', 'pager', 'tags'):
+            ns.sections[sec] = NameSpace(config.items(sec))
 
-    postdir = os.path.join(namespace.projectdir,
-                           namespace.site.get('postdir','content'))
+    ns.storage.projectdir = os.getcwd()
+    postdir = os.path.join(ns.storage.projectdir,
+                           ns.site.postdir)
     for f in walk_dir(postdir):
         reader = detect_reader(f)
         if reader:
             post = reader.render()
             if post:
                 # ignore invalid post
-                namespace.posts.append(post)
+                ns.storage.posts.append(post)
         else:
-            namespace.files.append(f)
+            ns.storage.files.append(f)
 
     return config
 
@@ -60,18 +57,18 @@ def build(config_file):
     init(config_file)
 
     logger.info('Starting readers')
-    for reader in namespace.readers.values():
+    for reader in ns.readers.values():
         import_module(reader)().start()
 
-    logger.info('Starting writters')
-    for writer in namespace.writers.values():
+    logger.info('Starting writers')
+    for writer in ns.writers.values():
         import_module(writer)().start()
 
-    logger.info('Running writters')
-    for writer in namespace.writers.values():
+    logger.info('Running writers')
+    for writer in ns.writers.values():
         import_module(writer)().run()
-    
-    for error in namespace.errors:
+
+    for error in ns.storage.errors:
         logger.error('Invalid Post: %s' % error)
 
     end = time.time()
@@ -80,17 +77,16 @@ def build(config_file):
 
 
 def create(config_file='config.ini'):
-    shutil.copy(os.path.join(ROOT, 'config.ini'), config_file)
+    shutil.copy(os.path.join(os.storage.root, 'config.ini'), config_file)
     config = init(config_file)
     cwd = os.getcwd()
-    dest = os.path.join(cwd, namespace.site.get('staticdir', 'static'))
+    dest = os.path.join(cwd, ns.site.staticdir)
     if not os.path.exists(dest):
-        shutil.copytree(os.path.join(ROOT, '_static'), dest)
-    dest = os.path.join(cwd, namespace.site.get('template', '_templates'))
+        shutil.copytree(os.path.join(os.storage.root, '_static'), dest)
+    dest = os.path.join(cwd, ns.site.template)
     if not os.path.exists(dest):
-        #shutil.copytree(os.path.join(ROOT, '_templates'), dest)
         os.makedirs(dest)
-    dest = os.path.join(cwd, namespace.site.get('postdir', 'content'))
+    dest = os.path.join(cwd, ns.site.postdir)
     if not os.path.exists(dest):
         os.makedirs(dest)
     print('Felix Felicis Repo Created')

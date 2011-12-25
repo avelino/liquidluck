@@ -8,14 +8,14 @@ from math import log
 from liquidluck.writers import Writer, ArchiveMixin, FeedMixin, PagerMixin
 from liquidluck.writers import sort_posts, make_folder, copy_to
 from liquidluck.utils import merge, to_unicode, walk_dir
-from liquidluck.ns import namespace, NameSpace
+from liquidluck.namespace import ns, NameSpace
 from liquidluck import logger
 
 
 def static_url(name):
-    f = os.path.join(namespace.projectdir,
-                     namespace.site.staticdir, name)
-    url = namespace.site.static_prefix
+    f = os.path.join(ns.storage.projectdir,
+                     ns.site.staticdir, name)
+    url = ns.site.static_prefix
     if not os.path.exists(f):
         logger.warn('No such static file: %s' % f)
         return os.path.join(url, name)
@@ -28,18 +28,18 @@ class StaticWriter(Writer):
     writer_type = 'Static Writer'
 
     def start(self):
-        namespace.functions.update({'static_url': static_url})
+        ns.storage.functions.update({'static_url': static_url})
         return
 
     def run(self):
         for source in walk_dir(self.staticdir):
-            path = source.replace(namespace.projectdir, '').lstrip('/')
+            path = source.replace(ns.storage.projectdir, '').lstrip('/')
             dest = os.path.join(self.deploydir, path)
             copy_to(source, dest)
 
 
 def content_url(a, *args):
-    slug = namespace.site.slug
+    slug = ns.site.slug
     args = [to_unicode(arg) for arg in args]
     path = os.path.join(to_unicode(a), *args)
     basename, ext = os.path.splitext(path)
@@ -60,12 +60,12 @@ class PostWriter(Writer):
     writer_type = 'Post Writer'
 
     def start(self):
-        return namespace.functions.update({'content_url': content_url})
+        return ns.storage.functions.update({'content_url': content_url})
 
     def _calc_rel_posts(self):
         public_posts = []
         secret_posts = []
-        for post in namespace.posts:
+        for post in ns.storage.posts:
             if post.public:
                 public_posts.append(post)
             else:
@@ -98,7 +98,7 @@ class FileWriter(Writer):
     writer_type = 'File Writer'
 
     def run(self):
-        for source in namespace.files:
+        for source in ns.storage.files:
             path = source.replace(self.postdir, '').lstrip('/')
             dest = os.path.join(self.deploydir, path)
             copy_to(source, dest)
@@ -108,14 +108,14 @@ class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     writer_type = 'Index Writer'
 
     def start(self):
-        namespace.status.posts = sort_posts(self.calc_archive_posts())
+        ns.storage.status.posts = sort_posts(self.calc_archive_posts())
         return
 
     def run(self):
         posts = sort_posts(self.calc_archive_posts())
-        dest = namespace.site.index
-        _archive_tpl = namespace.site.get('index_archive_template', None)
-        _feed_tpl = namespace.site.get('index_feed_template', None)
+        dest = ns.site.index
+        _archive_tpl = ns.site.get('index_archive_template', None)
+        _feed_tpl = ns.site.get('index_feed_template', None)
         params = {'title': 'Archive'}
         if _archive_tpl:
             params.update({'tpl': _archive_tpl})
@@ -134,14 +134,14 @@ class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
             yield post.date.year, post
 
     def start(self):
-        namespace.status.years = []
+        ns.storage.status.years = []
         for year, posts in self.calc_year_posts():
-            namespace.status.years.append(year)
-        namespace.status.years = sorted(set(namespace.status.years))
+            ns.storage.status.years.append(year)
+        ns.storage.status.years = sorted(set(ns.storage.status.years))
         return
 
     def run(self):
-        _tpl = namespace.site.get('year_archive_template', None)
+        _tpl = ns.site.get('year_archive_template', None)
         for year, posts in merge(self.calc_year_posts()).iteritems():
             posts = sort_posts(posts)
             year = str(year)
@@ -172,19 +172,19 @@ class TagWriter(Writer, ArchiveMixin, PagerMixin):
             yield tag
 
     def start(self):
-        namespace.status.tags = [tag for tag in self.calc_tagcloud()]
+        ns.storage.status.tags = [tag for tag in self.calc_tagcloud()]
         return
 
     def write_tagcloud(self):
         dest = 'tag/index.html'
-        _tpl = namespace.site.tagcloud_template
-        return self.write({'tags': namespace.status.tags}, _tpl, dest)
+        _tpl = ns.site.tagcloud_template
+        return self.write({'tags': ns.storage.status.tags}, _tpl, dest)
 
     def run(self):
         self.write_tagcloud()
 
         tagcloud = merge(self.calc_tag_posts())
-        _tpl = namespace.site.get('tag_archive_template', None)
+        _tpl = ns.site.get('tag_archive_template', None)
         for tag, posts in tagcloud.items():
             posts = sort_posts(posts)
             dest = os.path.join('tag', tag, 'index.html')
@@ -204,15 +204,15 @@ class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
                 yield folder, post
 
     def start(self):
-        namespace.status.folders = []
+        ns.storage.status.folders = []
         for folder, posts in self.calc_folder_posts():
-            namespace.status.folders.append(folder)
-        namespace.status.folders = set(namespace.status.folders)
+            ns.storage.status.folders.append(folder)
+        ns.storage.status.folders = set(ns.storage.status.folders)
         return
 
     def run(self):
-        _archive_tpl = namespace.site.get('folder_archive_template', None)
-        _feed_tpl = namespace.site.get('folder_feed_template', None)
+        _archive_tpl = ns.site.get('folder_archive_template', None)
+        _feed_tpl = ns.site.get('folder_feed_template', None)
         for folder, posts in merge(self.calc_folder_posts()).iteritems():
             posts = sort_posts(posts)
             dest = os.path.join(folder, 'index.html')
@@ -232,23 +232,23 @@ class CategoryWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
     writer_type = 'Category Writer'
 
     def calc_category_posts(self):
-        key = namespace.site.get('category', 'category')
+        key = ns.site.get('category', 'category')
         for post in self.calc_archive_posts():
             category = post.get(key, None)
             if category:
                 yield category, post
 
     def start(self):
-        namespace.status.categories = []
+        ns.storage.status.categories = []
         for cat, posts in self.calc_category_posts():
-            namespace.status.categories.append(cat)
-        namespace.status.categories = set(namespace.status.categories)
+            ns.storage.status.categories.append(cat)
+        ns.storage.status.categories = set(ns.storage.status.categories)
         return
 
     def run(self):
-        key = namespace.site.get('category', 'category')
-        _archive_tpl = namespace.site.get('category_archive_template', None)
-        _feed_tpl = namespace.site.get('category_feed_template', None)
+        key = ns.site.get('category', 'category')
+        _archive_tpl = ns.site.get('category_archive_template', None)
+        _feed_tpl = ns.site.get('category_feed_template', None)
         for cat, posts in merge(self.calc_category_posts()).iteritems():
             posts = sort_posts(posts)
             dest = os.path.join(key, cat, 'index.html')

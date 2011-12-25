@@ -15,7 +15,7 @@ import shutil
 from jinja2 import Environment, FileSystemLoader
 
 from liquidluck.utils import import_module
-from liquidluck.ns import namespace
+from liquidluck.namespace import ns
 
 from liquidluck import logger
 
@@ -61,17 +61,17 @@ class Writer(object):
     def jinja(self):
         if hasattr(self, '_jinja'):
             return self._jinja
-        tpl = os.path.join(namespace.projectdir,
-                           namespace.site.template)
-        autoescape = namespace.site.autoescape == 'true'
+        tpl = os.path.join(ns.storage.projectdir,
+                           ns.site.template)
+        autoescape = ns.site.autoescape == 'true'
         jinja = Environment(
             loader=FileSystemLoader([
-                tpl, os.path.join(namespace.root, '_templates')
+                tpl, os.path.join(ns.storage.root, '_templates')
             ]),
             autoescape=autoescape,
             extensions=['jinja2.ext.autoescape', 'jinja2.ext.with_'],
         )
-        for k, v in namespace.filters.items():
+        for k, v in ns.filters.items():
             jinja.filters.update({k: import_module(v)})
 
         self._jinja = jinja
@@ -80,22 +80,23 @@ class Writer(object):
     @property
     def postdir(self):
         return os.path.join(
-            namespace.projectdir, namespace.site.postdir)
+            ns.storage.projectdir, ns.site.postdir)
 
     @property
     def deploydir(self):
         return os.path.join(
-            namespace.projectdir, namespace.site.deploydir)
+            ns.storage.projectdir, ns.site.deploydir)
 
     @property
     def staticdir(self):
-        return os.path.join(namespace.projectdir,
-                            namespace.site.staticdir)
+        return os.path.join(ns.storage.projectdir,
+                            ns.site.staticdir)
 
     def render(self, template, params={}):
-        params.update(dict(namespace.functions))
-        params.update({'context': namespace.context})
-        params.update({'status': namespace.status})
+        params.update(dict(ns.storage.functions))
+        params.update(dict(ns.sections))
+        params.update({'context': ns.context})
+        params.update({'status': ns.storage.status})
         params.update({'now': datetime.datetime.now()})
         tpl = self.jinja.get_template(template)
         return tpl.render(params)
@@ -116,16 +117,16 @@ class Writer(object):
 
 class ArchiveMixin(object):
     def calc_archive_posts(self):
-        for post in namespace.posts:
+        for post in ns.storage.posts:
             if post.public:
                 yield post
 
 
 class FeedMixin(object):
     def write_feed(self, posts, dest='feed.xml', **params):
-        count = int(namespace.site.feed_count)
+        count = int(ns.site.feed_count)
         posts = posts[:count]
-        _tpl = namespace.site.feed_template
+        _tpl = ns.site.feed_template
         _tpl = params.pop('tpl', _tpl)
         params.update({'posts': posts})
         return self.write(params, _tpl, dest)
@@ -156,15 +157,15 @@ class Pagination(object):
 
 class PagerMixin(object):
     def write_pager(self, posts, dest='index.html', **params):
-        perpage = int(namespace.site.perpage)
+        perpage = int(ns.site.perpage)
         paginator = Pagination(posts, perpage)
-        _tpl = namespace.site.archive_template
+        _tpl = ns.site.archive_template
         _tpl = params.pop('tpl', _tpl)
 
         # first page
         folder, filename = os.path.split(dest)
         if filename == 'index.html' or \
-           filename == namespace.site.index:
+           filename == ns.site.index:
             sub_folder = 'page'
         else:
             sub_folder, ext = os.path.splitext(filename)

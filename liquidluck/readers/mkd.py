@@ -34,12 +34,12 @@ from pygments.lexers import get_lexer_by_name, TextLexer
 from markdown import Markdown
 
 from liquidluck.readers import Reader
-from liquidluck.ns import namespace, NameSpace
+from liquidluck.namespace import ns, NameSpace
 from liquidluck.utils import to_unicode
 from liquidluck.filters import embed
 from liquidluck import logger
 
-if namespace.site.get('syntax', 'class') == 'class':
+if ns.site.syntax == 'class':
     INLINESTYLES = False
 else:
     INLINESTYLES = True

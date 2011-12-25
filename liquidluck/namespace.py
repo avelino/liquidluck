@@ -1,5 +1,5 @@
 
-__all__ = ['NameSpace', 'namespace']
+__all__ = ['NameSpace', 'ns']
 
 
 class NameSpace(dict):
@@ -24,15 +24,23 @@ class NameSpace(dict):
         except KeyError:
             raise AttributeError
 
-namespace = NameSpace.instance()
+ns = NameSpace.instance()
 
 
 #defaults
-namespace.errors = []
-namespace.context = NameSpace()
-namespace.status = NameSpace()
-namespace.functions = NameSpace()
-namespace.site = NameSpace({
+ns.storage = NameSpace()
+ns.storage.errors = [] # error list storage
+ns.storage.status = NameSpace() # status of the blog info
+ns.storage.functions = NameSpace() # functions storage for writer
+ns.storage.root = None
+ns.storage.posts = []
+ns.storage.files = []
+
+
+ns.context = NameSpace() # [context] in config file
+
+# [site] in config file
+ns.site = NameSpace({
     'postdir': 'content',
     'deploydir': 'deploy',
     'staticdir': 'static',
@@ -51,11 +59,13 @@ namespace.site = NameSpace({
     'archive_template': 'archive.html',
     'tagcloud_template': 'tagcloud.html',
 })
-namespace.readers = NameSpace({
+# [readers] in config file
+ns.readers = NameSpace({
     'mkd': 'liquidluck.readers.mkd.MarkdownReader',
     'rst': 'liquidluck.readers.rst.RstReader',
 })
-namespace.writers = NameSpace({
+# [writers] in config file
+ns.writers = NameSpace({
     'static': 'liquidluck.writers.default.StaticWriter',
     'post': 'liquidluck.writers.default.PostWriter',
     'file': 'liquidluck.writers.default.FileWriter',
@@ -63,9 +73,13 @@ namespace.writers = NameSpace({
     'year': 'liquidluck.writers.default.YearWriter',
     'tag': 'liquidluck.writers.default.TagWriter',
 })
-namespace.filters = NameSpace({
+# [filters] in config file
+ns.filters = NameSpace({
     'restructuredtext': 'liquidluck.readers.rst.restructuredtext',
     'markdown': 'liquidluck.readers.mkd.markdown',
     'xmldatetime': 'liquidluck.filters.xmldatetime',
     'embed': 'liquidluck.filters.embed',
 })
+# other sections in config file
+# ns.sections[section] = sectionData
+ns.sections = NameSpace()
