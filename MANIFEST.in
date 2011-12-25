@@ -1,3 +1,4 @@
 recursive-include liquidluck/_templates *.*
 recursive-include liquidluck/_static *.*
 include liquidluck/config.ini
+include README.rst
