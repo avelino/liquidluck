@@ -77,12 +77,12 @@ def build(config_file):
 
 
 def create(config_file='config.ini'):
-    shutil.copy(os.path.join(os.storage.root, 'config.ini'), config_file)
+    shutil.copy(os.path.join(ns.storage.root, 'config.ini'), config_file)
     config = init(config_file)
     cwd = os.getcwd()
     dest = os.path.join(cwd, ns.site.staticdir)
     if not os.path.exists(dest):
-        shutil.copytree(os.path.join(os.storage.root, '_static'), dest)
+        shutil.copytree(os.path.join(ns.storage.root, '_static'), dest)
     dest = os.path.join(cwd, ns.site.template)
     if not os.path.exists(dest):
         os.makedirs(dest)
