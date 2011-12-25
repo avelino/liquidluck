@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from .utils import to_unicode
 
 __all__ = ['NameSpace', 'ns']
 
@@ -11,12 +15,12 @@ class NameSpace(dict):
 
     def __getattr__(self, key):
         try:
-            return self[key]
+            return to_unicode(self[key])
         except KeyError:
             raise AttributeError
 
     def __setattr__(self, key, value):
-        self[key] = value
+        self[key] = to_unicode(value)
 
     def __delattr__(self, key):
         try:
