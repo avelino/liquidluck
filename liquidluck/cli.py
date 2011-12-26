@@ -11,7 +11,7 @@ try:
 except ImportError:
     from ConfigParser import ConfigParser
 
-from liquidluck.utils import import_module, walk_dir
+from liquidluck.utils import import_module, walk_dir, UnicodeDict
 from liquidluck.namespace import ns, NameSpace
 from liquidluck import logger
 from liquidluck.readers import detect_reader
@@ -26,7 +26,7 @@ def init(filepath):
         if sec in ('site', 'context', 'writers', 'readers', 'filters'):
             ns[sec].update(config.items(sec))
         elif sec not in ('title', 'post', 'status', 'pager', 'tags'):
-            ns.sections[sec] = NameSpace(config.items(sec))
+            ns.sections[sec] = UnicodeDict(config.items(sec))
 
     ns.storage.projectdir = os.getcwd()
     postdir = os.path.join(ns.storage.projectdir,

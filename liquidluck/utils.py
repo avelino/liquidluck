@@ -62,3 +62,26 @@ def walk_dir(dest):
         for f in files:
             path = os.path.join(root, f)
             yield path
+
+
+class UnicodeDict(dict):
+    def __getattr__(self, key):
+        try:
+            return to_unicode(self[key])
+        except KeyError:
+            raise AttributeError
+
+    def __setattr__(self, key, value):
+        self[key] = to_unicode(value)
+
+    def __delattr__(self, key):
+        try:
+            del self[key]
+        except KeyError:
+            raise AttributeError
+
+    def __getitem__(self, key):
+        return to_unicode(super(UnicodeDict, self).__getitem__(key))
+
+    def __setitem__(self, key, value):
+        return super(UnicodeDict, self).__setitem__(key, to_unicode(value))

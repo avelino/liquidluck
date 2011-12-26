@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .utils import to_unicode
-
 __all__ = ['NameSpace', 'ns']
+
+from .utils import UnicodeDict
 
 
 class NameSpace(dict):
@@ -15,12 +15,12 @@ class NameSpace(dict):
 
     def __getattr__(self, key):
         try:
-            return to_unicode(self[key])
+            return self[key]
         except KeyError:
             raise AttributeError
 
     def __setattr__(self, key, value):
-        self[key] = to_unicode(value)
+        self[key] = value
 
     def __delattr__(self, key):
         try:
@@ -41,7 +41,7 @@ ns.storage.posts = []
 ns.storage.files = []
 
 
-ns.context = NameSpace() # [context] in config file
+ns.context = UnicodeDict()  # [context] in config file
 
 # [site] in config file
 ns.site = NameSpace({
