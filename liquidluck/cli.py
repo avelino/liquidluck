@@ -19,7 +19,7 @@ from liquidluck.readers import detect_reader
 ns.storage.root = os.path.dirname(__file__)
 
 
-def init(filepath):
+def init_config(filepath):
     config = ConfigParser()
     config.read(filepath)
     for sec in config.sections():
@@ -28,6 +28,10 @@ def init(filepath):
         elif sec not in ('title', 'post', 'status', 'pager', 'tags'):
             ns.sections[sec] = UnicodeDict(config.items(sec))
 
+    return config
+
+
+def init_post():
     ns.storage.projectdir = os.getcwd()
     postdir = os.path.join(ns.storage.projectdir,
                            ns.site.postdir)
@@ -41,7 +45,7 @@ def init(filepath):
         else:
             ns.storage.files.append(f)
 
-    return config
+    return ns
 
 
 def build(config_file):
@@ -54,7 +58,8 @@ def build(config_file):
             return
         return create()
 
-    init(config_file)
+    init_config(config_file)
+    init_post()
 
     logger.info('Starting readers')
     for reader in ns.readers.values():
@@ -78,7 +83,7 @@ def build(config_file):
 
 def create(config_file='config.ini'):
     shutil.copy(os.path.join(ns.storage.root, 'config.ini'), config_file)
-    config = init(config_file)
+    config = init_config(config_file)
     cwd = os.getcwd()
     dest = os.path.join(cwd, ns.site.staticdir)
     if not os.path.exists(dest):
@@ -86,6 +91,9 @@ def create(config_file='config.ini'):
     dest = os.path.join(cwd, ns.site.template)
     if not os.path.exists(dest):
         os.makedirs(dest)
+        for f in ('layout.html', 'archive.html', 'post.html', 'tagcloud.html'):
+            shutil.copy(os.path.join(ns.storage.root, '_templates', f),
+                        os.path.join(dest, f))
     dest = os.path.join(cwd, ns.site.postdir)
     if not os.path.exists(dest):
         os.makedirs(dest)
