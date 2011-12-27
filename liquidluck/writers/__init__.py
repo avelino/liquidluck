@@ -22,6 +22,8 @@ from liquidluck import logger
 
 def make_folder(dest):
     folder = os.path.split(dest)[0]
+    # on Mac OSX, `folder` == `FOLDER`
+    # then make sure dest is lowercase
     if not os.path.isdir(folder):
         os.makedirs(folder)
     return folder
@@ -102,7 +104,7 @@ class Writer(object):
         return tpl.render(params)
 
     def write(self, params, tpl, dest):
-        dest = os.path.join(self.deploydir, dest)
+        dest = os.path.join(self.deploydir, dest).lower()
         logger.info('write ' + dest)
         make_folder(dest)
         f = open(dest, 'w')

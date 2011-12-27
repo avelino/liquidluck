@@ -53,7 +53,7 @@ def content_url(a, *args):
 
     if not path.startswith('http://'):
         path = '/%s' % path.lstrip('/')
-    return path
+    return path.lower()
 
 
 class PostWriter(Writer):
@@ -163,7 +163,7 @@ class TagWriter(Writer, ArchiveMixin, PagerMixin):
 
     def calc_tagcloud(self):
         tagcloud = merge(self.calc_tag_posts())
-        for k, v in tagcloud.iteritems():
+        for k, v in tagcloud.items():
             tag = NameSpace(
                 name=k,
                 count=len(v),
