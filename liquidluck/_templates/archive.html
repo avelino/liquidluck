@@ -10,7 +10,7 @@
     <li>
     <h3><a href="{{content_url(post.slug)}}">{{post.title}}</a></h3>
     <p>{{post.summary}}</p>
-    <time class="updated" datetime="{{post.date}}" title="{{post.date.strftime("%a, %b %d, %Y")}}" pubdate>
+    <time class="updated" datetime="{{post.date|xmldatetime}}" title="{{post.date.strftime("%a, %b %d, %Y")}}" pubdate>
     <a href="/{{post.date.year}}/" class="year">{{post.date.year}}</a>
     <span class="day">{{post.date.strftime("%b. %d")}}</span>
     </time>
