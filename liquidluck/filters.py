@@ -23,6 +23,16 @@ def embed(value):
     return value
 
 
+def remove_linebreak_for_double_width_language(value):
+    """This will remove linebreak for double width languages.
+    """
+    pattern = re.compile(
+        r'([^a-zA-Z0-9!\"#\$%&\'\(\)\*\+,-\./:;<=>\?@\[\\\]\^_`\{\|\}~])'
+        r'(\n|\r\n|\r)'
+        r'([^a-zA-Z0-9!\"#\$%&\'\(\)\*\+,-\./:;<=>\?@\[\\\]\^_`\{\|\}~])'
+    )
+    return pattern.sub(r'\1\3', value)
+
 
 def first_paragraph(value):
     regex = re.compile(r'<p>(.*?)</p>', re.U|re.S)

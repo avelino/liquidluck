@@ -74,6 +74,25 @@ class Reader(object):
                     return True
         return False
 
+    def _parse_datetime(sef, value):
+        supported_formats = [
+            '%a %b %d %H:%M:%S %Y',
+            '%Y-%m-%d %H:%M:%S',
+            '%Y-%m-%d %H:%M',
+            '%Y-%m-%dT%H:%M',
+            '%Y%m%d %H:%M:%S',
+            '%Y%m%d %H:%M',
+            '%Y-%m-%d',
+            '%Y%m%d',
+        ]
+        supported_formats.extend([ns.site.dateformat, ns.site.timeformat])
+        for format in supported_formats:
+            try:
+                return datetime.strptime(value, format)
+            except ValueError:
+                pass
+        raise ValueError('Unrecognized date/time: %r' % value)
+
     def render(self):
         try:
             post = self.parse_post()
@@ -87,20 +106,16 @@ class Reader(object):
         if not post.get('author', None):
             post.author = ns.context.get('author', 'admin')
 
-        dateformat = ns.site.dateformat
-        timeformat = ns.site.timeformat
         try:
-            post.date = datetime.strptime(post.get('date'), dateformat)
-        except ValueError:
-            post.date = datetime.strptime(post.get('date'), timeformat)
-        except ValueError:
+            post.date = self._parse_datetime(post.get('date'))
+        except ValueError as e:
             ns.storage.errors.append(self.filepath)
             return None
         for key in post.keys():
             if '_date' in key:
-                post[key] = datetime.strptime(post[key], dateformat)
+                post[key] = datetime.strptime(post[key], ns.site.dateformat)
             elif '_time' in key:
-                post[key] = datetime.strptime(post[key], timeformat)
+                post[key] = datetime.strptime(post[key], ns.site.timeformat)
 
         if post.get('public', 'true') == 'false':
             post.public = False
