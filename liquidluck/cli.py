@@ -63,15 +63,18 @@ def build(config_file):
 
     logger.info('Starting readers')
     for reader in ns.readers.values():
-        import_module(reader)().start()
+        if reader:
+            import_module(reader)().start()
 
     logger.info('Starting writers')
     for writer in ns.writers.values():
-        import_module(writer)().start()
+        if writer:
+            import_module(writer)().start()
 
     logger.info('Running writers')
     for writer in ns.writers.values():
-        import_module(writer)().run()
+        if writer:
+            import_module(writer)().run()
 
     for error in ns.storage.errors:
         logger.error('Invalid Post: %s' % error)
