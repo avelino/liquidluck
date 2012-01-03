@@ -43,6 +43,18 @@
     </p>
     {% endif %}
 </div>
+<div class="related-post">
+    {% if post.related %}
+    Related Posts:
+    <ul>
+        <li>
+        {% for rp in post.related %}
+        <a href="{{ content_url(rp.slug) }}" class="related-post" rel="related-post">{{ rp.title }}</a>
+        {% endfor %}
+        </li>
+    </ul>
+    {% endif %}
+</div>
 {% if context.disqus and post.public %}
 <div id="disqus_thread"></div>
 <script type="text/javascript">
