@@ -59,7 +59,7 @@ def embed(value):
         r'allowScriptAccess="sameDomain" type="application/x-shockwave-flash">'
         r'</embed><br /><small><a rel="nofollow" '
         r'href="http://www.yinyuetai.com/video/\1">'
-        r'href="http://www.yinyuetai.com/video/\1</a></small></div>',
+        r'http://www.yinyuetai.com/video/\1</a></small></div>',
         value)
     return value
 
