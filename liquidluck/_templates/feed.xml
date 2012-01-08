@@ -12,7 +12,7 @@
     {% for post in posts -%}
     <entry>
         <title type="html"><![CDATA[{{ post.title }}]]></title>
-        <author><name>{{ post.author }}</name><uri>{% if post.author in authors %}{{ authors[post.author] }}{% else %}{{ context.siteurl }}{% endif %}</uri></author>
+        <author><name>{{ post.author }}</name><uri>{% if post.author in author_data %}{{ author_data[post.author] }}{% else %}{{ context.siteurl }}{% endif %}</uri></author>
         <link href="{{ content_url(context.siteurl, post.slug) }}"/>
         <updated>{{ post.date|xmldatetime }}</updated>
         <published>{{ post.date|xmldatetime }}</published>

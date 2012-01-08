@@ -25,9 +25,10 @@ def init_config(filepath):
     for sec in config.sections():
         if sec in ('site', 'context', 'writers', 'readers', 'filters'):
             ns[sec].update(config.items(sec))
-        elif sec not in ('title', 'post', 'status', 'pager', 'tags'):
+        elif '_data' in sec:
+            ns.data[sec] = UnicodeDict(config.items(sec))
+        else:
             ns.sections[sec] = UnicodeDict(config.items(sec))
-
     return config
 
 

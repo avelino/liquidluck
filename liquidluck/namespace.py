@@ -87,3 +87,7 @@ ns.filters = NameSpace({
 # other sections in config file
 # ns.sections[section] = sectionData
 ns.sections = NameSpace()
+
+# data in sections
+# section name: xxx_data
+ns.data = NameSpace()

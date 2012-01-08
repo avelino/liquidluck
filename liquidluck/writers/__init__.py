@@ -96,7 +96,7 @@ class Writer(object):
 
     def render(self, template, params={}):
         params.update(dict(ns.storage.functions))
-        params.update(dict(ns.sections))
+        params.update(dict(ns.data))
         params.update({'context': ns.context})
         params.update({'status': ns.storage.status})
         params.update({'now': datetime.datetime.now()})
