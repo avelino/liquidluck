@@ -51,8 +51,6 @@ ns.site = NameSpace({
     'static_prefix': '/static',
     'template': '_templates',
     'format': 'year',
-    'dateformat': '%Y-%m-%d',
-    'timeformat': '%Y-%m-%d %H:%M',
     'slug': 'html',
     'syntax': 'class',
     'autoescape': 'false',

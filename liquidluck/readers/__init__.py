@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 from liquidluck.utils import import_module
 from liquidluck.namespace import ns
+from liquidluck import logger
 
 
 def detect_reader(filepath):
@@ -85,20 +86,22 @@ class Reader(object):
             '%Y-%m-%d',
             '%Y%m%d',
         ]
-        supported_formats.extend([ns.site.dateformat, ns.site.timeformat])
         for format in supported_formats:
             try:
                 return datetime.strptime(value, format)
             except ValueError:
                 pass
+        logger.error('Unrecognized date/time: %r' % value)
         raise ValueError('Unrecognized date/time: %r' % value)
 
     def render(self):
         try:
             post = self.parse_post()
-        except:
+        except Exception as e:
+            logger.error(e)
             ns.storage.errors.append(self.filepath)
             return None
+
         if not post or not post.get('date', None):
             ns.storage.errors.append(self.filepath)
             return None
@@ -111,11 +114,14 @@ class Reader(object):
         except ValueError as e:
             ns.storage.errors.append(self.filepath)
             return None
+
         for key in post.keys():
-            if '_date' in key:
-                post[key] = datetime.strptime(post[key], ns.site.dateformat)
-            elif '_time' in key:
-                post[key] = datetime.strptime(post[key], ns.site.timeformat)
+            if '_date' in key or '_time' in key:
+                try:
+                    post[key] = self._parse_datetime(post[key])
+                except ValueError as e:
+                    ns.storage.errors.append(self.filepath)
+                    return None
 
         if post.get('public', 'true') == 'false':
             post.public = False
