@@ -82,7 +82,6 @@ ns.filters = NameSpace({
     'restructuredtext': 'liquidluck.readers.rst.restructuredtext',
     'markdown': 'liquidluck.readers.mkd.markdown',
     'xmldatetime': 'liquidluck.filters.xmldatetime',
-    'embed': 'liquidluck.filters.embed',
 })
 # other sections in config file
 # ns.sections[section] = sectionData

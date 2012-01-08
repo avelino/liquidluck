@@ -35,8 +35,7 @@ from markdown import Markdown
 
 from liquidluck.readers import Reader
 from liquidluck.namespace import ns, NameSpace
-from liquidluck.utils import to_unicode
-from liquidluck.filters import embed
+from liquidluck.utils import to_unicode, import_module
 from liquidluck import logger
 
 if ns.site.syntax == 'class':
@@ -67,9 +66,21 @@ def codeblock(text):
     return pattern.sub(repl, text)
 
 
+markdown_prefork = NameSpace({
+    'codeblock': 'liquidluck.readers.mkd.codeblock',
+    'youku': 'liquidluck.filters.youku',
+    'tudou': 'liquidluck.filters.tudou',
+    'yinyuetai': 'liquidluck.filters.yinyuetai',
+})
+
+
 def markdown(text):
-    text = codeblock(text)
-    text = embed(text)
+    if 'markdown_prefork' in ns.sections:
+        markdown_prefork.update(ns.sections.markdown_prefork)
+
+    for module in markdown_prefork.values():
+        if module:
+            text = import_module(module)(text)
     md = Markdown()
     return md.convert(text)
 

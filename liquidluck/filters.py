@@ -10,10 +10,7 @@ def xmldatetime(value):
     return value.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 
-def embed(value):
-    """ this filter only avaible for markdown """
-
-    #youtube
+def youtube(value):
     value = re.sub(
         r'http://www.youtube.com/watch\?v=([a-zA-Z0-9\-\_]+)',
         r'<div><embed src="http://www.youtube.com/v/\1?fs=1&amp;hl=en_US" '
@@ -22,7 +19,6 @@ def embed(value):
         r'<br /><small><a rel="nofollow" href="http://youtu.be/\1">'
         r'http://youtu.be/\1</a></small></div>',
         value)
-    #youtube
     value = re.sub(
         r'http://youtu.be/([a-zA-Z0-9\-\_]+)',
         r'<div><embed src="http://www.youtube.com/v/\1?fs=1&amp;hl=en_US" '
@@ -31,27 +27,36 @@ def embed(value):
         r'<br /><small><a rel="nofollow" href="http://youtu.be/\1">'
         r'http://youtu.be/\1</a></small></div>',
         value)
-    #youku
+    return value
+
+
+def youku(value):
     value = re.sub(
         r'http://v.youku.com/v_show/id_([a-zA-Z0-9\=]+).html',
         r'<div><embed src="http://player.youku.com/player.php/sid/\1/v.swf" '
         r'quality="high" width="480" height="400" '
-        r'allowScriptAccess="sameDomain" type="application/x-shockwave-flash"'
-        r'/><br /><small><a rel="nofollow" '
+        r'type="application/x-shockwave-flash" /><br />'
+        r'<small><a rel="nofollow" '
         r'href="http://v.youku.com/v_show/id_\1.html">'
         r'http://v.youku.com/v_show/id_\1.html</a></small></div>',
         value)
-    #tudou
+    return value
+
+
+def tudou(value):
     value = re.sub(
         r'http://www.tudou.com/programs/view/([a-zA-z0-9\-\=]+)/',
-        r'<div><embed src="http://www.tudou.com/v/\1/v.swf" width="480" '
-        r'height="400" allowScriptAccess="sameDomain" wmode="opaque" '
+        r'<div><embed src="http://www.tudou.com/v/\1/v.swf" '
+        r'width="480" height="400" wmode="opaque" '
         r'type="application/x-shockwave-flash" /><br />'
         r'<small><a rel="nofollow" '
         r'href="http://www.tudou.com/programs/view/\1/">'
         r'http://www.tudou.com/programs/view/\1/</a></small></div>',
         value)
-    #yinyuetai
+    return value
+
+
+def yinyuetai(value):
     value = re.sub(
         r'http://www.yinyuetai.com/video/(\d+)',
         r'<div><embed src="http://www.yinyuetai.com/video/player/\1/v_0.swf"'
