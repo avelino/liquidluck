@@ -104,7 +104,7 @@ class Writer(object):
         return tpl.render(params)
 
     def write(self, params, tpl, dest):
-        dest = os.path.join(self.deploydir, dest).lower()
+        dest = os.path.join(self.deploydir, dest.lower())
         logger.info('write ' + dest)
         make_folder(dest)
         f = open(dest, 'w')

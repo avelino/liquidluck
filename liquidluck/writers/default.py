@@ -62,35 +62,28 @@ class PostWriter(Writer):
     def start(self):
         return ns.storage.functions.update({'content_url': content_url})
 
-    def _calc_rel_posts(self):
-        public_posts = []
-        secret_posts = []
-        for post in ns.storage.posts:
-            if post.public:
-                public_posts.append(post)
-            else:
-                logger.warn('Non-indexed Post: %s' % post.filepath)
-                secret_posts.append(post)
-        public_posts = sort_posts(public_posts)
-        i = 0
-        count = len(public_posts)
-        for post in public_posts:
-            if i > 0:
-                public_posts[i].prev = public_posts[i - 1]
-            if i + 1 < count:
-                public_posts[i].next = public_posts[i + 1]
-            i += 1
-        posts = public_posts
-        posts.extend(secret_posts)
-        return posts
-
     def _write_post(self, post):
         _tpl = post.get('template', 'post.html')
         dest = os.path.join(self.deploydir, post.destination)
         self.write({'post': post}, _tpl, post.destination)
 
+    def _get_rel_posts(self, post):
+        if not post.public:
+            logger.warn('Non-indexed Post: %s' % post.filepath)
+            return post
+        olders = filter(lambda p: p.date < post.date and p.public,
+                       ns.storage.posts)
+        newers = filter(lambda p: p.date > post.date and p.public,
+                       ns.storage.posts)
+        if olders:
+            post.older = sort_posts(olders)[0]
+        if newers:
+            post.newer = sort_posts(newers)[-1]
+        return post
+
     def run(self):
-        for post in self._calc_rel_posts():
+        for post in ns.storage.posts:
+            post = self._get_rel_posts(post)
             self._write_post(post)
 
 

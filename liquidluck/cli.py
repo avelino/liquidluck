@@ -19,6 +19,14 @@ from liquidluck.readers import detect_reader
 ns.storage.root = os.path.dirname(__file__)
 
 
+def make_notify():
+    logger.warn("Important!!!!!")
+    logger.warn("Please use post.newer and post.older instead of"
+                " post.prev and post.next")
+    logger.warn("Edit your post.html, change post.prev to post.newer")
+    logger.warn("Edit your post.html, change post.next to post.older")
+
+
 def init_config(filepath):
     config = ConfigParser()
     config.read(filepath)
@@ -82,6 +90,7 @@ def build(config_file):
 
     end = time.time()
     logger.info('Total time: %s' % (end - begin))
+    make_notify()
     return
 
 
