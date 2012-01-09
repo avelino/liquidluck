@@ -72,6 +72,27 @@ class PostWriter(Writer):
                 logger.warn('Non-indexed Post: %s' % post.filepath)
                 secret_posts.append(post)
         public_posts = sort_posts(public_posts)
+        # get related_posts
+        for thispost in public_posts:
+            flag = 0
+            thispost.related = []
+            tags = thispost.get("tags", None)
+            all_posts = sort_posts(public_posts)
+            for tag in tags:
+                for other_post in all_posts:
+                    if other_post.slug != thispost.slug:
+                        other_tags = other_post.get("tags",None)
+                        for other_tag in other_tags:
+                            if other_tag == tag:
+                                if flag == 0:
+                                    thispost.related.append(other_post)
+                                    flag = 1
+                                else:
+                                    for existed in thispost.related:
+                                        print existed.slug
+                                        print other_post.slug
+                                        if other_post.slug != existed.slug:
+                                            thispost.related.append(other_post)
         i = 0
         count = len(public_posts)
         for post in public_posts:
