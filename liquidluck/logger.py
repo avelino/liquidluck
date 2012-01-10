@@ -1,5 +1,6 @@
 import sys
 import datetime
+from .namespace import ns
 
 
 class Logger(object):
@@ -53,8 +54,12 @@ class Logger(object):
         now = datetime.datetime.now().strftime(' %H:%M:%S ')
         self._stderr(self._deco('%s %s' % (now, msg), self.ERROR))
 
+
 _logger = Logger.instance()
+if hasattr(ns, 'disable_log') and ns.disable_log:
+    info = lambda o: o
+else:
+    info = _logger.info
 debug = _logger.debug
-info = _logger.info
 warn = _logger.warn
 error = _logger.error

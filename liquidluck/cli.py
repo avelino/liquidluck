@@ -11,8 +11,10 @@ try:
 except ImportError:
     from ConfigParser import ConfigParser
 
-from liquidluck.utils import import_module, walk_dir, UnicodeDict
 from liquidluck.namespace import ns, NameSpace
+if '--disable-log' in sys.argv:
+    ns.disable_log = True
+from liquidluck.utils import import_module, walk_dir, UnicodeDict
 from liquidluck import logger
 from liquidluck.readers import detect_reader
 
@@ -62,6 +64,7 @@ def init_post():
 
 
 def build(config_file):
+    log = logger.Logger()
     begin = time.time()
     if not os.path.exists(config_file):
         answer = raw_input('This is not a Felix Felicis repo, '
@@ -74,26 +77,26 @@ def build(config_file):
     init_config(config_file)
     init_post()
 
-    logger.info('Starting readers')
+    log.info('Starting readers')
     for reader in ns.readers.values():
         if reader:
             import_module(reader)().start()
 
-    logger.info('Starting writers')
+    log.info('Starting writers')
     for writer in ns.writers.values():
         if writer:
             import_module(writer)().start()
 
-    logger.info('Running writers')
+    log.info('Running writers')
     for writer in ns.writers.values():
         if writer:
             import_module(writer)().run()
 
     for error in ns.storage.errors:
-        logger.error('Invalid Post: %s' % error)
+        log.error('Invalid Post: %s' % error)
 
     end = time.time()
-    logger.info('Total time: %s' % (end - begin))
+    log.info('Total time: %s' % (end - begin))
     make_notify()
     return
 
@@ -130,6 +133,7 @@ def main():
                        )
     parser.add_argument('-f', '--config', dest='config', default='config.ini',
                         metavar='config.ini')
+    parser.add_argument('--disable-log', action='store_true')
     args = parser.parse_args()
 
     def run_command(cmd):
