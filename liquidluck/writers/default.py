@@ -5,7 +5,7 @@ import os
 import hashlib
 from math import log
 
-from liquidluck.writers import Writer, ArchiveMixin, FeedMixin, PagerMixin
+from liquidluck.writers import Writer, FeedMixin, PagerMixin
 from liquidluck.writers import sort_posts, make_folder, copy_to
 from liquidluck.utils import merge, to_unicode, walk_dir
 from liquidluck.namespace import ns, NameSpace
@@ -78,7 +78,7 @@ class PostWriter(Writer):
         if olders:
             post.older = sort_posts(olders)[0]
         if newers:
-            post.newer = sort_posts(newers)[-1]
+            post.newer = sort_posts(newers, False)[0]
         return post
 
     def run(self):
@@ -97,33 +97,34 @@ class FileWriter(Writer):
             copy_to(source, dest)
 
 
-class IndexWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
+class IndexWriter(Writer, PagerMixin, FeedMixin):
     writer_type = 'Index Writer'
 
     def start(self):
-        ns.storage.status.posts = sort_posts(self.calc_archive_posts())
+        ns.storage.status.posts = ns.storage.public_posts
         return
 
     def run(self):
-        posts = sort_posts(self.calc_archive_posts())
+        posts = ns.storage.public_posts
         dest = ns.site.index
-        _archive_tpl = ns.site.get('index_archive_template', None)
-        _feed_tpl = ns.site.get('index_feed_template', None)
         params = {'title': 'Archive'}
-        if _archive_tpl:
-            params.update({'tpl': _archive_tpl})
+        _tpl = ns.site.get('index_archive_template', None)
+        if _tpl:
+            params.update({'tpl': _tpl})
         self.write_pager(posts, dest, **params)
+
         params = {'folder': ''}
-        if _feed_tpl:
-            params.update({'tpl': _feed_tpl})
+        _tpl = ns.site.get('index_feed_template', None)
+        if _tpl:
+            params.update({'tpl': _tpl})
         self.write_feed(posts, dest='feed.xml', **params)
 
 
-class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
+class YearWriter(Writer, PagerMixin, FeedMixin):
     writer_type = 'Year Writer'
 
     def calc_year_posts(self):
-        for post in self.calc_archive_posts():
+        for post in ns.storage.public_posts:
             yield post.date.year, post
 
     def start(self):
@@ -135,7 +136,7 @@ class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
 
     def run(self):
         _tpl = ns.site.get('year_archive_template', None)
-        for year, posts in merge(self.calc_year_posts()).iteritems():
+        for year, posts in merge(self.calc_year_posts()).items():
             posts = sort_posts(posts)
             year = str(year)
             dest = os.path.join(year, 'index.html')
@@ -145,11 +146,11 @@ class YearWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
             self.write_pager(posts, dest, **params)
 
 
-class TagWriter(Writer, ArchiveMixin, PagerMixin):
+class TagWriter(Writer, PagerMixin):
     writer_type = 'Tag Writer'
 
     def calc_tag_posts(self):
-        for post in self.calc_archive_posts():
+        for post in ns.storage.public_posts:
             tags = post.get('tags', [])
             for tag in tags:
                 yield tag, post
@@ -187,11 +188,11 @@ class TagWriter(Writer, ArchiveMixin, PagerMixin):
             self.write_pager(posts, dest, **params)
 
 
-class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
+class FolderWriter(Writer, PagerMixin, FeedMixin):
     writer_type = 'Folder Writer'
 
     def calc_folder_posts(self):
-        for post in self.calc_archive_posts():
+        for post in ns.storage.public_posts:
             folder = post.get('folder', None)
             if folder:
                 yield folder, post
@@ -221,12 +222,12 @@ class FolderWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
             self.write_feed(posts, dest, **params)
 
 
-class CategoryWriter(Writer, ArchiveMixin, PagerMixin, FeedMixin):
+class CategoryWriter(Writer, PagerMixin, FeedMixin):
     writer_type = 'Category Writer'
 
     def calc_category_posts(self):
         key = ns.site.get('category', 'category')
-        for post in self.calc_archive_posts():
+        for post in ns.storage.public_posts:
             category = post.get(key, None)
             if category:
                 yield category, post

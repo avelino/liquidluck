@@ -54,6 +54,10 @@ def init_post():
         else:
             ns.storage.files.append(f)
 
+    ns.storage.posts = sorted(
+        ns.storage.posts, key=lambda o: o.date, reverse=True)
+    ns.storage.public_posts = filter(
+        lambda post: post.public, ns.storage.posts)
     return ns
 
 

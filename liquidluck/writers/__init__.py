@@ -117,13 +117,6 @@ class Writer(object):
         raise NotImplementedError
 
 
-class ArchiveMixin(object):
-    def calc_archive_posts(self):
-        for post in ns.storage.posts:
-            if post.public:
-                yield post
-
-
 class FeedMixin(object):
     def write_feed(self, posts, dest='feed.xml', **params):
         count = int(ns.site.feed_count)
