@@ -6,22 +6,28 @@ import hashlib
 from math import log
 
 from liquidluck.writers import Writer, FeedMixin, PagerMixin
-from liquidluck.writers import sort_posts, make_folder, copy_to
+from liquidluck.writers import sort_posts, copy_to
 from liquidluck.utils import merge, to_unicode, walk_dir
 from liquidluck.namespace import ns, NameSpace
 from liquidluck import logger
 
+_hash_cache = {}
 
 def static_url(name):
+    global _hash_cache
+    url = ns.site.static_prefix
+    if name in _hash_cache:
+        return os.path.join(url, name) + '?v=' + _hash_cache[name]
+
     f = os.path.join(ns.storage.projectdir,
                      ns.site.staticdir, name)
-    url = ns.site.static_prefix
     if not os.path.exists(f):
         logger.warn('No such static file: %s' % f)
         return os.path.join(url, name)
     f = open(f, 'rb')
-    stat = hashlib.md5(f.read()).hexdigest()
-    return os.path.join(url, name) + '?v=' + stat[:5]
+    stat = hashlib.md5(f.read()).hexdigest()[:5]
+    _hash_cache[name] = stat
+    return os.path.join(url, name) + '?v=' + stat
 
 
 class StaticWriter(Writer):
@@ -64,7 +70,6 @@ class PostWriter(Writer):
 
     def _write_post(self, post):
         _tpl = post.get('template', 'post.html')
-        dest = os.path.join(self.deploydir, post.destination)
         self.write({'post': post}, _tpl, post.destination)
 
     def _get_rel_posts(self, post):

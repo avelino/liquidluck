@@ -33,8 +33,11 @@ class Reader(object):
     def start(self):
         return None
 
-    def get_resource_path(self):
-        return self.filepath
+    def get_relative_folder(self):
+        postdir = os.path.join(ns.storage.projectdir,
+                               ns.site.postdir)
+        folder, filename = os.path.split(self.filepath.replace(postdir, ''))
+        return folder.lstrip('/')
 
     def get_resource_basename(self):
         folder, filename = os.path.split(self.filepath)
@@ -44,7 +47,10 @@ class Reader(object):
     def get_resource_destination(self):
         _format = ns.site.format
         post = self.parse_post()
-        filename = self.get_resource_basename() + '.html'
+        if hasattr(post, 'ext'):
+            filename = self.get_resource_basename() + '.' + ext
+        else:
+            filename = self.get_resource_basename() + '.html'
         year = str(post.date.year)
         month = str(post.date.month)
         day = str(post.date.day)
@@ -56,7 +62,7 @@ class Reader(object):
             return os.path.join(year, month, day, filename)
         if hasattr(post, 'folder'):
             return os.path.join(post.folder, filename)
-        return filename
+        return os.path.join(self.get_relative_folder(), filename)
 
     def get_resource_slug(self):
         return self.get_resource_destination()
