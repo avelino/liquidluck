@@ -11,7 +11,7 @@ try:
 except ImportError:
     from ConfigParser import ConfigParser
 
-from liquidluck.namespace import ns, NameSpace
+from liquidluck.namespace import ns
 if '--disable-log' in sys.argv:
     ns.disable_log = True
 from liquidluck.utils import import_module, walk_dir, UnicodeDict
@@ -103,7 +103,7 @@ def build(config_file):
 
 def create(config_file='config.ini'):
     shutil.copy(os.path.join(ns.storage.root, 'config.ini'), config_file)
-    config = init_config(config_file)
+    init_config(config_file)
     cwd = os.getcwd()
     dest = os.path.join(cwd, ns.site.staticdir)
     if not os.path.exists(dest):
@@ -141,7 +141,7 @@ def main():
             return build(args.config)
         if cmd == 'create':
             return create(args.config)
-        config = init(args.config)
+        config = init_config(args.config)
         if not config.has_section('commands'):
             return
         for k, v in config.items('commands'):

@@ -13,6 +13,7 @@ from liquidluck import logger
 
 _hash_cache = {}
 
+
 def static_url(name):
     global _hash_cache
     url = ns.site.static_prefix
