@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import re
-from liquidluck.utils import to_unicode
 
 
 def xmldatetime(value):
@@ -81,7 +80,7 @@ def remove_linebreak_for_double_width_language(value):
 
 
 def first_paragraph(value):
-    regex = re.compile(r'<p>(.*?)</p>', re.U|re.S)
+    regex = re.compile(r'<p>(.*?)</p>', re.U | re.S)
     m = regex.findall(value)
     if not m:
         return ''

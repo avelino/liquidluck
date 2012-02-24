@@ -12,9 +12,8 @@ You can add your author information like I did below.
 __author__ = 'lepture <lepture@me.com>'
 
 from liquidluck.writers.default import PostWriter
-from liquidluck.writers import sort_posts
 from liquidluck.namespace import ns
-from liquidluck import logger
+
 
 class TagRelatedPostWriter(PostWriter):
     """
@@ -51,7 +50,7 @@ class TagRelatedPostWriter(PostWriter):
         tags = set(post.tags)
         base = len(post.tags)
         for p in ns.storage.posts:
-            prior = len(tags - set(p.get('tags',[])))
+            prior = len(tags - set(p.get('tags', [])))
             if prior < base and p.slug != post.slug and p.public:
                 p.related_priority = base - prior
                 yield p

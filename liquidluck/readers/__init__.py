@@ -48,7 +48,7 @@ class Reader(object):
         _format = ns.site.format
         post = self.parse_post()
         if hasattr(post, 'ext'):
-            filename = self.get_resource_basename() + '.' + ext
+            filename = self.get_resource_basename() + '.' + post.ext
         else:
             filename = self.get_resource_basename() + '.html'
         year = str(post.date.year)

@@ -33,9 +33,9 @@ ns = NameSpace.instance()
 
 #defaults
 ns.storage = NameSpace()
-ns.storage.errors = [] # error list storage
-ns.storage.status = NameSpace() # status of the blog info
-ns.storage.functions = NameSpace() # functions storage for writer
+ns.storage.errors = []  # error list storage
+ns.storage.status = NameSpace()  # status of the blog info
+ns.storage.functions = NameSpace()  # functions storage for writer
 ns.storage.root = None
 ns.storage.posts = []
 ns.storage.files = []

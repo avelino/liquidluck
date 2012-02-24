@@ -27,8 +27,6 @@ Syntax::
 :license: BSD
 '''
 
-import os
-import os.path
 from xml.dom import minidom
 from docutils import nodes
 from docutils.core import publish_parts
