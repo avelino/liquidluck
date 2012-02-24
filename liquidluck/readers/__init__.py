@@ -54,6 +54,20 @@ class Reader(object):
         year = str(post.date.year)
         month = str(post.date.month)
         day = str(post.date.day)
+        if '/' in _format:
+            path = ''
+            dates = {'year': year, 'month': month, 'day': day}
+            for attr in _format.split('/'):
+                if attr in dates:
+                    path = os.path.join(path, dates[attr])
+                else:
+                    try:
+                        path = os.path.join(path, getattr(post, attr))
+                    except AttributeError:
+                        logger.warn('Attribute %s Missing: %s'\
+                                    % (attr, filename))
+                        pass
+            return os.path.join(path, filename)
         if _format == 'year':
             return os.path.join(year, filename)
         if _format == 'month':
@@ -65,7 +79,7 @@ class Reader(object):
         return os.path.join(self.get_relative_folder(), filename)
 
     def get_resource_slug(self):
-        return self.get_resource_destination()
+        return self.get_resource_destination().lower()
 
     def support_type(self):
         return None
