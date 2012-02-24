@@ -42,8 +42,8 @@ def init_config(filepath):
     return config
 
 
-def init_post():
-    ns.storage.projectdir = os.getcwd()
+def init_post(projectdir):
+    ns.storage.projectdir = projectdir
     postdir = os.path.join(ns.storage.projectdir,
                            ns.site.postdir)
     for f in walk_dir(postdir):
@@ -63,6 +63,20 @@ def init_post():
     return ns
 
 
+def generate():
+    for reader in ns.readers.values():
+        if reader:
+            import_module(reader)().start()
+
+    for writer in ns.writers.values():
+        if writer:
+            import_module(writer)().start()
+
+    for writer in ns.writers.values():
+        if writer:
+            import_module(writer)().run()
+
+
 def build(config_file):
     log = logger.Logger()
     begin = time.time()
@@ -75,22 +89,9 @@ def build(config_file):
         return create()
 
     init_config(config_file)
-    init_post()
+    init_post(os.getcwd())
 
-    log.info('Starting readers')
-    for reader in ns.readers.values():
-        if reader:
-            import_module(reader)().start()
-
-    log.info('Starting writers')
-    for writer in ns.writers.values():
-        if writer:
-            import_module(writer)().start()
-
-    log.info('Running writers')
-    for writer in ns.writers.values():
-        if writer:
-            import_module(writer)().run()
+    generate()
 
     for error in ns.storage.errors:
         log.error('Invalid Post: %s' % error)
@@ -155,5 +156,5 @@ def main():
             run_command(cmd)
 
 
-if '__main__' == __name__:
+if __name__ == '__main__':
     main()
