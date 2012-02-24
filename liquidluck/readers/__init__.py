@@ -60,7 +60,7 @@ class Reader(object):
             for attr in _format.split('/'):
                 if attr in dates:
                     path = os.path.join(path, dates[attr])
-                else:
+                elif attr:
                     try:
                         path = os.path.join(path, getattr(post, attr))
                     except AttributeError:
