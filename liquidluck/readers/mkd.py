@@ -44,15 +44,16 @@ else:
     INLINESTYLES = True
 
 """
-[sourcecode:lexer]
-some code
-[/sourcecode]
+```python
+def yourcode():
+    print('here')
+```
 """
 
 
 def codeblock(text):
     pattern = re.compile(
-        r'\[sourcecode:(.+?)\](.+?)\[/sourcecode\]', re.S)
+        r'```(.+?)\n(.+?)```', re.S)
     formatter = HtmlFormatter(noclasses=INLINESTYLES)
 
     def repl(m):

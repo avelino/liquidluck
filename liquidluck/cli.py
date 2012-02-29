@@ -23,10 +23,9 @@ ns.storage.root = os.path.dirname(__file__)
 
 def make_notify():
     logger.warn("Important!!!!!")
-    logger.warn("Please use post.newer and post.older instead of"
-                " post.prev and post.next")
-    logger.warn("Edit your post.html, change post.prev to post.newer")
-    logger.warn("Edit your post.html, change post.next to post.older")
+    logger.warn("sourcecode in markdown changed to the new mark")
+    logger.warn("using ```python instead of [sourcecode:python]")
+    logger.warn("using ``` to end the code block instead of [/sourcecode]")
 
 
 def init_config(filepath):
