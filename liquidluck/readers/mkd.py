@@ -14,12 +14,12 @@ Syntax::
 
     Your content here. And it support code highlight.
 
-    [sourcecode:python]
+    ```python
 
     def hello():
         return 'Hello World'
 
-    [/sourcecode]
+    ```
 
 
 :copyright: (c) 2011 by Hsiaoming Young (aka lepture)
@@ -52,8 +52,7 @@ def yourcode():
 
 
 def codeblock(text):
-    pattern = re.compile(
-        r'```(.+?)\n(.+?)```', re.S)
+    pattern = re.compile(r'```(\w+)(.+?)```', re.S)
     formatter = HtmlFormatter(noclasses=INLINESTYLES)
 
     def repl(m):
