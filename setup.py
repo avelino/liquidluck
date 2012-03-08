@@ -14,21 +14,21 @@ except ImportError:
 from liquidluck import __version__ as version
 
 setup(
-    name = 'liquidluck',
-    version = version,
-    author = 'Hsiaoming Young',
-    author_email = 'lepture@me.com',
-    url = 'http://lepture.com/project/liquidluck',
-    packages = ['liquidluck', 'liquidluck.writers', 'liquidluck.readers'],
-    description = 'A lightweight static weblog generator',
-    long_description = open(readme).read(),
-    license = 'BSD License',
-    entry_points = {
+    name='liquidluck',
+    version=version,
+    author='Hsiaoming Young',
+    author_email='lepture@me.com',
+    url='http://lepture.com/project/liquidluck',
+    packages=['liquidluck', 'liquidluck.writers', 'liquidluck.readers'],
+    description='A lightweight static weblog generator',
+    long_description=open(readme).read(),
+    license='BSD License',
+    entry_points={
         'console_scripts': ['liquidluck= liquidluck.cli:main'],
     },
     install_requires=install_requires,
-    include_package_data = True,
-    classifiers = [
+    include_package_data=True,
+    classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
         'License :: OSI Approved :: BSD License',
