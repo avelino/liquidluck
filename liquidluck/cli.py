@@ -11,6 +11,7 @@ try:
 except ImportError:
     from ConfigParser import ConfigParser
 
+import liquidluck
 from liquidluck.namespace import ns
 if '--disable-log' in sys.argv:
     ns.disable_log = True
@@ -134,6 +135,7 @@ def main():
     parser.add_argument('-f', '--config', dest='config', default='config.ini',
                         metavar='config.ini')
     parser.add_argument('--disable-log', action='store_true')
+    parser.add_argument('-v', '--version', action='store_true', dest='version')
     args = parser.parse_args()
 
     def run_command(cmd):
@@ -148,6 +150,9 @@ def main():
             if args.command == k:
                 return import_module(v)(args.config)
 
+    if args.version:
+        print 'liquidluck (Felix Felicis) %s' % liquidluck.__version__
+        return
     if isinstance(args.command, basestring):
         return run_command(args.command)
     if isinstance(args.command, list):
