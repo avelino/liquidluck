@@ -61,7 +61,7 @@ def codeblock(text):
         except ValueError:
             lexer = TextLexer()
         code = highlight(m.group(2), lexer, formatter)
-        code = code.replace('\n\n', '\n&nbsp;\n').replace('\n', '<br />')
+        #code = code.replace('\n\n', '\n&nbsp;\n').replace('\n', '<br />')
         return '\n\n<div class="code">%s</div>\n\n' % code
     return pattern.sub(repl, text)
 
