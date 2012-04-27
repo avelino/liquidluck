@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import hashlib
 from math import log
 
@@ -17,18 +18,21 @@ _hash_cache = {}
 def static_url(name):
     global _hash_cache
     url = ns.site.static_prefix
+    path = os.path.join(url, name)
+    if sys.platform.startswith('win'):
+        path = path.replace('\\','/')
     if name in _hash_cache:
-        return os.path.join(url, name) + '?v=' + _hash_cache[name]
+        return path + '?v=' + _hash_cache[name]
 
     f = os.path.join(ns.storage.projectdir,
                      ns.site.staticdir, name)
     if not os.path.exists(f):
         logger.warn('No such static file: %s' % f)
-        return os.path.join(url, name)
+        return path
     f = open(f, 'rb')
     stat = hashlib.md5(f.read()).hexdigest()[:5]
     _hash_cache[name] = stat
-    return os.path.join(url, name) + '?v=' + stat
+    return path + '?v=' + stat
 
 
 class StaticWriter(Writer):
@@ -41,6 +45,8 @@ class StaticWriter(Writer):
     def run(self):
         for source in walk_dir(self.staticdir):
             path = source.replace(ns.storage.projectdir, '').lstrip('/')
+            if sys.platform.startswith('win'):
+                path = path.lstrip('\\')
             dest = os.path.join(self.deploydir, path)
             copy_to(source, dest)
 
@@ -49,6 +55,8 @@ def content_url(a, *args):
     slug = ns.site.slug
     args = [to_unicode(arg) for arg in args]
     path = os.path.join(to_unicode(a), *args)
+    if sys.platform.startswith('win'):
+        path = path.replace('\\','/')
     basename, ext = os.path.splitext(path)
     if not ext:
         path = basename + '/'
