@@ -81,7 +81,7 @@ def markdown(text):
     for module in markdown_prefork.values():
         if module:
             text = import_module(module)(text)
-    md = Markdown()
+    md = Markdown(extensions=['extra','toc'])
     return md.convert(text)
 
 

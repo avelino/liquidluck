@@ -107,6 +107,8 @@ class FileWriter(Writer):
     def run(self):
         for source in ns.storage.files:
             path = source.replace(self.postdir, '').lstrip('/')
+            if sys.platform.startswith('win'):
+                path = path.lstrip('\\')
             dest = os.path.join(self.deploydir, path)
             copy_to(source, dest)
 
