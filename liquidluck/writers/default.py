@@ -20,7 +20,7 @@ def static_url(name):
     url = ns.site.static_prefix
     path = os.path.join(url, name)
     if sys.platform.startswith('win'):
-        path = path.replace('\\','/')
+        path = path.replace('\\', '/')
     if name in _hash_cache:
         return path + '?v=' + _hash_cache[name]
 
@@ -56,7 +56,14 @@ def content_url(a, *args):
     args = [to_unicode(arg) for arg in args]
     path = os.path.join(to_unicode(a), *args)
     if sys.platform.startswith('win'):
-        path = path.replace('\\','/')
+        path = path.replace('\\', '/')
+
+    if path.endswith('/index.html'):
+        path = path.rstrip('index.html')
+        if not path.startswith('http://'):
+            path = '/%s' % path.lstrip('/')
+        return path.lower()
+
     basename, ext = os.path.splitext(path)
     if not ext:
         path = basename + '/'
