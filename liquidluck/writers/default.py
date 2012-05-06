@@ -72,6 +72,8 @@ def content_url(a, *args):
         path = basename
     if slug == 'slash':
         path = basename + '/'
+    if slug == 'html':
+        path = basename + '.html'
 
     if not path.startswith('http://'):
         path = '/%s' % path.lstrip('/')
