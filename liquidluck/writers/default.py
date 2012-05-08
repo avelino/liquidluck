@@ -60,13 +60,11 @@ def content_url(a, *args):
     basename, ext = os.path.splitext(path)
     if not ext:
         path = basename + '/'
-
-    if slug == 'clean':
-        path = basename
-    if slug == 'slash':
-        path = basename + '/'
-    if slug == 'html':
-        path = basename + '.html'
+    elif ext == '.html':
+        if slug == 'clean':
+            path = basename
+        elif slug == 'slash':
+            path = basename + '/'
 
     if not path.startswith('http://'):
         path = '/%s' % path.lstrip('/')

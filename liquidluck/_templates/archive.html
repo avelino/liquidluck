@@ -27,14 +27,14 @@
         <a class="prev" href="{{ content_url(pager.folder, pager.sub_folder) }}">«Prev</a>
         {% endif %}
         {% else %}
-        <a class="prev" href="{{ content_url(pager.folder, pager.sub_folder, pager.prev) }}">«Prev</a>
+        <a class="prev" href="{{ content_url(pager.folder, pager.sub_folder, pager.prev+'.html') }}">«Prev</a>
         {% endif %}
     {% else %}
     <span class="prev">«Prev</span>
     {% endif %}
     <span class="fn-current">{{pager.page}}</span>
     {% if pager.next %}
-    <a class="next" href="{{ content_url(pager.folder, pager.sub_folder, pager.next) }}">Next»</a>
+    <a class="next" href="{{ content_url(pager.folder, pager.sub_folder, pager.next+'.html') }}">Next»</a>
     {% else %}
     <span class="next">Next»</span>
     {% endif %}
