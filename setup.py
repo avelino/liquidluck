@@ -4,7 +4,7 @@
 import os
 readme = os.path.join(os.path.dirname(__file__), 'README.rst')
 from setuptools import setup
-install_requires = ['docutils', 'Jinja2', 'Pygments', 'markdown']
+install_requires = ['docutils', 'Jinja2', 'Pygments', 'misaka', 'houdini.py']
 try:
     import argparse  # python 2.7+ support argparse
 except ImportError:

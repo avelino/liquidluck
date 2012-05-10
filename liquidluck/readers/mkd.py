@@ -28,10 +28,16 @@ Syntax::
 
 
 import re
+import misaka as m
+import houdini as h
+
+from misaka import HtmlRenderer
+from misaka import SmartyPants
+
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
-from pygments.lexers import get_lexer_by_name, TextLexer
-from markdown import Markdown
+from pygments.lexers import get_lexer_by_name
+# from markdown import Markdown
 
 from liquidluck.readers import Reader
 from liquidluck.namespace import ns, NameSpace
@@ -50,7 +56,7 @@ def yourcode():
 ```
 """
 
-
+"""
 def codeblock(text):
     pattern = re.compile(r'```(\w+)(.+?)```', re.S)
     formatter = HtmlFormatter(noclasses=INLINESTYLES)
@@ -65,14 +71,25 @@ def codeblock(text):
         return '\n\n<div class="code">%s</div>\n\n' % code
     return pattern.sub(repl, text)
 
+"""
 
+class BleepRenderer(HtmlRenderer, SmartyPants):
+    def block_code(self, text, lang):
+        if not lang:
+            return '\n<pre><code>%s</code></pre>\n' % \
+                h.escape_html(text.strip())
+        lexer = get_lexer_by_name(lang, stripall=True)
+        formatter = HtmlFormatter()
+        return highlight(text, lexer, formatter)
+
+renderer = BleepRenderer()
+ 
 markdown_prefork = NameSpace({
-    'codeblock': 'liquidluck.readers.mkd.codeblock',
+#   'codeblock': 'liquidluck.readers.mkd.codeblock',
     'youku': 'liquidluck.filters.youku',
     'tudou': 'liquidluck.filters.tudou',
     'yinyuetai': 'liquidluck.filters.yinyuetai',
 })
-
 
 def markdown(text):
     if 'markdown_prefork' in ns.sections:
@@ -81,9 +98,10 @@ def markdown(text):
     for module in markdown_prefork.values():
         if module:
             text = import_module(module)(text)
-    md = Markdown(extensions=['extra','toc'])
-    return md.convert(text)
-
+            
+    md = m.Markdown(renderer, extensions=m.EXT_FENCED_CODE | m.EXT_NO_INTRA_EMPHASIS)
+    return md.render(text)
+   
 
 class MarkdownParser(object):
     def __init__(self, filepath):
