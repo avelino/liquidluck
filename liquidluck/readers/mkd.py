@@ -56,22 +56,13 @@ def yourcode():
 ```
 """
 
-"""
-def codeblock(text):
-    pattern = re.compile(r'```(\w+)(.+?)```', re.S)
-    formatter = HtmlFormatter(noclasses=INLINESTYLES)
 
-    def repl(m):
-        try:
-            lexer = get_lexer_by_name(m.group(1))
-        except ValueError:
-            lexer = TextLexer()
-        code = highlight(m.group(2), lexer, formatter)
-        #code = code.replace('\n\n', '\n&nbsp;\n').replace('\n', '<br />')
-        return '\n\n<div class="code">%s</div>\n\n' % code
-    return pattern.sub(repl, text)
+markdown_prefork = NameSpace({
+    'youku': 'liquidluck.filters.youku',
+    'tudou': 'liquidluck.filters.tudou',
+    'yinyuetai': 'liquidluck.filters.yinyuetai',
+})
 
-"""
 
 class BleepRenderer(HtmlRenderer, SmartyPants):
     def block_code(self, text, lang):
@@ -79,29 +70,30 @@ class BleepRenderer(HtmlRenderer, SmartyPants):
             return '\n<pre><code>%s</code></pre>\n' % \
                 h.escape_html(text.strip())
         lexer = get_lexer_by_name(lang, stripall=True)
-        formatter = HtmlFormatter()
+        formatter = HtmlFormatter(noclasses=ns.site.syntax)
         return highlight(text, lexer, formatter)
 
+    def preprocess(self, text):
+        if 'markdown_prefork' in ns.sections:
+            markdown_prefork.update(ns.sections.markdown_prefork)
+
+        for module in markdown_prefork.values():
+            if module:
+                text = import_module(module)(text)
+
+        return text
+
+
 renderer = BleepRenderer()
- 
-markdown_prefork = NameSpace({
-#   'codeblock': 'liquidluck.readers.mkd.codeblock',
-    'youku': 'liquidluck.filters.youku',
-    'tudou': 'liquidluck.filters.tudou',
-    'yinyuetai': 'liquidluck.filters.yinyuetai',
-})
+
 
 def markdown(text):
-    if 'markdown_prefork' in ns.sections:
-        markdown_prefork.update(ns.sections.markdown_prefork)
-
-    for module in markdown_prefork.values():
-        if module:
-            text = import_module(module)(text)
-            
-    md = m.Markdown(renderer, extensions=m.EXT_FENCED_CODE | m.EXT_NO_INTRA_EMPHASIS)
+    md = m.Markdown(
+        renderer,
+        extensions=m.EXT_FENCED_CODE | m.EXT_NO_INTRA_EMPHASIS
+    )
     return md.render(text)
-   
+
 
 class MarkdownParser(object):
     def __init__(self, filepath):
