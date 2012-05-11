@@ -70,7 +70,7 @@ class BleepRenderer(HtmlRenderer, SmartyPants):
             return '\n<pre><code>%s</code></pre>\n' % \
                 h.escape_html(text.strip())
         lexer = get_lexer_by_name(lang, stripall=True)
-        formatter = HtmlFormatter(noclasses=ns.site.syntax)
+        formatter = HtmlFormatter(noclasses=INLINESTYLES)
         return highlight(text, lexer, formatter)
 
     def preprocess(self, text):
