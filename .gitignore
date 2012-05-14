@@ -11,3 +11,4 @@ parts
 .installed.cfg
 deploy
 content
+docs/_build
