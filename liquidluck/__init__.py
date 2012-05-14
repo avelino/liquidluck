@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2011, Hsiaoming Young <http://lepture.com>
+# Copyright (c) 2012, Hsiaoming Yang <http://lepture.com>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -29,5 +29,5 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__version__ = '0.3'
-__author__ = 'Hsiaoming Young <lepture@me.com>'
+__version__ = '1.0'
+__author__ = 'Hsiaoming Yang <lepture@me.com>'
