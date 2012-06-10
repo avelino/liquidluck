@@ -8,7 +8,7 @@ ROOT = os.path.abspath(os.path.dirname(__file__))
 
 class TestMarkdownReader(object):
     def setUp(self):
-        path = os.path.join(ROOT, 'source/post/demo.md')
+        path = os.path.join(ROOT, 'source/post/demo-markdown-1.md')
         self.reader = MarkdownReader(path)
         self.post = self.reader.render()
 

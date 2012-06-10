@@ -4,11 +4,12 @@ Blog content file parser.
 
 Syntax::
 
-    -----------------
-    title: Title
-    date: 2011-09-01
-    folder: life
-    tags: tag1, tag2
+    # Title
+
+    - date: 2011-09-01
+    - folder: life
+    - tags: tag1, tag2
+
     -----------------
 
     Your content here. And it support code highlight.
@@ -45,34 +46,36 @@ class MarkdownReader(BaseReader):
     def render(self):
         f = open(self.filepath)
         logging.info('read ' + self.filepath)
-        content = f.read()
+
+        header = ''
+        body = None
+        for line in f:
+            if line.startswith('---'):
+                body = ''
+            elif body is not None:
+                body += line
+            else:
+                header += line
+
         f.close()
 
-        meta_regex = re.compile(
-            r"^\s*(?:-|=){3,}\s*\n((?:.|\n)+?)\n\s*(?:-|=){3,}\s*\n*",
-            re.MULTILINE
-        )
-        match = re.match(meta_regex, content)
-        if not match:
-            logging.error("No metadata in: %s" % self.filepath)
-            return None
+        meta = self._parse_meta(header)
+        content = markdown(body)
+        return Post(self.filepath, content, meta=meta)
 
-        meta = match.group(1)
-        meta = re.sub(r'\r\n|\r|\n', '\n', meta)
-        dct = {}
-        k = v = None
-        for item in meta.split('\n'):
-            item = item.replace('\t', '    ')
-            if item.startswith('  ') and k:
-                dct[k] = dct[k] + '\n' + item.lstrip()
-            if ':' in item and not item.startswith(' '):
-                index = item.find(':')
-                k, v = item[:index], item[index + 1:]
-                k, v = k.rstrip(), v.lstrip()
-                dct[k] = to_unicode(v)
+    def _parse_meta(self, header):
+        header = markdown(header)
+        title = re.findall(r'<h1>(.*)</h1>', header)[0]
 
-        content = markdown(content[match.end():])
-        return Post(self.filepath, content, meta=dct)
+        meta = {'title': title}
+        items = re.findall(r'<li>(.*?)</li>', header, re.S)
+        for item in items:
+            index = item.find(':')
+            key = item[:index].rstrip()
+            value = item[index + 1:].lstrip()
+            meta[key] = value
+
+        return meta
 
 
 class JuneRender(m.HtmlRenderer, m.SmartyPants):

@@ -1,8 +1,9 @@
------------
-title: demo
-date: 2012-12-12
-tags: tag1, tag2
------------
+# demo
+
+- date: 2012-12-12
+- tags: tag1, tag2
+
+------
 
 first line
 
