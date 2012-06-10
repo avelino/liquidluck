@@ -11,10 +11,8 @@ g.root_directory = os.path.abspath(os.path.dirname(__file__))
 
 
 def load_settings(path):
-    config = {}
-    execfile(path, config, config)
-    for key in config:
-        settings[key] = config[key]
+    execfile(path, settings, settings)
+    #: TODO config default settings
 
 
 def main():
