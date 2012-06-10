@@ -11,7 +11,7 @@ Writer, write your content to html.
 import os
 import re
 from jinja2 import Environment, FileSystemLoader
-from liquidluck.utils import import_module
+from liquidluck.utils import import_module, to_unicode
 
 # blog settings
 from liquidluck.options import settings
@@ -78,6 +78,10 @@ def get_post_slug(post, slug_format):
 
     def replace(m):
         key = m.group(1)
-        value = getattr(post, key)
-        return value
+        tokens = key.split('.')
+        value = post
+        for token in tokens:
+            value = getattr(value, token)
+
+        return to_unicode(value)
     return regex.sub(replace, slug_format)
