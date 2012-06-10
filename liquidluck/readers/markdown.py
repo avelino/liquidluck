@@ -38,6 +38,43 @@ from liquidluck.readers.base import BaseReader, Post
 from liquidluck.utils import to_unicode
 
 
+class MarkdownReader(BaseReader):
+    def support_type(self):
+        return 'md', 'mkd', 'markdown'
+
+    def render(self):
+        f = open(self.filepath)
+        logging.info('read ' + self.filepath)
+        content = f.read()
+        f.close()
+
+        meta_regex = re.compile(
+            r"^\s*(?:-|=){3,}\s*\n((?:.|\n)+?)\n\s*(?:-|=){3,}\s*\n*",
+            re.MULTILINE
+        )
+        match = re.match(meta_regex, content)
+        if not match:
+            logging.error("No metadata in: %s" % self.filepath)
+            return None
+
+        meta = match.group(1)
+        meta = re.sub(r'\r\n|\r|\n', '\n', meta)
+        dct = {}
+        k = v = None
+        for item in meta.split('\n'):
+            item = item.replace('\t', '    ')
+            if item.startswith('  ') and k:
+                dct[k] = dct[k] + '\n' + item.lstrip()
+            if ':' in item and not item.startswith(' '):
+                index = item.find(':')
+                k, v = item[:index], item[index + 1:]
+                k, v = k.rstrip(), v.lstrip()
+                dct[k] = to_unicode(v)
+
+        content = markdown(content[match.end():])
+        return Post(self.filepath, content, meta=dct)
+
+
 class JuneRender(m.HtmlRenderer, m.SmartyPants):
     def block_code(self, text, lang):
         if lang:
@@ -101,43 +138,6 @@ def markdown(text):
         extensions=m.EXT_FENCED_CODE | m.EXT_AUTOLINK,
     )
     return md.render(text)
-
-
-class MarkdownReader(BaseReader):
-    def support_type(self):
-        return 'md', 'mkd', 'markdown'
-
-    def render(self):
-        f = open(self.filepath)
-        logging.info('read ' + self.filepath)
-        content = f.read()
-        f.close()
-
-        meta_regex = re.compile(
-            r"^\s*(?:-|=){3,}\s*\n((?:.|\n)+?)\n\s*(?:-|=){3,}\s*\n*",
-            re.MULTILINE
-        )
-        match = re.match(meta_regex, content)
-        if not match:
-            logging.error("No metadata in: %s" % self.filepath)
-            return None
-
-        meta = match.group(1)
-        meta = re.sub(r'\r\n|\r|\n', '\n', meta)
-        dct = {}
-        k = v = None
-        for item in meta.split('\n'):
-            item = item.replace('\t', '    ')
-            if item.startswith('  ') and k:
-                dct[k] = dct[k] + '\n' + item.lstrip()
-            if ':' in item and not item.startswith(' '):
-                index = item.find(':')
-                k, v = item[:index], item[index + 1:]
-                k, v = k.rstrip(), v.lstrip()
-                dct[k] = to_unicode(v)
-
-        content = markdown(content[match.end():])
-        return Post(self.filepath, content, meta=dct)
 
 
 _XHTML_ESCAPE_RE = re.compile('[&<>"]')

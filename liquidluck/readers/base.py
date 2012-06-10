@@ -13,12 +13,41 @@ from liquidluck.options import settings
 from liquidluck.utils import import_module
 
 
-def detect_reader(filepath):
-    for reader in settings.readers.values():
-        reader = import_module(reader)(filepath)
-        if reader.support():
-            return reader
-    return None
+class BaseReader(object):
+    """
+    Base Reader, all readers must inherit this module. e.g.:
+
+        ``MarkdownReader(BaseReader)``
+
+    New reader required:
+        - ``support_type``
+        - ``render``
+
+    New reader optional:
+        - ``start``
+    """
+    def __init__(self, filepath=None):
+        self.filepath = filepath
+
+    def start(self):
+        return None
+
+    def support_type(self):
+        return None
+
+    def support(self):
+        _type = self.support_type()
+        if isinstance(_type, basestring):
+            return self.filepath.endswith('.' + _type)
+        if isinstance(_type, list) or isinstance(_type, tuple):
+            for _t in _type:
+                if isinstance(_t, basestring) and \
+                   self.filepath.endswith('.' + _t):
+                    return True
+        return False
+
+    def render(self):
+        raise NotImplementedError
 
 
 class Post(object):
@@ -64,43 +93,6 @@ class Post(object):
         return [tag.strip() for tag in tags.split(",")]
 
 
-class BaseReader(object):
-    """
-    Base Reader, all readers must inherit this module. e.g.:
-
-        ``MarkdownReader(BaseReader)``
-
-    New reader required:
-        - ``support_type``
-        - ``render``
-
-    New reader optional:
-        - ``start``
-    """
-    def __init__(self, filepath=None):
-        self.filepath = filepath
-
-    def start(self):
-        return None
-
-    def support_type(self):
-        return None
-
-    def support(self):
-        _type = self.support_type()
-        if isinstance(_type, basestring):
-            return self.filepath.endswith('.' + _type)
-        if isinstance(_type, list) or isinstance(_type, tuple):
-            for _t in _type:
-                if isinstance(_t, basestring) and \
-                   self.filepath.endswith('.' + _t):
-                    return True
-        return False
-
-    def render(self):
-        raise NotImplementedError
-
-
 def to_datetime(value):
     supported_formats = [
         '%a %b %d %H:%M:%S %Y',
@@ -119,3 +111,11 @@ def to_datetime(value):
             pass
     logging.error('Unrecognized date/time: %r' % value)
     raise ValueError('Unrecognized date/time: %r' % value)
+
+
+def detect_reader(filepath):
+    for reader in settings.readers.values():
+        reader = import_module(reader)(filepath)
+        if reader.support():
+            return reader
+    return None
