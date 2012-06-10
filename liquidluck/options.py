@@ -86,7 +86,9 @@ class _Options(dict):
             raise AttributeError
 
 
+#: settings for blog user
 settings = _Options.instance()
+#: settings for liquidluck
 g = _Options.instance()
 
 

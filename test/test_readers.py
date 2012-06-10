@@ -8,7 +8,7 @@ ROOT = os.path.abspath(os.path.dirname(__file__))
 
 class TestMarkdownReader(object):
     def setUp(self):
-        path = os.path.join(ROOT, 'source/post.md')
+        path = os.path.join(ROOT, 'source/post/demo.md')
         self.reader = MarkdownReader(path)
         self.post = self.reader.render()
 
@@ -20,9 +20,6 @@ class TestMarkdownReader(object):
 
     def test_public(self):
         assert self.post.public is True
-
-    def test_author(self):
-        assert self.post.author is None
 
     def test_pygments(self):
         assert 'highlight' in self.post.content
