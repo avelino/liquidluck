@@ -73,7 +73,7 @@ class BaseWriter(object):
         return
 
 
-def parse_post_destination(post, slug_format):
+def get_post_slug(post, slug_format):
     regex = re.compile(r'\{\{(.*?)\}\}')
 
     def replace(m):
