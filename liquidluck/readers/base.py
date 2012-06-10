@@ -10,6 +10,58 @@ Reader, read content, parse to html.
 import datetime
 import logging
 from liquidluck.options import settings
+from liquidluck.utils import import_module
+
+
+def detect_reader(filepath):
+    for reader in settings.readers.values():
+        reader = import_module(reader)(filepath)
+        if reader.support():
+            return reader
+    return None
+
+
+class Post(object):
+    meta = {}
+
+    def __init__(self, filepath, content, title=None, meta=None):
+        self.filepath = filepath
+        self.content = content
+        if title:
+            self.title = title
+        else:
+            self.title = meta.pop('title')
+
+        if meta:
+            self.meta = meta
+
+    @property
+    def author(self):
+        return self.meta.get('author', settings.author)
+
+    @property
+    def date(self):
+        date = self.meta.get('date', None)
+        if date:
+            return to_datetime(date)
+        return None
+
+    @property
+    def public(self):
+        return self.meta.get('public', 'true') == 'true'
+
+    @property
+    def folder(self):
+        return self.meta.get('folder', None)
+
+    @property
+    def tags(self):
+        tags = self.meta.get('tags', None)
+        if not tags:
+            return []
+        if isinstance(tags, (list, tuple)):
+            return tags
+        return [tag.strip() for tag in tags.split(",")]
 
 
 class BaseReader(object):
@@ -20,7 +72,7 @@ class BaseReader(object):
 
     New reader required:
         - ``support_type``
-        - ``parse_post``
+        - ``render``
 
     New reader optional:
         - ``start``
@@ -30,9 +82,6 @@ class BaseReader(object):
 
     def start(self):
         return None
-
-    def get_resource_slug(self):
-        pass
 
     def support_type(self):
         return None
@@ -49,72 +98,24 @@ class BaseReader(object):
         return False
 
     def render(self):
-        """rend to post.
-
-        post:
-            - public
-            - date
-            - author
-            - title
-            - content
-            - slug
-            - destination
-        """
-        try:
-            post = self.parse_post()
-        except Exception as e:
-            logging.error(e)
-            return None
-
-        if post.get('public', 'true') == 'false':
-            post.public = False
-        else:
-            post.public = True
-
-        if not post.get('date', None) and post.public:
-            logging.error('post has no date')
-            return None
-
-        if not post.get('author', None):
-            post.author = settings.author
-
-        try:
-            post.date = self._parse_datetime(post.get('date'))
-        except ValueError as e:
-            logging.error(e)
-            return None
-
-        for key in post.keys():
-            if '_date' in key or '_time' in key:
-                try:
-                    post[key] = self._parse_datetime(post[key])
-                except ValueError as e:
-                    logging.error(e)
-                    return None
-
-        post.destination = self.get_resource_destination()
-        post.slug = self.get_resource_slug()
-        post.filepath = self.filepath
-        return post
-
-    def parse_post(self):
         raise NotImplementedError
 
-    def _parse_datetime(sef, value):
-        supported_formats = [
-            '%a %b %d %H:%M:%S %Y',
-            '%Y-%m-%d %H:%M:%S',
-            '%Y-%m-%d %H:%M',
-            '%Y-%m-%dT%H:%M',
-            '%Y%m%d %H:%M:%S',
-            '%Y%m%d %H:%M',
-            '%Y-%m-%d',
-            '%Y%m%d',
-        ]
-        for format in supported_formats:
-            try:
-                return datetime.strptime(value, format)
-            except ValueError:
-                pass
-        logging.error('Unrecognized date/time: %r' % value)
-        raise ValueError('Unrecognized date/time: %r' % value)
+
+def to_datetime(value):
+    supported_formats = [
+        '%a %b %d %H:%M:%S %Y',
+        '%Y-%m-%d %H:%M:%S',
+        '%Y-%m-%d %H:%M',
+        '%Y-%m-%dT%H:%M',
+        '%Y%m%d %H:%M:%S',
+        '%Y%m%d %H:%M',
+        '%Y-%m-%d',
+        '%Y%m%d',
+    ]
+    for format in supported_formats:
+        try:
+            return datetime.datetime.strptime(value, format)
+        except ValueError:
+            pass
+    logging.error('Unrecognized date/time: %r' % value)
+    raise ValueError('Unrecognized date/time: %r' % value)
