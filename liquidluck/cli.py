@@ -13,6 +13,13 @@ g.root_directory = os.path.abspath(os.path.dirname(__file__))
 def load_settings(path):
     execfile(path, settings, settings)
     #: TODO config default settings
+    config = {
+        'slug_format': '{{category}}/{{filename}}.html',
+    }
+
+    for key in config:
+        if key not in settings:
+            settings[key] = config[key]
 
 
 def main():

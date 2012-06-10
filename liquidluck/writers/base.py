@@ -9,6 +9,7 @@ Writer, write your content to html.
 
 
 import os
+import re
 from jinja2 import Environment, FileSystemLoader
 from liquidluck.utils import import_module
 
@@ -70,3 +71,13 @@ class BaseWriter(object):
         self.write(html, destination)
         #: logging
         return
+
+
+def parse_post_destination(post, slug_format):
+    regex = re.compile(r'\{\{(.*?)\}\}')
+
+    def replace(m):
+        key = m.group(1)
+        value = getattr(post, key)
+        return value
+    return regex.sub(replace, slug_format)
