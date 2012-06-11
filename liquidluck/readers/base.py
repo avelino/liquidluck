@@ -69,6 +69,30 @@ class Post(object):
         return self.meta.get('author', settings.author)
 
     @property
+    def embed_author(self):
+        """define in settings::
+
+            authors = {
+                "lepture": {
+                    "name": "Hsiaoming Yang",
+                    "website": "http://lepture.com",
+                    "email": "lepture@me.com",
+                }
+            }
+        """
+        if not settings.authors:
+            return self.author or ''
+        author = settings.authors[self.author]
+        name = author.get('name', self.author)
+        website = author.get('website', None)
+        email = author.get('email', None)
+        if website:
+            return '<a href="%s">%s</a>' % (website, name)
+        if email:
+            return '<a href="mailto:%s">%s</a>' % (email, name)
+        return name
+
+    @property
     def date(self):
         date = self.meta.get('date', None)
         if date:
