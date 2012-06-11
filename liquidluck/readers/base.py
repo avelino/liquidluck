@@ -118,6 +118,15 @@ class Post(object):
         path = os.path.split(self.filepath)[1]
         return os.path.splitext(path)[0]
 
+    def __getattr__(self, key):
+        try:
+            return super(Post, self).__getattr__(key)
+        except:
+            pass
+        if key in self.meta:
+            return self.meta[key]
+        raise AttributeError
+
 
 class Author(object):
     def __init__(self, author):

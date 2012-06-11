@@ -71,6 +71,14 @@ class TestPost(object):
         post = Post('filepath', 'content', title='title', meta=self.meta)
         assert post.tags == ['life', 'work']
 
+    def test_getattr(self):
+        meta = {'date': '2012-12-12', 'topic': 'getattr'}
+        post = Post('filepath', 'content', title='title', meta=meta)
+
+        assert getattr(getattr(post, 'date'), 'year') == 2012
+        assert hasattr(post, 'topic') is True
+        assert getattr(post, 'topic') == 'getattr'
+
 
 class TestBaseReade(object):
     def test_support(self):
