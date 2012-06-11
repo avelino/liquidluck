@@ -134,6 +134,7 @@ settings.site = {
 g = _Options()
 g.liquid_directory = os.path.abspath(os.path.dirname(__file__))
 g.source_directory = settings.postdir
+g.output_directory = settings.deploydir
 g.public_posts = []
 g.secure_posts = []
 g.pure_files = []

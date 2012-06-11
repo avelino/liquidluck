@@ -49,10 +49,6 @@ class BaseWriter(object):
         #: logging
         return
 
-    def destination_of_post(self, post):
-        slug = get_post_slug(post, settings.permalink)
-        return os.path.join(settings.deploydir, slug_to_destination(slug))
-
 
 class Pagination(object):
     def __init__(self, items, page, per_page):

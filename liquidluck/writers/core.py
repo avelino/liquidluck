@@ -6,9 +6,14 @@ import shutil
 from liquidluck.options import g, settings
 from liquidluck.utils import UnicodeDict
 from liquidluck.writers.base import BaseWriter, Pagination, linkmaker
+from liquidluck.writers.base import get_post_slug, slug_to_destination
 
 
 class PostWriter(BaseWriter):
+    def destination_of_post(self, post):
+        slug = get_post_slug(post, settings.permalink)
+        return os.path.join(g.output_directory, slug_to_destination(slug))
+
     def run(self):
         for post in g.public_posts:
             self.render(
@@ -26,12 +31,12 @@ class PostWriter(BaseWriter):
 class ArchiveWriter(BaseWriter):
     def run(self):
         pagination = Pagination(g.public_posts, 1, settings.perpage)
-        dest = os.path.join(settings.deploydir, settings.archive)
+        dest = os.path.join(g.output_directory, settings.archive)
         self.render({'pagination': pagination}, 'archive.html', dest)
 
         for page in range(1, pagination.pages + 1):
             pagination = Pagination(g.public_posts, page, settings.perpage)
-            dest = os.path.join(settings.deploydir, 'page/%s.html' % page)
+            dest = os.path.join(g.output_directory, 'page/%s.html' % page)
             self.render({'pagination': pagination}, 'archive.html', dest)
 
         logging.info('ArchiveWriter Finished')
@@ -43,7 +48,7 @@ class ArchiveFeedWriter(BaseWriter):
         feed.posts = g.public_posts[:settings.feedcount]
         feed.feedurl = linkmaker('feed.xml')
         feed.url = g.siteurl
-        dest = os.path.join(settings.deploydir, 'feed.xml')
+        dest = os.path.join(g.output_directory, 'feed.xml')
         self.render({'feed': feed}, 'feed.xml', dest)
 
 
@@ -51,7 +56,7 @@ class FileWriter(BaseWriter):
     def run(self):
         for f in g.pure_files:
             path = f.lstrip(g.source_directory)
-            dest = os.path.join(settings.deploydir, path)
+            dest = os.path.join(g.output_directory, path)
             copy_to(f, dest)
 
         logging.info('FileWriter Finished')

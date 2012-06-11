@@ -17,6 +17,7 @@ def load_settings(path):
     for key in config:
         settings[key] = config[key]
 
+    g.output_directory = os.path.abspath(settings.deploydir)
     load_jinja()
 
 
