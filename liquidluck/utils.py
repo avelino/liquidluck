@@ -4,43 +4,6 @@
 import os
 
 
-class Cache(object):
-    def __init__(self):
-        self._app_cache = {}
-
-    def set(self, key, value):
-        self._app_cache[key] = value
-
-    def get(self, key):
-        value = self._app_cache.get(key, None)
-        return value
-
-    def delete(self, key):
-        if key in self._app_cache:
-            del self._app_cache[key]
-        return None
-
-    def __call__(self):
-        return self._app_cache
-
-
-def merge(li):
-    '''
-    [(a,b),(a,c),(a,d)] -> {a:[b,c,d]}
-    '''
-    cache = Cache()
-    try:
-        for k, v in li:
-            store = cache.get(k)
-            if not store:
-                store = []
-            store.append(v)
-            cache.set(k, store)
-    except:
-        pass
-    return cache()
-
-
 def to_unicode(value):
     if isinstance(value, unicode):
         return value
@@ -49,6 +12,12 @@ def to_unicode(value):
     if isinstance(value, int):
         return str(value)
     return value
+
+
+def utf8(value):
+    if isinstance(value, (bytes, type(None))):
+        return value
+    return value.encode('utf-8')
 
 
 def import_object(name):

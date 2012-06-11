@@ -12,7 +12,7 @@ import os
 import re
 import datetime
 from jinja2 import Environment, FileSystemLoader
-from liquidluck.utils import import_object, to_unicode
+from liquidluck.utils import import_object, to_unicode, utf8
 
 # blog settings
 from liquidluck.options import settings
@@ -38,7 +38,7 @@ class BaseWriter(object):
             os.makedirs(folder)
 
         f = open(destination, 'w')
-        f.write(content.encode('utf-8'))
+        f.write(utf8(content))
         f.close()
         return
 
