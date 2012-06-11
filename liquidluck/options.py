@@ -133,6 +133,7 @@ settings.site = {
 #: settings for liquidluck
 g = _Options()
 g.liquid_directory = os.path.abspath(os.path.dirname(__file__))
+g.source_directory = settings.postdir
 g.public_posts = []
 g.secure_posts = []
 g.pure_files = []

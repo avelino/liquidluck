@@ -2,6 +2,7 @@
 
 import os
 import logging
+import shutil
 from liquidluck.options import g, settings
 from liquidluck.utils import UnicodeDict
 from liquidluck.writers.base import BaseWriter, Pagination, linkmaker
@@ -44,3 +45,28 @@ class ArchiveFeedWriter(BaseWriter):
         feed.url = g.siteurl
         dest = os.path.join(settings.deploydir, 'feed.xml')
         self.render({'feed': feed}, 'feed.xml', dest)
+
+
+class FileWriter(BaseWriter):
+    def run(self):
+        for f in g.pure_files:
+            path = f.lstrip(g.source_directory)
+            dest = os.path.join(settings.deploydir, path)
+            copy_to(f, dest)
+
+        logging.info('FileWriter Finished')
+
+
+def copy_to(source, dest):
+    if os.path.exists(dest) and \
+       os.stat(source).st_mtime <= os.stat(dest).st_mtime:
+        return
+
+    folder = os.path.split(dest)[0]
+    # on Mac OSX, `folder` == `FOLDER`
+    # then make sure destination is lowercase
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+
+    shutil.copy(source, dest)
+    return

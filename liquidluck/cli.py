@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#import os
+import os
 import argparse
 from liquidluck.options import enable_pretty_logging
 from liquidluck.options import g, settings
@@ -21,6 +21,8 @@ def load_settings(path):
 
 
 def load_posts(path):
+    g.source_directory = os.path.abspath(path)
+
     readers = []
     for reader in settings.readers:
         readers.append(import_object(reader))
