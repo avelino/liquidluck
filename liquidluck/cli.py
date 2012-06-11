@@ -36,10 +36,15 @@ def load_posts(path):
         post = detect_reader(filepath)
         if not post:
             g.pure_files.append(filepath)
+        elif not post.date:
+            g.pure_pages.append(post)
         elif post.public:
             g.public_posts.append(post)
         else:
             g.secure_posts.append(post)
+
+    g.public_posts = sorted(g.public_posts, key=lambda o: o.date, reverse=True)
+    g.secure_posts = sorted(g.secure_posts, key=lambda o: o.date, reverse=True)
 
 
 def write_posts():

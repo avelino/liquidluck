@@ -119,6 +119,7 @@ settings.readers = [
 ]
 settings.writers = [
     'liquidluck.writers.core.PostWriter',
+    'liquidluck.writers.core.ArchiveWriter',
 ]
 settings.archive = 'index.html'
 
@@ -129,3 +130,4 @@ g.liquid_directory = os.path.abspath(os.path.dirname(__file__))
 g.public_posts = []
 g.secure_posts = []
 g.pure_files = []
+g.pure_pages = []
