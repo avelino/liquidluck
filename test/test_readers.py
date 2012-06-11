@@ -3,7 +3,7 @@
 import os.path
 import datetime
 from liquidluck.options import settings
-from liquidluck.readers.base import Post
+from liquidluck.readers.base import BaseReader, Post
 from liquidluck.readers.markdown import MarkdownReader
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -70,6 +70,21 @@ class TestPost(object):
     def test_tags(self):
         post = Post('filepath', 'content', title='title', meta=self.meta)
         assert post.tags == ['life', 'work']
+
+
+class TestBaseReade(object):
+    def test_support(self):
+
+        class TestReader(BaseReader):
+            SUPPORT_TYPE = ['md', 'markdown']
+
+        assert TestReader.SUPPORT_TYPE == ['md', 'markdown']
+
+        reader = TestReader('filename.md')
+        assert reader.support() is True
+
+        reader = TestReader('filename.mkd')
+        assert reader.support() is False
 
 
 class TestMarkdownReader(object):

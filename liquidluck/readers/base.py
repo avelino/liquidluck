@@ -14,13 +14,14 @@ from liquidluck.utils import import_module
 
 
 class BaseReader(object):
+    SUPPORT_TYPE = None
     """
     Base Reader, all readers must inherit this module. e.g.:
 
         ``MarkdownReader(BaseReader)``
 
     New reader required:
-        - ``support_type``
+        - ``SUPPORT_TYPE``
         - ``render``
 
     New reader optional:
@@ -32,11 +33,8 @@ class BaseReader(object):
     def start(self):
         return None
 
-    def support_type(self):
-        return None
-
     def support(self):
-        _type = self.support_type()
+        _type = self.SUPPORT_TYPE
         if isinstance(_type, basestring):
             return self.filepath.endswith('.' + _type)
         if isinstance(_type, list) or isinstance(_type, tuple):
