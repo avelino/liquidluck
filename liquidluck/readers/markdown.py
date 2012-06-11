@@ -40,8 +40,7 @@ from liquidluck.utils import to_unicode
 
 
 class MarkdownReader(BaseReader):
-    def support_type(self):
-        return 'md', 'mkd', 'markdown'
+    SUPPORT_TYPE = ['md', 'mkd', 'markdown']
 
     def render(self):
         f = open(self.filepath)

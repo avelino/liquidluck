@@ -10,7 +10,6 @@ Reader, read content, parse to html.
 import datetime
 import logging
 from liquidluck.options import settings
-from liquidluck.utils import import_module
 
 
 class BaseReader(object):
@@ -133,11 +132,3 @@ def to_datetime(value):
             pass
     logging.error('Unrecognized date/time: %r' % value)
     raise ValueError('Unrecognized date/time: %r' % value)
-
-
-def detect_reader(filepath):
-    for reader in settings.readers.values():
-        reader = import_module(reader)(filepath)
-        if reader.support():
-            return reader
-    return None

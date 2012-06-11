@@ -11,7 +11,7 @@ Writer, write your content to html.
 import os
 import re
 from jinja2 import Environment, FileSystemLoader
-from liquidluck.utils import import_module, to_unicode
+from liquidluck.utils import import_object, to_unicode
 
 # blog settings
 from liquidluck.options import settings
@@ -48,7 +48,7 @@ class BaseWriter(object):
         )
         jinja.globals = settings.jinja_variables
         for k, v in settings.jinja_filters.items():
-            jinja.filters.update({k: import_module(v)})
+            jinja.filters.update({k: import_object(v)})
 
         self._jinja = jinja
         return jinja

@@ -64,12 +64,6 @@ except ImportError:
 
 
 class _Options(dict):
-    @classmethod
-    def instance(cls):
-        if not hasattr(cls, "_instance"):
-            cls._instance = cls()
-        return cls._instance
-
     def __getattr__(self, key):
         try:
             return self[key]
@@ -87,9 +81,14 @@ class _Options(dict):
 
 
 #: settings for blog user
-settings = _Options.instance()
+settings = _Options()
+
 #: settings for liquidluck
-g = _Options.instance()
+g = _Options()
+g.root_directory = '.'
+g.public_posts = []
+g.secure_posts = []
+g.pure_files = []
 
 
 def enable_pretty_logging(level='info'):
