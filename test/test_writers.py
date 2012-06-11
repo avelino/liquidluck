@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
+import os.path
 import datetime
 from liquidluck.writers.base import get_post_slug, slug_to_destination
+from liquidluck.writers.core import PostWriter
+
+ROOT = os.path.abspath(os.path.dirname(__file__))
 
 
 def test_get_post_slug():
@@ -37,3 +41,10 @@ def test_slug_to_destination():
     assert slug_to_destination('a/b/') == 'a/b.html'
     assert slug_to_destination('a/b/', True) == 'a/b/index.html'
     assert slug_to_destination('a/b') == 'a/b.html'
+
+
+class TestPostWriter(object):
+    def test_run(self):
+        #: if test_cli.py run first
+        writer = PostWriter()
+        writer.run()

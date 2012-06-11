@@ -37,7 +37,7 @@ class BaseWriter(object):
             os.makedirs(folder)
 
         f = open(destination, 'w')
-        f.write(content)
+        f.write(content.encode('utf-8'))
         f.close()
         return
 
@@ -48,6 +48,10 @@ class BaseWriter(object):
         #: logging
         return
 
+    def destination_of_post(self, post):
+        slug = get_post_slug(post, settings.permalink)
+        return os.path.join(g.deploy_directory, slug_to_destination(slug))
+
 
 def load_jinja():
     loaders = []
@@ -55,12 +59,19 @@ def load_jinja():
     if os.path.exists(tpl):
         loaders.append(tpl)
 
-    theme = os.path.join(os.path.abspath('_themes'), settings.theme)
+    theme = os.path.join(
+        os.path.abspath('_themes'), settings.theme, 'templates'
+    )
     if os.path.exists(theme):
         loaders.append(theme)
     else:
         loaders.append(
-            os.path.join(g.liquid_directory, '_themes', settings.theme)
+            os.path.join(
+                g.liquid_directory,
+                '_themes',
+                settings.theme,
+                'templates'
+            )
         )
 
     jinja = Environment(
@@ -87,10 +98,13 @@ def get_post_slug(post, slug_format):
 
     def replace(m):
         key = m.group(1)
-        tokens = key.split('.')
+        bits = key.split('.')
         value = post
-        for token in tokens:
-            value = getattr(value, token)
+
+        for bit in bits:
+            if not hasattr(value, bit):
+                return ''
+            value = getattr(value, bit)
 
         if not value:
             return ''

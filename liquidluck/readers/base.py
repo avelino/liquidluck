@@ -7,6 +7,7 @@ Reader, read content, parse to html.
 :license: BSD
 '''
 
+import os
 import datetime
 import logging
 from liquidluck.options import settings
@@ -105,6 +106,10 @@ class Post(object):
         return self.meta.get('folder', None)
 
     @property
+    def category(self):
+        return self.meta.get('folder', None)
+
+    @property
     def tags(self):
         tags = self.meta.get('tags', None)
         if not tags:
@@ -112,6 +117,11 @@ class Post(object):
         if isinstance(tags, (list, tuple)):
             return tags
         return [tag.strip() for tag in tags.split(",")]
+
+    @property
+    def filename(self):
+        path = os.path.split(self.filepath)[1]
+        return os.path.splitext(path)[0]
 
 
 def to_datetime(value):

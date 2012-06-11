@@ -118,6 +118,7 @@ settings.readers = [
     'liquidluck.readers.markdown.MarkdownReader',
 ]
 settings.writers = [
+    'liquidluck.writers.core.PostWriter',
 ]
 settings.archive = 'index.html'
 
