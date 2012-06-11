@@ -12,9 +12,29 @@ g.root_directory = os.path.abspath(os.path.dirname(__file__))
 
 def load_settings(path):
     execfile(path, settings, settings)
-    #: TODO config default settings
     config = {
-        'slug_format': '{{category}}/{{filename}}.html',
+        'author': 'admin',
+
+        'permalink': '{{category}}/{{filename}}.html',
+
+        'postdir': 'content',
+        'deploydir': 'deploy',
+        'staticdir': 'deploy/static',
+
+        'theme': 'default',
+        'templatedir': None,
+
+        'perpage': 30,
+        'feedcount': 20,
+
+        'readers': [
+            'liquidluck.readers.markdown.MarkdownReader',
+        ],
+
+        'writers': [
+        ],
+
+        'archive': 'index.html',
     }
 
     for key in config:
