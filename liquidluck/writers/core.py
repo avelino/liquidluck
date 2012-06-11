@@ -29,6 +29,7 @@ class ArchiveWriter(BaseWriter):
         self.render({'pagination': pagination}, 'archive.html', dest)
 
         for page in range(1, pagination.pages + 1):
+            pagination = Pagination(g.public_posts, page, settings.perpage)
             dest = os.path.join(settings.deploydir, 'page/%s.html' % page)
             self.render({'pagination': pagination}, 'archive.html', dest)
 
