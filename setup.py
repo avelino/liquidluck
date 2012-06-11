@@ -1,27 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-readme = os.path.join(os.path.dirname(__file__), 'README.rst')
 from setuptools import setup
-install_requires = ['docutils', 'Jinja2', 'Pygments', 'misaka', 'houdini.py']
+install_requires = ['docutils', 'Jinja2', 'Pygments', 'misaka']
 try:
     import argparse  # python 2.7+ support argparse
 except ImportError:
     install_requires.append('argparse')
 
 
-from liquidluck import __version__ as version
+import liquidluck
 
 setup(
     name='liquidluck',
-    version=version,
-    author='Hsiaoming Young',
+    version=liquidluck.__version__,
+    author=liquidluck.__author__,
     author_email='lepture@me.com',
-    url='http://lepture.com/project/liquidluck',
+    url='http://project.lepture.com/liquidluck/',
     packages=['liquidluck', 'liquidluck.writers', 'liquidluck.readers'],
     description='A lightweight static weblog generator',
-    long_description=open(readme).read(),
     license='BSD License',
     entry_points={
         'console_scripts': ['liquidluck= liquidluck.cli:main'],
@@ -32,8 +29,14 @@ setup(
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
         'License :: OSI Approved :: BSD License',
-        'Operating System :: POSIX',
         'Operating System :: MacOS',
+        'Operating System :: POSIX',
+        'Operating System :: POSIX :: Linux',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Topic :: Text Processing :: Markup',
     ]
 )
