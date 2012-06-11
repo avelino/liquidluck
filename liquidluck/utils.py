@@ -72,16 +72,10 @@ class UnicodeDict(dict):
         try:
             return to_unicode(self[key])
         except KeyError:
-            raise AttributeError
+            return None
 
     def __setattr__(self, key, value):
         self[key] = to_unicode(value)
-
-    def __delattr__(self, key):
-        try:
-            del self[key]
-        except KeyError:
-            raise AttributeError
 
     def __getitem__(self, key):
         return to_unicode(super(UnicodeDict, self).__getitem__(key))

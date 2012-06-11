@@ -107,6 +107,7 @@ class _LogFormatter(logging.Formatter):
 settings = _Options()
 settings.author = 'admin'
 settings.permalink = '{{category}}/{{filename}}.html'
+settings.linktype = 'html'  # clean, slash, html
 settings.postdir = 'content'
 settings.deploydir = 'deploy'
 settings.staticdir = 'deploy/static'
@@ -120,8 +121,15 @@ settings.readers = [
 settings.writers = [
     'liquidluck.writers.core.PostWriter',
     'liquidluck.writers.core.ArchiveWriter',
+    'liquidluck.writers.core.ArchiveFeedWriter',
 ]
 settings.archive = 'index.html'
+settings.jinja_variables = {
+    'site': {
+        'name': 'Felix Felicis',
+        'url': 'http://lepture.com',
+    }
+}
 
 
 #: settings for liquidluck
@@ -131,3 +139,5 @@ g.public_posts = []
 g.secure_posts = []
 g.pure_files = []
 g.pure_pages = []
+
+g.siteurl = settings.jinja_variables['site']['url']

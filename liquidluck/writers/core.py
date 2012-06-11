@@ -3,7 +3,8 @@
 import os
 import logging
 from liquidluck.options import g, settings
-from liquidluck.writers.base import BaseWriter, Pagination
+from liquidluck.utils import UnicodeDict
+from liquidluck.writers.base import BaseWriter, Pagination, linkmaker
 
 
 class PostWriter(BaseWriter):
@@ -36,6 +37,9 @@ class ArchiveWriter(BaseWriter):
 
 class ArchiveFeedWriter(BaseWriter):
     def run(self):
-        posts = g.public_posts[settings.feedcount]
+        feed = UnicodeDict()
+        feed.posts = g.public_posts[:settings.feedcount]
+        feed.feedurl = linkmaker('feed.xml')
+        feed.url = g.siteurl
         dest = os.path.join(settings.deploydir, 'feed.xml')
-        self.render({'posts': posts}, 'feed.xml', dest)
+        self.render({'feed': feed}, 'feed.xml', dest)

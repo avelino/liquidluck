@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <title>{{ context.sitename }}</title>
-    <link href="{{ content_url(context.siteurl, folder, 'feed.xml') }}" rel="self" />
-    {% if folder %}
-    <link href="{{ content_url(context.siteurl, folder) }}" />
-    {% else %}
-    <link href="{{ context.siteurl }}" />
-    {% endif %}
+    <title>{{ site.name }}</title>
+    <link href="{{feed.feedurl}}" rel="self" />
+    <link href="{{feed.url}}" />
     <updated>{{now|xmldatetime}}</updated>
-    <id>{{ context.siteurl }}</id>
-    {% for post in posts -%}
+    <id>{{ site.url }}</id>
+    {% for post in feed.posts -%}
     <entry>
         <title type="html"><![CDATA[{{ post.title }}]]></title>
-        <author><name>{{ post.author }}</name><uri>{% if post.author in author_data %}{{ author_data[post.author] }}{% else %}{{ context.siteurl }}{% endif %}</uri></author>
-        <link href="{{ content_url(context.siteurl, post.slug) }}"/>
+        <author><name>{{ post.author }}</name>{%if post.author_website%}<uri>{{post.author_website}}</uri>{%endif%}</author>
+        <link href="{{ post|postlink }}"/>
         <updated>{{ post.date|xmldatetime }}</updated>
         <published>{{ post.date|xmldatetime }}</published>
-        <id>{{ content_url(context.siteurl, post.slug) }}</id>
-        {% for tag in post.get('tags', []) -%}
-        <category scheme="{{ content_url(context.siteurl, 'tag', tag) }}" term="{{tag}}" label="{{ tag|title }}" />
+        <id>{{ post|postlink }}</id>
+        {% for tag in post.tags -%}
+        <category scheme="{{ linkmaker('tag', tag) }}" term="{{tag}}" label="{{ tag|title }}" />
         {% endfor -%}
-        <content type="html" xml:base="{{ context.siteurl }}" xml:lang="en">
+        <content type="html" xml:base="{{ site.url }}" xml:lang="en">
             <![CDATA[ {{ post.content }} ]]>
         </content>
     </entry>
-    {% endfor -%}
+    {%- endfor %}
 </feed>

@@ -4,6 +4,7 @@ import os.path
 import datetime
 from liquidluck.writers.base import get_post_slug, slug_to_destination
 from liquidluck.writers.core import PostWriter, ArchiveWriter
+from liquidluck.writers.core import ArchiveFeedWriter
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -56,4 +57,10 @@ class TestPostWriter(object):
 class TestArchiveWriter(object):
     def test_run(self):
         writer = ArchiveWriter()
+        writer.run()
+
+
+class TestArchiveFeedWriter(object):
+    def test_run(self):
+        writer = ArchiveFeedWriter()
         writer.run()

@@ -10,6 +10,7 @@ Writer, write your content to html.
 
 import os
 import re
+import datetime
 from jinja2 import Environment, FileSystemLoader
 from liquidluck.utils import import_object, to_unicode
 
@@ -125,8 +126,16 @@ def load_jinja():
     )
 
     jinja.globals = settings.jinja_variables or {}
+    jinja.globals.update({
+        'linkmaker': linkmaker,
+        'now': datetime.datetime.now(),
+    })
 
-    #: TODO add default filters
+    jinja.filters.update({
+        'xmldatetime': lambda o: o.strftime('%Y-%m-%dT%H:%M:%SZ'),
+        'postlink': postlink,
+    })
+
     if settings.jinja_filters is None:
         settings.jinja_filters = {}
 
@@ -167,3 +176,38 @@ def slug_to_destination(slug, use_index=False):
         return slug + 'index.html'
 
     return slug.rstrip('/') + '.html'
+
+
+def postlink(post):
+    slug = get_post_slug(post, settings.permalink)
+    siteurl = g.siteurl.rstrip('/')
+    return '%s/%s' % (siteurl, slug)
+
+
+def linkmaker(base, *args):
+    siteurl = g.siteurl.rstrip('/')
+    args = list(args)
+    args.insert(0, base)
+    args = map(lambda o: str(o).strip('/'), args)
+    url = '%s/%s' % (siteurl, '/'.join(args))
+    if settings.linktype == 'html':
+        if url.endswith('.html'):
+            return url
+        if url.endswith('.xml'):
+            return url
+        return '%s.html' % url
+
+    if settings.linktype == 'clean':
+        if url.endswith('.html'):
+            return url.rstrip('.html')
+        if url.endswith('.xml'):
+            return url.rstrip('.xml')
+        return url
+
+    if settings.linktype == 'slash':
+        if url.endswith('.html'):
+            url = url.rstrip('.html')
+        if url.endswith('.xml'):
+            url = url.rstrip('.xml')
+
+        return '%s/' % url
