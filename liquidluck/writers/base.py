@@ -127,8 +127,9 @@ def load_jinja():
 
     jinja.globals = settings.jinja_variables or {}
     jinja.globals.update({
-        'linkmaker': linkmaker,
+        'site': settings.site,
         'now': datetime.datetime.now(),
+        'linkmaker': linkmaker,
     })
 
     jinja.filters.update({
@@ -180,12 +181,12 @@ def slug_to_destination(slug, use_index=False):
 
 def postlink(post):
     slug = get_post_slug(post, settings.permalink)
-    siteurl = g.siteurl.rstrip('/')
+    siteurl = settings.site['url'].rstrip('/')
     return '%s/%s' % (siteurl, slug)
 
 
 def linkmaker(base, *args):
-    siteurl = g.siteurl.rstrip('/')
+    siteurl = settings.site['url'].rstrip('/')
     args = list(args)
     args.insert(0, base)
     args = map(lambda o: str(o).strip('/'), args)

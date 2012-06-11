@@ -124,11 +124,9 @@ settings.writers = [
     'liquidluck.writers.core.ArchiveFeedWriter',
 ]
 settings.archive = 'index.html'
-settings.jinja_variables = {
-    'site': {
-        'name': 'Felix Felicis',
-        'url': 'http://lepture.com',
-    }
+settings.site = {
+    'name': 'Felix Felicis',
+    'url': 'http://lepture.com',
 }
 
 
@@ -139,5 +137,3 @@ g.public_posts = []
 g.secure_posts = []
 g.pure_files = []
 g.pure_pages = []
-
-g.siteurl = settings.jinja_variables['site']['url']

@@ -17,7 +17,6 @@ def load_settings(path):
     for key in config:
         settings[key] = config[key]
 
-    g.siteurl = settings.jinja_variables['site']['url']
     load_jinja()
 
 
