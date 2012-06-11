@@ -1,27 +1,88 @@
 Felix Felicis
 ==============
 
-Felix Felicis (aka ``liquidluck``) is a simple lightweight static blog generator. It supports markup of restructedText_ and markdown_ .
+.. image:: https://secure.travis-ci.org/lepture/liquidluck.png
+    :target: https://secure.travis-ci.org/lepture/liquidluck
 
-Tested on:
 
-- python2.5 (Linux/Mac)
-- python2.6 (Linux/Mac)
-- python2.7 (Linux/Mac)
+Felix Felicis (aka ``liquidluck``) is a simple lightweight static blog generator
+written in Python.
 
-Getting Started
-----------------
-Take a look at `Wiki <https://github.com/lepture/liquidluck/wiki>`_
+**There are so many static blog generators, why create a new one?**
 
-Check my blog for preview: http://lepture.com
+The main design pattern of Felix Felicis:
 
-Contact me with `Email <lepture@me.com>`_ . Join #liquidluck on irc.freenode.net.
+1. We don't create any syntax that is only available in Felix Felicis
+2. Document should always be valid, it will be pretty even without Felix Felicis
 
-Useful Tips
----------------
-- Write a `Makefile`
-- Test on your localhost with: ``python -m SimpleHTTPServer``
-- Publish your posts with ``rsync`` rather than ftp.
+Overview
+---------
+
+A post in markdown::
+
+    # Hello World
+
+    - date: 2012-06-11
+    - tags: python, javascript
+
+    -------
+
+    Hello World in Python
+
+    ```python
+    def hello(name="World"):
+        print "Hello %s" % name
+    ```
+
+    Hello World in JavaScript
+
+    ```javascript
+    function hello(name) {
+        alert('Hello ' + name);
+    }
+    ```
+
+A post in restructuredText::
+
+    Hello World
+    ============
+
+    :date: 2012-06-11
+    :tags: python, javascript
+
+    Hello World in Python::
+
+        def hello(name="World"):
+            print "Hello %s" % name
+
+    Hello World in JavaScript:
+
+    .. sourcecode:: javascript
+
+        function hello(name) {
+            alert('Hello ' + name);
+        }
+
+Both of these two posts are valid in their markup language, even without Felix Felicis
+they should be displayed well.
+
+And in this case, your documents will always be yours, not tied to Felix Felicis.
+
+
+Compatibility
+--------------
+
++ Markup:
+
+  - restructedText_
+  - markdown_
+
++ Python:
+
+  - 2.6
+  - 2.7
+  - 3.2
+
 
 .. _restructedText: http://docutils.sourceforge.net/rst.html
 .. _markdown: http://daringfireball.net/projects/markdown/
