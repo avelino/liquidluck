@@ -19,7 +19,7 @@ class TestPost(object):
 
     def test_author(self):
         post = Post('filepath', 'content', title='title', meta=self.meta)
-        assert post.author == 'lepture'
+        assert str(post.author) == 'lepture'
 
     def test_embed_author(self):
         post = Post('filepath', 'content', title='title', meta=self.meta)

@@ -8,7 +8,7 @@
     {% for post in feed.posts -%}
     <entry>
         <title type="html"><![CDATA[{{ post.title }}]]></title>
-        <author><name>{{ post.author }}</name>{%if post.author_website%}<uri>{{post.author_website}}</uri>{%endif%}</author>
+        <author><name>{{ post.author }}</name>{%if post.author.website%}<uri>{{post.author.website}}</uri>{%endif%}</author>
         <link href="{{ post|postlink }}"/>
         <updated>{{ post.date|xmldatetime }}</updated>
         <published>{{ post.date|xmldatetime }}</published>

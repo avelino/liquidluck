@@ -64,7 +64,7 @@ class Post(object):
 
     @property
     def author(self):
-        return self.meta.get('author', settings.author)
+        return Author(self.meta.get('author', settings.author))
 
     @property
     def embed_author(self):
@@ -78,17 +78,12 @@ class Post(object):
                 }
             }
         """
-        if not settings.authors:
-            return self.author or ''
-        author = settings.authors[self.author]
-        name = author.get('name', self.author)
-        website = author.get('website', None)
-        email = author.get('email', None)
-        if website:
-            return '<a href="%s">%s</a>' % (website, name)
-        if email:
-            return '<a href="mailto:%s">%s</a>' % (email, name)
-        return name
+        author = self.author
+        if author.website:
+            return '<a href="%s">%s</a>' % (author.website, author.name)
+        if author.email:
+            return '<a href="mailto:%s">%s</a>' % (author.email, author.name)
+        return author.name
 
     @property
     def date(self):
@@ -122,6 +117,32 @@ class Post(object):
     def filename(self):
         path = os.path.split(self.filepath)[1]
         return os.path.splitext(path)[0]
+
+
+class Author(object):
+    def __init__(self, author):
+        self.author = author
+
+        __ = settings.authors or {}
+        self._d = __.get(author, {})
+
+    def __str__(self):
+        return self.author
+
+    def __repr__(self):
+        return self.author
+
+    @property
+    def name(self):
+        return self._d.get('name', self.author)
+
+    @property
+    def website(self):
+        return self._d.get('website', None)
+
+    @property
+    def email(self):
+        return self._d.get('email', None)
 
 
 def to_datetime(value):
