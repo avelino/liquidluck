@@ -23,35 +23,11 @@ from liquidluck.options import g
 class BaseWriter(object):
     """BaseWriter
     """
-    @property
-    def jinja(self):
-        if hasattr(self, '_jinja'):
-            return self._jinja
+    def begin(self):
+        pass
 
-        loaders = []
-        tpl = os.path.abspath('_templates')
-        if os.path.exists(tpl):
-            loaders.append(tpl)
-
-        theme = os.path.join(os.path.abspath('_themes'), settings.theme)
-        if os.path.exists(theme):
-            loaders.append(theme)
-        else:
-            loaders.append(
-                os.path.join(g.liquid_directory, '_themes', settings.theme)
-            )
-
-        jinja = Environment(
-            loader=FileSystemLoader(loaders),
-            autoescape=False,  # blog don't need autoescape
-            extensions=settings.jinja_extensions,
-        )
-        jinja.globals = settings.jinja_variables
-        for k, v in settings.jinja_filters.items():
-            jinja.filters.update({k: import_object(v)})
-
-        self._jinja = jinja
-        return jinja
+    def run(self):
+        raise NotImplementedError
 
     def write(self, content, destination):
         folder = os.path.split(destination)[0]
@@ -66,11 +42,44 @@ class BaseWriter(object):
         return
 
     def render(self, params, template, destination):
-        tpl = self.jinja.get_template(template)
+        tpl = g.jinja.get_template(template)
         html = tpl.render(params)
         self.write(html, destination)
         #: logging
         return
+
+
+def load_jinja():
+    loaders = []
+    tpl = os.path.abspath('_templates')
+    if os.path.exists(tpl):
+        loaders.append(tpl)
+
+    theme = os.path.join(os.path.abspath('_themes'), settings.theme)
+    if os.path.exists(theme):
+        loaders.append(theme)
+    else:
+        loaders.append(
+            os.path.join(g.liquid_directory, '_themes', settings.theme)
+        )
+
+    jinja = Environment(
+        loader=FileSystemLoader(loaders),
+        autoescape=False,  # blog don't need autoescape
+        extensions=settings.jinja_extensions or [],
+    )
+
+    jinja.globals = settings.jinja_variables or {}
+
+    #: TODO add default filters
+    if settings.jinja_filters is None:
+        settings.jinja_filters = {}
+
+    for k, v in settings.jinja_filters.items():
+        jinja.filters.update({k: import_object(v)})
+
+    g.jinja = jinja
+    return jinja
 
 
 def get_post_slug(post, slug_format):

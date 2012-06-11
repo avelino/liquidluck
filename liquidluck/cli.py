@@ -7,6 +7,8 @@ from liquidluck.options import enable_pretty_logging
 from liquidluck.options import g, settings
 from liquidluck.utils import import_object, walk_dir
 
+from liquidluck.writers.base import load_jinja
+
 
 def load_settings(path):
     config = {}
@@ -15,9 +17,13 @@ def load_settings(path):
     for key in config:
         settings[key] = config[key]
 
+    g.post_directory = settings.postdir
+    g.deploy_directory = settings.deploydir
+
+    load_jinja()
+
 
 def load_posts(path):
-    g.post_directory = path
     readers = []
     for reader in settings.readers:
         readers.append(import_object(reader))
@@ -39,6 +45,18 @@ def load_posts(path):
             g.secure_posts.append(post)
 
 
+def write_posts():
+    writers = []
+    for writer in settings.writers:
+        writers.append(import_object(writer)())
+
+    for writer in writers:
+        writer.begin()
+
+    for writer in writers:
+        writer.run()
+
+
 def main():
     parser = argparse.ArgumentParser(prog='liquidluck')
 
@@ -50,3 +68,7 @@ def main():
         enable_pretty_logging('warn')
     else:
         enable_pretty_logging()
+
+
+if __name__ == '__main__':
+    main()

@@ -10,9 +10,11 @@ def test_load_settings():
     path = os.path.join(ROOT, 'source/settings.py')
     load_settings(path)
 
-    from liquidluck.options import settings
+    from liquidluck.options import settings, g
     assert settings.author == 'lepture'
     assert settings.perpage == 30
+
+    assert g.jinja is not None
 
 
 def test_load_posts():
