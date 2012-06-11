@@ -50,7 +50,7 @@ class BaseWriter(object):
 
     def destination_of_post(self, post):
         slug = get_post_slug(post, settings.permalink)
-        return os.path.join(g.deploy_directory, slug_to_destination(slug))
+        return os.path.join(settings.deploydir, slug_to_destination(slug))
 
 
 def load_jinja():

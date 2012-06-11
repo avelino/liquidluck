@@ -126,8 +126,6 @@ settings.archive = 'index.html'
 #: settings for liquidluck
 g = _Options()
 g.liquid_directory = os.path.abspath(os.path.dirname(__file__))
-g.post_directory = None
-g.deploy_directory = None
 g.public_posts = []
 g.secure_posts = []
 g.pure_files = []
