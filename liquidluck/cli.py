@@ -1,51 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
+#import os
 import argparse
 from liquidluck.options import enable_pretty_logging
 from liquidluck.options import g, settings
 from liquidluck.utils import import_object, walk_dir
 
-#: prepare liquidluck config
-g.root_directory = os.path.abspath(os.path.dirname(__file__))
-
 
 def load_settings(path):
-    defaults = {
-        'author': 'admin',
-
-        'permalink': '{{category}}/{{filename}}.html',
-
-        'postdir': 'content',
-        'deploydir': 'deploy',
-        'staticdir': 'deploy/static',
-
-        'theme': 'default',
-        'templatedir': None,
-
-        'perpage': 30,
-        'feedcount': 20,
-
-        'readers': [
-            'liquidluck.readers.markdown.MarkdownReader',
-        ],
-
-        'writers': [
-        ],
-
-        'archive': 'index.html',
-    }
-
     config = {}
     execfile(path, {}, config)
-    defaults.update(config)
 
-    for key in defaults:
-        settings[key] = defaults[key]
+    for key in config:
+        settings[key] = config[key]
 
 
 def load_posts(path):
+    g.post_directory = path
     readers = []
     for reader in settings.readers:
         readers.append(import_object(reader))

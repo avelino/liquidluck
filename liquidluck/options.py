@@ -1,55 +1,6 @@
-#!/usr/bin/env python
-#
-# Copyright 2009 Facebook
-#
-# Licensed under the Apache License, Version 2.0 (the "License"); you may
-# not use this file except in compliance with the License. You may obtain
-# a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations
-# under the License.
-
-"""A command line parsing module that lets modules define their own options.
-
-Each module defines its own options, e.g.::
-
-    from tornado.options import define, options
-
-    define("mysql_host", default="127.0.0.1:3306", help="Main user DB")
-    define("memcache_hosts", default="127.0.0.1:11011", multiple=True,
-           help="Main user memcache servers")
-
-    def connect():
-        db = database.Connection(options.mysql_host)
-        ...
-
-The main() method of your application does not need to be aware of all of
-the options used throughout your program; they are all automatically loaded
-when the modules are loaded. Your main() method can parse the command line
-or parse a config file with::
-
-    import tornado.options
-    tornado.options.parse_config_file("/etc/server.conf")
-    tornado.options.parse_command_line()
-
-Command line formats are what you would expect ("--myoption=myvalue").
-Config files are just Python files. Global names become options, e.g.::
-
-    myoption = "myvalue"
-    myotheroption = "myothervalue"
-
-We support datetimes, timedeltas, ints, and floats (just pass a 'type'
-kwarg to define). We also accept multi-value options. See the documentation
-for define() below.
-"""
-
 from __future__ import absolute_import, division, with_statement
 
+import os
 import logging
 import logging.handlers
 import sys
@@ -78,17 +29,6 @@ class _Options(dict):
             del self[key]
         except KeyError:
             raise AttributeError
-
-
-#: settings for blog user
-settings = _Options()
-
-#: settings for liquidluck
-g = _Options()
-g.root_directory = '.'
-g.public_posts = []
-g.secure_posts = []
-g.pure_files = []
 
 
 def enable_pretty_logging(level='info'):
@@ -161,3 +101,32 @@ class _LogFormatter(logging.Formatter):
         if record.exc_text:
             formatted = formatted.rstrip() + "\n" + record.exc_text
         return formatted.replace("\n", "\n    ")
+
+
+#: settings for blog user
+settings = _Options()
+settings.author = 'admin'
+settings.permalink = '{{category}}/{{filename}}.html'
+settings.postdir = 'content'
+settings.deploydir = 'deploy'
+settings.staticdir = 'deploy/static'
+settings.theme = 'default'
+settings.templatedir = None
+settings.perpage = 30
+settings.feedcount = 20
+settings.readers = [
+    'liquidluck.readers.markdown.MarkdownReader',
+]
+settings.writers = [
+]
+settings.archive = 'index.html'
+
+
+#: settings for liquidluck
+g = _Options()
+g.liquid_directory = os.path.abspath(os.path.dirname(__file__))
+g.post_directory = None
+g.deploy_directory = None
+g.public_posts = []
+g.secure_posts = []
+g.pure_files = []

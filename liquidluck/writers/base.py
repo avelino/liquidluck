@@ -38,7 +38,7 @@ class BaseWriter(object):
             loaders.append(theme)
         else:
             loaders.append(
-                os.path.join(g.root_directory, '_themes', settings.theme)
+                os.path.join(g.liquid_directory, '_themes', settings.theme)
             )
 
         jinja = Environment(
