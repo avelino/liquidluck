@@ -83,5 +83,20 @@ def get_post_slug(post, slug_format):
         for token in tokens:
             value = getattr(value, token)
 
+        if not value:
+            return ''
         return to_unicode(value)
-    return regex.sub(replace, slug_format)
+
+    slug = regex.sub(replace, slug_format)
+    slug = slug.lstrip('/').replace('//', '/')
+    return slug
+
+
+def slug_to_destination(slug, use_index=False):
+    if slug.endswith('.html'):
+        return slug
+
+    if slug.endswith('/') and use_index:
+        return slug + 'index.html'
+
+    return slug.rstrip('/') + '.html'
