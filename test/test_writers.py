@@ -48,3 +48,6 @@ class TestPostWriter(object):
         #: if test_cli.py run first
         writer = PostWriter()
         writer.run()
+        from liquidluck.options import settings
+        settings.permalink = '{{date.year}}/{{filename}}.html'
+        writer.run()
