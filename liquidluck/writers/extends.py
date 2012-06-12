@@ -75,3 +75,38 @@ class TagWriter(BaseWriter):
             pagination = Pagination(posts, page, self.perpage)
             pagination.title = tag
             self.render({'pagination': pagination}, 'archive.html', dest)
+
+
+class CategoryWriter(BaseWriter):
+    _posts = {}
+
+    def __init__(self):
+        self._template = self.get('category_template', 'archive.html')
+
+        for post in g.public_posts:
+            if post.category not in self._posts:
+                self._posts[post.category] = [post]
+            else:
+                self._posts[post.category].append(post)
+
+    def start(self):
+        for category in self._posts:
+            self._write_posts(category)
+
+    def _write_posts(self, category):
+        posts = self._posts[category]
+        pagination = Pagination(posts, 1, self.perpage)
+        pagination.title = category
+
+        dest = os.path.join(g.output_directory, category, 'index.html')
+        self.render({'pagination': pagination}, self._template, dest)
+
+        if pagination.pages < 2:
+            return
+
+        for page in range(1, pagination.pages + 1):
+            dest = os.path.join(
+                g.output_directory, category, 'page/%s.html' % page)
+            pagination = Pagination(posts, page, self.perpage)
+            pagination.title = category
+            self.render({'pagination': pagination}, self._template, dest)
