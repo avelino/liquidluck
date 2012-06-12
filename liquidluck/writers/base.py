@@ -133,6 +133,13 @@ def load_jinja():
     if os.path.exists(theme_template):
         loaders.append(theme_template)
 
+    #: load default theme template always
+    default_template = os.path.join(
+        g.liquid_directory, '_themes/default/templates'
+    )
+    if default_template != theme_template:
+        loaders.append(default_template)
+
     #: init jinja
     jinja = Environment(
         loader=FileSystemLoader(loaders),
