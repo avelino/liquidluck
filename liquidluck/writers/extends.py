@@ -2,7 +2,7 @@
 
 import os
 import logging
-from liquidluck.options import g, settings
+from liquidluck.options import g
 from liquidluck.writers.base import BaseWriter, Pagination
 
 
@@ -26,7 +26,7 @@ class YearWriter(BaseWriter):
 
     def _write_posts(self, year):
         posts = self._posts[year]
-        pagination = Pagination(posts, 1, settings.perpage)
+        pagination = Pagination(posts, 1, self.perpage)
         pagination.title = year
 
         dest = os.path.join(g.output_directory, str(year), 'index.html')
@@ -39,7 +39,7 @@ class YearWriter(BaseWriter):
             dest = os.path.join(
                 g.output_directory, str(year), 'page/%s.html' % page
             )
-            pagination = Pagination(posts, page, settings.perpage)
+            pagination = Pagination(posts, page, self.perpage)
             pagination.title = year
             self.render({'pagination': pagination}, self._template, dest)
 
@@ -65,7 +65,7 @@ class TagWriter(BaseWriter):
 
     def _write_posts(self, tag):
         posts = self._posts[tag]
-        pagination = Pagination(posts, 1, settings.perpage)
+        pagination = Pagination(posts, 1, self.perpage)
         pagination.title = tag
 
         dest = os.path.join(g.output_directory, 'tags', tag, 'index.html')
@@ -77,6 +77,6 @@ class TagWriter(BaseWriter):
         for page in range(1, pagination.pages + 1):
             dest = os.path.join(
                 g.output_directory, 'tags', tag, 'page/%s.html' % page)
-            pagination = Pagination(posts, page, settings.perpage)
+            pagination = Pagination(posts, page, self.perpage)
             pagination.title = tag
             self.render({'pagination': pagination}, 'archive.html', dest)

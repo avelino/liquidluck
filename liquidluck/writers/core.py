@@ -41,7 +41,7 @@ class ArchiveWriter(BaseWriter):
         logging.info('ArchiveWriter Finished')
 
     def _write_posts(self):
-        pagination = Pagination(g.public_posts, 1, settings.perpage)
+        pagination = Pagination(g.public_posts, 1, self.perpage)
         pagination.title = 'Archive'
 
         dest = os.path.join(g.output_directory, self._output)
@@ -51,7 +51,7 @@ class ArchiveWriter(BaseWriter):
             return
 
         for page in range(1, pagination.pages + 1):
-            pagination = Pagination(g.public_posts, page, settings.perpage)
+            pagination = Pagination(g.public_posts, page, self.perpage)
             dest = os.path.join(g.output_directory, 'page/%s.html' % page)
             self.render({'pagination': pagination}, self._template, dest)
 

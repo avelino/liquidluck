@@ -49,6 +49,10 @@ class BaseWriter(object):
     def get(self, key, value=None):
         return settings.writers_variables.get(key, value)
 
+    @property
+    def perpage(self):
+        return settings.perpage
+
 
 class Pagination(object):
     title = None
