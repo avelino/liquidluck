@@ -64,7 +64,7 @@ class TagWriter(BaseWriter):
         pagination.title = tag
 
         dest = os.path.join(g.output_directory, 'tags', tag, 'index.html')
-        self.render({'pagination': pagination}, 'archive.html', dest)
+        self.render({'pagination': pagination}, self._template, dest)
 
         if pagination.pages < 2:
             return
@@ -74,7 +74,7 @@ class TagWriter(BaseWriter):
                 g.output_directory, 'tags', tag, 'page/%s.html' % page)
             pagination = Pagination(posts, page, self.perpage)
             pagination.title = tag
-            self.render({'pagination': pagination}, 'archive.html', dest)
+            self.render({'pagination': pagination}, self._template, dest)
 
 
 class CategoryWriter(BaseWriter):
