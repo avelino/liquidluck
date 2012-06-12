@@ -46,6 +46,9 @@ class BaseWriter(object):
         #: logging
         return
 
+    def get(self, key, value=None):
+        return settings.writers_variables.get(key, value)
+
 
 class Pagination(object):
     def __init__(self, items, page, per_page):

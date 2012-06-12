@@ -132,9 +132,7 @@ settings.writers = [
     'liquidluck.writers.core.FileWriter',
     'liquidluck.writers.core.StaticWriter',
 ]
-settings.writers_variables = {
-    'archive': 'index.html',
-}
+settings.writers_variables = {}
 
 settings.site = {
     'name': 'Felix Felicis',

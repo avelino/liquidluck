@@ -30,32 +30,36 @@ class PostWriter(BaseWriter):
 
 class ArchiveWriter(BaseWriter):
     def __init__(self):
-        if 'archive' in settings.writers_variables:
-            self._destination = settings.writers_variables['archive']
-        else:
-            self._destination = 'index.html'
+        self._template = self.get('archive_template', 'archive.html')
+        self._output = self.get('archive_output', 'index.html')
 
     def run(self):
         pagination = Pagination(g.public_posts, 1, settings.perpage)
-        dest = os.path.join(g.output_directory, self._destination)
-        self.render({'pagination': pagination}, 'archive.html', dest)
+        dest = os.path.join(g.output_directory, self._output)
+        self.render({'pagination': pagination}, self._template, dest)
 
         for page in range(1, pagination.pages + 1):
             pagination = Pagination(g.public_posts, page, settings.perpage)
             dest = os.path.join(g.output_directory, 'page/%s.html' % page)
-            self.render({'pagination': pagination}, 'archive.html', dest)
+            self.render({'pagination': pagination}, self._template, dest)
 
         logging.info('ArchiveWriter Finished')
 
 
 class ArchiveFeedWriter(BaseWriter):
+    def __init__(self):
+        self._template = self.get('archive_feed_template', 'feed.xml')
+
+        self.feed = UnicodeDict()
+        self.feed.url = g.siteurl
+
+        self._output = self.get('archive_feed_output', 'feed.xml')
+        self.feed.feedurl = linkmaker(self._output)
+
     def run(self):
-        feed = UnicodeDict()
-        feed.posts = g.public_posts[:settings.feedcount]
-        feed.feedurl = linkmaker('feed.xml')
-        feed.url = g.siteurl
-        dest = os.path.join(g.output_directory, 'feed.xml')
-        self.render({'feed': feed}, 'feed.xml', dest)
+        self.feed.posts = g.public_posts[:settings.feedcount]
+        dest = os.path.join(g.output_directory, self._output)
+        self.render({'feed': self.feed}, self._template, dest)
 
 
 class FileWriter(BaseWriter):
