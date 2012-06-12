@@ -105,10 +105,10 @@ class _LogFormatter(logging.Formatter):
 
 #: settings for blog user
 settings = _Options()
-settings.postdir = 'content'
-settings.deploydir = 'deploy'
-settings.staticdir = 'deploy/static'
-settings.templatedir = None
+settings.source = 'content'
+settings.output = 'deploy'
+settings.static_output = 'deploy/static'
+settings.template = None
 settings.theme = 'default'
 
 settings.permalink = '{{category}}/{{filename}}.html'
@@ -145,9 +145,9 @@ settings.template_filters = {}
 #: settings for liquidluck
 g = _Options()
 g.liquid_directory = os.path.abspath(os.path.dirname(__file__))
-g.source_directory = settings.postdir
-g.output_directory = settings.deploydir
-g.static_directory = settings.staticdir
+g.source_directory = settings.source
+g.output_directory = settings.output
+g.static_directory = settings.static_output
 g.theme_directory = os.path.join(g.liquid_directory, '_themes', settings.theme)
 g.public_posts = []
 g.secure_posts = []
