@@ -36,6 +36,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 
 from liquidluck.readers.base import BaseReader, Post
+from liquidluck.options import settings
 from liquidluck.utils import to_unicode, cjk_nowrap
 
 
@@ -88,7 +89,10 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
         else:
             return '\n<pre><code>%s</code></pre>\n' % escape(text.strip())
 
-        formatter = HtmlFormatter()
+        formatter = HtmlFormatter(
+            noclasses=settings.get('highlight_inline', False),
+            linenos=settings.get('highlight_linenos', False),
+        )
         return highlight(text, lexer, formatter)
 
     def autolink(self, link, is_email):
