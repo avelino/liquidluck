@@ -2,3 +2,4 @@
 
 author = 'lepture'
 deploydir = 'build/deploy'
+staticdir = 'build/deploy/static'

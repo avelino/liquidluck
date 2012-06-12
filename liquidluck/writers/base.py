@@ -106,6 +106,9 @@ def load_jinja():
     if not os.path.exists(theme):
         theme = os.path.join(g.liquid_directory, '_themes', settings.theme)
 
+    #: global variable
+    g.theme_directory = theme
+
     theme_template = os.path.join(theme, 'templates')
     if os.path.exists(theme_template):
         loaders.append(theme_template)

@@ -4,7 +4,8 @@ import os
 import datetime
 from liquidluck.writers.base import get_post_slug, slug_to_destination
 from liquidluck.writers.core import PostWriter, ArchiveWriter
-from liquidluck.writers.core import ArchiveFeedWriter, FileWriter
+from liquidluck.writers.core import ArchiveFeedWriter
+from liquidluck.writers.core import FileWriter, StaticWriter
 from liquidluck.options import settings
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -75,3 +76,11 @@ class TestFileWriter(object):
         #: travis-ci bug
         #f = os.path.join(os.getcwd(), settings.deploydir, 'media/hold.txt')
         #assert os.path.exists(f)
+
+
+class TestStaticWriter(object):
+    def test_run(self):
+        writer = StaticWriter()
+        writer.run()
+        f = os.path.join(os.getcwd(), settings.staticdir, 'style.css')
+        assert os.path.exists(f)

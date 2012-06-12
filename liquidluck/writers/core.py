@@ -4,7 +4,7 @@ import os
 import logging
 import shutil
 from liquidluck.options import g, settings
-from liquidluck.utils import UnicodeDict
+from liquidluck.utils import UnicodeDict, walk_dir
 from liquidluck.writers.base import BaseWriter, Pagination, linkmaker
 from liquidluck.writers.base import get_post_slug, slug_to_destination
 
@@ -54,12 +54,25 @@ class ArchiveFeedWriter(BaseWriter):
 
 class FileWriter(BaseWriter):
     def run(self):
+        l = len(g.source_directory) + 1
         for f in g.pure_files:
-            path = f.lstrip(g.source_directory)
+            path = f[l:]
             dest = os.path.join(g.output_directory, path)
             copy_to(f, dest)
 
         logging.info('FileWriter Finished')
+
+
+class StaticWriter(BaseWriter):
+    def run(self):
+        static_path = os.path.join(g.theme_directory, 'static')
+        l = len(static_path) + 1
+        for f in walk_dir(static_path):
+            path = f[l:]
+            dest = os.path.join(g.static_directory, path)
+            copy_to(f, dest)
+
+        logging.info('StaticWriter Finished')
 
 
 def copy_to(source, dest):
