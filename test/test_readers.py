@@ -5,6 +5,7 @@ import datetime
 from liquidluck.options import settings
 from liquidluck.readers.base import BaseReader, Post
 from liquidluck.readers.markdown import MarkdownReader
+from liquidluck.readers.restructuredtext import RestructuredTextReader
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -109,6 +110,25 @@ class TestMarkdownReader(object):
 
     def test_public(self):
         assert self.post.public is True
+
+    def test_pygments(self):
+        assert 'highlight' in self.post.content
+
+
+class TestRestructuredTextReader(object):
+    def setUp(self):
+        path = os.path.join(ROOT, 'source/post/demo-rst-1.rst')
+        self.reader = RestructuredTextReader(path)
+        self.post = self.reader.render()
+
+    def test_title(self):
+        assert self.post.title == 'rst'
+
+    def test_tags(self):
+        assert self.post.tags == ['tag1', 'tag2']
+
+    def test_public(self):
+        assert self.post.public is False
 
     def test_pygments(self):
         assert 'highlight' in self.post.content
