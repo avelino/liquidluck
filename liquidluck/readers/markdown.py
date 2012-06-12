@@ -36,7 +36,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 
 from liquidluck.readers.base import BaseReader, Post
-from liquidluck.options import settings
+from liquidluck.options import settings, g
 from liquidluck.utils import to_unicode, cjk_nowrap
 
 
@@ -45,7 +45,9 @@ class MarkdownReader(BaseReader):
 
     def render(self):
         f = open(self.filepath)
-        logging.info('read ' + self.short_filepath)
+
+        if g.detail_logging:
+            logging.info('read ' + self.short_filepath)
 
         header = ''
         body = None

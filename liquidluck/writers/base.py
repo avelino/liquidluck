@@ -11,6 +11,7 @@ Writer, write your content to html.
 import os
 import re
 import datetime
+import logging
 from jinja2 import Environment, FileSystemLoader
 from liquidluck.utils import import_object, to_unicode, utf8
 
@@ -40,6 +41,9 @@ class BaseWriter(object):
         return
 
     def render(self, params, template, destination):
+        if g.detail_logging:
+            filepath = destination[len(g.output_directory) + 1:]
+            logging.info('write %s' % filepath)
         tpl = g.jinja.get_template(template)
         html = tpl.render(params)
         self.write(html, destination)

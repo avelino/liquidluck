@@ -144,6 +144,7 @@ settings.template_filters = {}
 
 #: settings for liquidluck
 g = _Options()
+g.detail_logging = False
 g.liquid_directory = os.path.abspath(os.path.dirname(__file__))
 g.source_directory = settings.source
 g.output_directory = settings.output

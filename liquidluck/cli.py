@@ -81,14 +81,12 @@ def main():
 
     parser.add_argument('command', nargs='?', default='build')
     parser.add_argument('-f', '--config', default='settings.py')
-    parser.add_argument('--disable-log', action='store_true',
-                        dest='disable_log')
+    parser.add_argument('-v', action='store_true', dest='detail_logging')
 
     args = parser.parse_args()
-    if args.disable_log:
-        enable_pretty_logging('warn')
-    else:
-        enable_pretty_logging()
+
+    g.detail_logging = args.detail_logging
+    enable_pretty_logging()
 
     if args.command == 'build':
         generate(args.config)
