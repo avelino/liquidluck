@@ -23,3 +23,6 @@ docs:
 
 install:
 	python setup.py install
+
+testing: clean-build
+	nosetests -v
