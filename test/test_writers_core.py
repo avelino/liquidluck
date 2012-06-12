@@ -59,6 +59,8 @@ class TestArchiveWriter(object):
     def test_run(self):
         writer = ArchiveWriter()
         writer.run()
+        f = os.path.join(os.getcwd(), settings.deploydir, 'index.html')
+        assert os.path.exists(f)
 
 
 class TestArchiveFeedWriter(object):
