@@ -36,7 +36,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 
 from liquidluck.readers.base import BaseReader, Post
-from liquidluck.utils import to_unicode
+from liquidluck.utils import to_unicode, cjk_nowrap
 
 
 class MarkdownReader(BaseReader):
@@ -79,12 +79,7 @@ class MarkdownReader(BaseReader):
 
 class JuneRender(m.HtmlRenderer, m.SmartyPants):
     def paragraph(self, text):
-        cjk = re.compile(
-            ur'([\u4e00-\u9fff]+?)'
-            r'(\n|\r\n|\r)'
-            ur'([\u4e00-\u9fff]+?)'
-        )
-        text = cjk.sub(r'\1\3', text)
+        text = cjk_nowrap(text)
         return '<p>%s</p>\n' % text
 
     def block_code(self, text, lang):

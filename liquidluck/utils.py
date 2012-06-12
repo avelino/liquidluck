@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
 import os
 
 
@@ -15,8 +16,9 @@ def to_unicode(value):
 
 
 def utf8(value):
-    if isinstance(value, (bytes, type(None))):
+    if isinstance(value, (bytes, type(None), str)):
         return value
+    assert isinstance(value, unicode)
     return value.encode('utf-8')
 
 
@@ -51,3 +53,12 @@ class UnicodeDict(dict):
 
     def __setitem__(self, key, value):
         return super(UnicodeDict, self).__setitem__(key, to_unicode(value))
+
+
+def cjk_nowrap(text):
+    start = u'\u4e00'
+    end = u'\u9fff'
+    pattern = ur'([%s-%s]+?)' % (start, end)
+    cjk = re.compile(pattern + r'(\n|\r\n|\r)' + pattern)
+    text = cjk.sub(r'\1\3', text)
+    return text
