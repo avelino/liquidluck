@@ -10,22 +10,25 @@ from liquidluck.writers.base import get_post_slug, slug_to_destination
 
 
 class PostWriter(BaseWriter):
-    def destination_of_post(self, post):
-        slug = get_post_slug(post, settings.permalink)
-        return os.path.join(g.output_directory, slug_to_destination(slug))
+    def __init__(self):
+        self._template = self.get('post_template', 'post.html')
 
     def run(self):
         for post in g.public_posts:
             self.render(
-                {'post': post}, 'post.html', self.destination_of_post(post)
+                {'post': post}, 'post.html', self._dest_of(post)
             )
 
         for post in g.secure_posts:
             self.render(
-                {'post': post}, 'post.html', self.destination_of_post(post)
+                {'post': post}, 'post.html', self._dest_of(post)
             )
 
         logging.info('PostWriter Finished')
+
+    def _dest_of(self, post):
+        slug = get_post_slug(post, settings.permalink)
+        return os.path.join(g.output_directory, slug_to_destination(slug))
 
 
 class ArchiveWriter(BaseWriter):
