@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-import os.path
+import os
 import datetime
 from liquidluck.writers.base import get_post_slug, slug_to_destination
 from liquidluck.writers.core import PostWriter, ArchiveWriter
 from liquidluck.writers.core import ArchiveFeedWriter, FileWriter
+from liquidluck.options import settings
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -49,7 +50,6 @@ class TestPostWriter(object):
         #: if test_cli.py run first
         writer = PostWriter()
         writer.run()
-        from liquidluck.options import settings
         settings.permalink = '{{date.year}}/{{filename}}.html'
         writer.run()
 
@@ -64,9 +64,13 @@ class TestArchiveFeedWriter(object):
     def test_run(self):
         writer = ArchiveFeedWriter()
         writer.run()
+        f = os.path.join(os.getcwd(), settings.deploydir, 'feed.xml')
+        assert os.path.exists(f)
 
 
 class TestFileWriter(object):
     def test_run(self):
         writer = FileWriter()
         writer.run()
+        f = os.path.join(os.getcwd(), settings.deploydir, 'media/robots.txt')
+        assert os.path.exists(f)
