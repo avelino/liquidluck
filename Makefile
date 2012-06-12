@@ -7,6 +7,7 @@ clean-build:
 	rm -fr deploy/
 	rm -fr build/
 	rm -fr dist/
+	rm -fr test/build/
 	rm -fr *.egg-info
 
 

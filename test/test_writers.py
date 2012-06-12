@@ -72,5 +72,6 @@ class TestFileWriter(object):
     def test_run(self):
         writer = FileWriter()
         writer.run()
-        f = os.path.join(os.getcwd(), settings.deploydir, 'media/robots.txt')
+        f = os.path.join(os.getcwd(), settings.deploydir, 'media/hold.txt')
+        print f
         assert os.path.exists(f)
