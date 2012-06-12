@@ -15,14 +15,10 @@ class PostWriter(BaseWriter):
 
     def run(self):
         for post in g.public_posts:
-            self.render(
-                {'post': post}, 'post.html', self._dest_of(post)
-            )
+            self.render({'post': post}, self._template, self._dest_of(post))
 
         for post in g.secure_posts:
-            self.render(
-                {'post': post}, 'post.html', self._dest_of(post)
-            )
+            self.render({'post': post}, self._template, self._dest_of(post))
 
         logging.info('PostWriter Finished')
 
