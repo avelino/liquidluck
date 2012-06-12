@@ -1,6 +1,7 @@
 # demo
 
 - date: 2012-12-12
+- category: work
 - tags: tag1, tag2
 
 ------

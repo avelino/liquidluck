@@ -7,4 +7,8 @@ alias = {
     'feed': 'liquidluck.writers.core.ArchiveFeedWriter',
     'file': 'liquidluck.writers.core.FileWriter',
     'static': 'liquidluck.writers.core.StaticWriter',
+
+    'year': 'liquidluck.writers.extends.YearWriter',
+    'tag': 'liquidluck.writers.extends.TagWriter',
+    'category': 'liquidluck.writers.extends.CategoryWriter',
 }
