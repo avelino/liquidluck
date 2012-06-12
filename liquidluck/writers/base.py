@@ -24,9 +24,6 @@ from liquidluck.options import g
 class BaseWriter(object):
     """BaseWriter
     """
-    def begin(self):
-        pass
-
     def run(self):
         raise NotImplementedError
 

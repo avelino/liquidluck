@@ -29,9 +29,15 @@ class PostWriter(BaseWriter):
 
 
 class ArchiveWriter(BaseWriter):
+    def __init__(self):
+        if 'archive' in settings.writers_variables:
+            self._destination = settings.writers_variables['archive']
+        else:
+            self._destination = 'index.html'
+
     def run(self):
         pagination = Pagination(g.public_posts, 1, settings.perpage)
-        dest = os.path.join(g.output_directory, settings.archive)
+        dest = os.path.join(g.output_directory, self._destination)
         self.render({'pagination': pagination}, 'archive.html', dest)
 
         for page in range(1, pagination.pages + 1):

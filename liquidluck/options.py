@@ -105,29 +105,43 @@ class _LogFormatter(logging.Formatter):
 
 #: settings for blog user
 settings = _Options()
-settings.author = 'admin'
-settings.permalink = '{{category}}/{{filename}}.html'
-settings.linktype = 'html'  # clean, slash, html
 settings.postdir = 'content'
 settings.deploydir = 'deploy'
 settings.staticdir = 'deploy/static'
-settings.theme = 'default'
 settings.templatedir = None
+settings.theme = 'default'
+
+settings.permalink = '{{category}}/{{filename}}.html'
+settings.linktype = 'html'  # clean, slash, html
 settings.perpage = 30
 settings.feedcount = 20
+
+settings.author = 'admin'
+settings.authors = {}
+
 settings.readers = [
     'liquidluck.readers.markdown.MarkdownReader',
 ]
+settings.readers_variables = {
+}
+
 settings.writers = [
     'liquidluck.writers.core.PostWriter',
     'liquidluck.writers.core.ArchiveWriter',
     'liquidluck.writers.core.ArchiveFeedWriter',
+    'liquidluck.writers.core.FileWriter',
+    'liquidluck.writers.core.StaticWriter',
 ]
-settings.archive = 'index.html'
+settings.writers_variables = {
+    'archive': 'index.html',
+}
+
 settings.site = {
     'name': 'Felix Felicis',
     'url': 'http://lepture.com',
 }
+settings.template_variables = {}
+settings.template_filters = {}
 
 
 #: settings for liquidluck

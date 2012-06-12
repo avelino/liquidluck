@@ -61,9 +61,6 @@ def write_posts():
         writers.append(import_object(writer)())
 
     for writer in writers:
-        writer.begin()
-
-    for writer in writers:
         writer.run()
 
 
