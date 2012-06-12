@@ -2,64 +2,19 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}{{context.sitename}}{% endblock %}</title>
+        <title>{% block title %}{{site.name}}{% endblock %}</title>
         <script>if (top !== self) top.location = self.location;</script>
-        <meta name="HandheldFriendly" content="True" />
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
-        {% block author %}<meta name="author" content="{{ context.author }}" />{% endblock %}
-        {% block beforestyle %}{% endblock %}
-        <link rel="alternate" type="application/rss+xml" href="{{content_url('feed.xml')}}" title="{{context.sitename}} Feed" />
-        <link rel="stylesheet" href="{{ static_url('style.css') }}" />
-        <!--[if lt IE 9]><script type="text/javascript" src="{{ static_url('html5.js') }}"></script><![endif]-->
-        {% block afterstyle %}{% endblock %}
-        {% if context.ga %}
-        <script type="text/javascript">
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', '{{context.ga}}']);
-            _gaq.push(['_trackPageview']);
-            (function() {
-             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-             })();
-         </script>
-         {% endif %}
-     </head>
-     <body>
-         <header id="header">
-             <nav class="fn-clear">
-                 <ul id="nav" class="fn-right fn-clear">
-                     <li id="nav-home"><a href="/">Home</a></li>
-                     <li id="nav-tags"><a href="/tag/">Tags</a></li>
-                 </ul>
-             </nav>
-         </header>
-         {% block entry %}
-         <article class="hentry">
-             <header class="entry-header fn-clear">
-                 <h1 class="entry-title fn-left">{%block entrytitle%}{{context.sitename}}{%endblock%}</h1>
-                 {% if context.gcse %}
-                 <form id="search-form" action="http://www.google.com/cse">
-                     <input type="hidden" name="cx" value="{{context.gcse}}" />
-                     <input id="search-input" class="ui-fm-text" type="text" placeholder="Search .." name="q" />
-                 </form>
-                 {% else %}
-                 <form id="search-form" action="http://www.google.com/search">
-                     <input type="hidden" name="q" value="site:{{context.siteurl}}" />
-                     <input id="search-input" class="ui-fm-text" type="text" placeholder="Search .." name="q" />
-                 </form>
-                 {% endif %}
-             </header>
-             {% block container %}{% endblock %}
-         </article>
-         {% endblock entry %}
-         <footer id="footer">
-             <div class="copyright">Copyright by <a href="{{context.siteurl}}">{{context.sitename}}</a> | Powered by <a href="http://lepture.com/project/liquidluck">Felix Felicis</a></div>
-             <p class="love">Lovely designed by <a href="http://lepture.com">lepture</a></p>
-         </footer>
-         <script type="text/javascript">
-             var currentNav = window.currentNav || "nav-home";
-             document.getElementById(currentNav).className = "current";
-         </script>
-     </body>
- </html>
+    </head>
+    <body>
+        {%- block nav %}
+        {%- endblock %}
+
+        {%- block main %}
+        {% endblock -%}
+
+        {%- block footer %}
+        <a href="{{theme.link}}">{{theme.name}}</a>
+        {%- endblock %}
+    </body>
+</html>

@@ -95,49 +95,58 @@ class Pagination(object):
 
 
 def load_jinja():
+    #: prepare loaders
+    #: loaders = ['_templates', theme]
     loaders = []
     tpl = os.path.abspath('_templates')
     if os.path.exists(tpl):
         loaders.append(tpl)
 
-    theme = os.path.join(
-        os.path.abspath('_themes'), settings.theme, 'templates'
-    )
-    if os.path.exists(theme):
-        loaders.append(theme)
-    else:
-        loaders.append(
-            os.path.join(
-                g.liquid_directory,
-                '_themes',
-                settings.theme,
-                'templates'
-            )
-        )
+    theme = os.path.join(os.path.abspath('_themes'), settings.theme)
+    if not os.path.exists(theme):
+        theme = os.path.join(g.liquid_directory, '_themes', settings.theme)
 
+    theme_template = os.path.join(theme, 'templates')
+    if os.path.exists(theme_template):
+        loaders.append(theme_template)
+
+    #: init jinja
     jinja = Environment(
         loader=FileSystemLoader(loaders),
         autoescape=False,  # blog don't need autoescape
-        extensions=settings.jinja_extensions or [],
+        extensions=settings.template_extensions or [],
     )
 
-    jinja.globals = settings.jinja_variables or {}
+    #: load theme config
+    config = {}
+    theme_config = os.path.join(theme, 'config.py')
+    if os.path.exists(theme_config):
+        execfile(theme_config, {}, config)
+
+    filters = config.pop('filters', {})
+    jinja.globals = config
+    jinja.filters.update(filters)
+
+    # load variables from settings
+    jinja.globals.update(settings.template_variables or {})
+
+    #: default variables
     jinja.globals.update({
         'site': settings.site,
         'now': datetime.datetime.now(),
         'linkmaker': linkmaker,
     })
 
+    #: load filters from settings
+    filters = settings.template_filters or {}
+    for k, v in filters.items():
+        jinja.filters.update({k: import_object(v)})
+
+    #: default filters
     jinja.filters.update({
         'xmldatetime': lambda o: o.strftime('%Y-%m-%dT%H:%M:%SZ'),
         'postlink': postlink,
     })
-
-    if settings.jinja_filters is None:
-        settings.jinja_filters = {}
-
-    for k, v in settings.jinja_filters.items():
-        jinja.filters.update({k: import_object(v)})
 
     g.jinja = jinja
     return jinja
