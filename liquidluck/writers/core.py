@@ -31,7 +31,7 @@ class PageWriter(BaseWriter):
     def start(self):
         l = len(g.source_directory) + 1
         for post in g.pure_pages:
-            dest = post.filepath[l:]
+            dest = os.path.join(g.output_directory, post.filepath[l:])
             self.render({'post': post}, self._template, dest)
 
 
