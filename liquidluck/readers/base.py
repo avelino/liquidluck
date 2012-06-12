@@ -101,11 +101,11 @@ class Post(object):
         return self.meta.get('public', 'true') == 'true'
 
     @property
-    def folder(self):
-        return self.meta.get('folder', None)
-
-    @property
     def category(self):
+        category = self.meta.get('category', None)
+        if category:
+            return category
+        #: historical reason
         return self.meta.get('folder', None)
 
     @property
