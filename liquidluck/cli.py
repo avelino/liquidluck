@@ -9,7 +9,6 @@ from liquidluck.options import g, settings
 from liquidluck.utils import import_object, walk_dir
 
 from liquidluck.writers.base import load_jinja
-from liquidluck.readers import alias as reader_alias
 
 
 def load_settings(path):
@@ -28,10 +27,11 @@ def load_settings(path):
 
 
 def load_posts(path):
+    from liquidluck.readers import alias
     readers = []
     for reader in settings.readers:
-        if reader in reader_alias:
-            reader = reader_alias[reader]
+        if reader in alias:
+            reader = alias[reader]
         readers.append(import_object(reader))
 
     def detect_reader(filepath):
@@ -59,8 +59,11 @@ def load_posts(path):
 
 
 def write_posts():
+    from liquidluck.writers import alias
     writers = []
     for writer in settings.writers:
+        if writer in alias:
+            writer = alias[writer]
         writers.append(import_object(writer)())
 
     for writer in writers:

@@ -69,7 +69,6 @@ class ArchiveFeedWriter(BaseWriter):
     def run(self):
         self.feed.posts = g.public_posts[:settings.feedcount]
         dest = os.path.join(g.output_directory, self._output)
-        print g.output_directory
         self.render({'feed': self.feed}, self._template, dest)
 
 
