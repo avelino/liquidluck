@@ -45,7 +45,7 @@ class MarkdownReader(BaseReader):
 
     def render(self):
         f = open(self.filepath)
-        logging.info('read ' + self.filepath)
+        logging.info('read ' + self.short_filepath)
 
         header = ''
         body = None

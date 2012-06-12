@@ -43,7 +43,7 @@ class RestructuredTextReader(BaseReader):
 
     def render(self):
         f = open(self.filepath)
-        logging.info('read ' + self.filepath)
+        logging.info('read ' + self.short_filepath)
         content = f.read()
         f.close()
 

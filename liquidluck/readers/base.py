@@ -10,7 +10,7 @@ Reader, read content, parse to html.
 import os
 import datetime
 import logging
-from liquidluck.options import settings
+from liquidluck.options import settings, g
 
 
 class BaseReader(object):
@@ -29,6 +29,10 @@ class BaseReader(object):
     """
     def __init__(self, filepath=None):
         self.filepath = filepath
+
+    @property
+    def short_filepath(self):
+        return self.filepath[len(g.source_directory) + 1:]
 
     def start(self):
         return None
