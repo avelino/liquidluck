@@ -136,7 +136,7 @@ settings.writers_variables = {}
 
 settings.site = {
     'name': 'Felix Felicis',
-    'url': 'http://lepture.com',
+    'url': 'http://github.com',
 }
 settings.template_variables = {}
 settings.template_filters = {}

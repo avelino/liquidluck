@@ -61,7 +61,7 @@ class ArchiveFeedWriter(BaseWriter):
         self._template = self.get('archive_feed_template', 'feed.xml')
 
         self.feed = UnicodeDict()
-        self.feed.url = g.siteurl
+        self.feed.url = settings.site['url']
 
         self._output = self.get('archive_feed_output', 'feed.xml')
         self.feed.feedurl = linkmaker(self._output)
