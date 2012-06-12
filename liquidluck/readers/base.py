@@ -124,6 +124,10 @@ class Post(object):
         return [tag.strip() for tag in tags.split(",")]
 
     @property
+    def template(self):
+        return self.meta.get('template', None)
+
+    @property
     def filename(self):
         path = os.path.split(self.filepath)[1]
         return os.path.splitext(path)[0]

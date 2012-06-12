@@ -14,10 +14,11 @@ class PostWriter(BaseWriter):
 
     def start(self):
         for post in g.public_posts:
-            self.render({'post': post}, self._template, self._dest_of(post))
+            template = post.template or self._template
+            self.render({'post': post}, template, self._dest_of(post))
 
         for post in g.secure_posts:
-            self.render({'post': post}, self._template, self._dest_of(post))
+            self.render({'post': post}, template, self._dest_of(post))
 
     def _dest_of(self, post):
         slug = get_post_slug(post, settings.permalink)
@@ -31,9 +32,10 @@ class PageWriter(BaseWriter):
     def start(self):
         l = len(g.source_directory) + 1
         for post in g.pure_pages:
+            template = post.template or self._template
             filename = os.path.splitext(post.filepath[l:])[0] + '.html'
             dest = os.path.join(g.output_directory, filename)
-            self.render({'post': post}, self._template, dest)
+            self.render({'post': post}, template, dest)
 
 
 class ArchiveWriter(BaseWriter):
