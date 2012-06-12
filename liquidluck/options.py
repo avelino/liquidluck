@@ -120,7 +120,7 @@ settings.author = 'admin'
 settings.authors = {}
 
 settings.readers = [
-    'liquidluck.readers.markdown.MarkdownReader',
+    'markdown',
 ]
 settings.readers_variables = {
 }
