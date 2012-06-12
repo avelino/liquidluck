@@ -29,7 +29,7 @@ class YearWriter(BaseWriter):
         pagination = Pagination(posts, 1, settings.perpage)
         pagination.title = year
 
-        dest = os.path.join(settings.deploydir, str(year), 'index.html')
+        dest = os.path.join(g.output_directory, str(year), 'index.html')
         self.render({'pagination': pagination}, self._template, dest)
 
         if pagination.pages < 2:
@@ -37,7 +37,7 @@ class YearWriter(BaseWriter):
 
         for page in range(1, pagination.pages + 1):
             dest = os.path.join(
-                settings.deploydir, str(year), 'page/%s.html' % page
+                g.output_directory, str(year), 'page/%s.html' % page
             )
             pagination = Pagination(posts, page, settings.perpage)
             pagination.title = year
@@ -68,7 +68,7 @@ class TagWriter(BaseWriter):
         pagination = Pagination(posts, 1, settings.perpage)
         pagination.title = tag
 
-        dest = os.path.join(settings.deploydir, 'tags', tag, 'index.html')
+        dest = os.path.join(g.output_directory, 'tags', tag, 'index.html')
         self.render({'pagination': pagination}, 'archive.html', dest)
 
         if pagination.pages < 2:
@@ -76,7 +76,7 @@ class TagWriter(BaseWriter):
 
         for page in range(1, pagination.pages + 1):
             dest = os.path.join(
-                settings.deploydir, 'tags', tag, 'page/%s.html' % page)
+                g.output_directory, 'tags', tag, 'page/%s.html' % page)
             pagination = Pagination(posts, page, settings.perpage)
             pagination.title = tag
             self.render({'pagination': pagination}, 'archive.html', dest)

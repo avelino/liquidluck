@@ -2,7 +2,7 @@
 
 import os
 from liquidluck.writers.extends import YearWriter, TagWriter
-from liquidluck.options import settings
+from liquidluck.options import g
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -11,7 +11,7 @@ class TestYearWriter(object):
     def test_run(self):
         writer = YearWriter()
         writer.run()
-        f = os.path.join(os.getcwd(), settings.deploydir, '2012/index.html')
+        f = os.path.join(os.getcwd(), g.output_directory, '2012/index.html')
         assert os.path.exists(f)
 
 
@@ -20,6 +20,6 @@ class TestTagWriter(object):
         writer = TagWriter()
         writer.run()
         f = os.path.join(
-            os.getcwd(), settings.deploydir, 'tags/tag1/index.html'
+            os.getcwd(), g.output_directory, 'tags/tag1/index.html'
         )
         assert os.path.exists(f)

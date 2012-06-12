@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
 author = 'lepture'
-postdir = 'post'
-deploydir = 'build/deploy'
-staticdir = 'build/deploy/static'
+source = 'post'
+output = 'build/deploy'
+static_output = 'build/deploy/static'

@@ -6,7 +6,7 @@ from liquidluck.writers.base import get_post_slug, slug_to_destination
 from liquidluck.writers.core import PostWriter, ArchiveWriter
 from liquidluck.writers.core import ArchiveFeedWriter
 from liquidluck.writers.core import FileWriter, StaticWriter
-from liquidluck.options import settings
+from liquidluck.options import settings, g
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -59,7 +59,7 @@ class TestArchiveWriter(object):
     def test_run(self):
         writer = ArchiveWriter()
         writer.run()
-        f = os.path.join(os.getcwd(), settings.deploydir, 'index.html')
+        f = os.path.join(os.getcwd(), g.output_directory, 'index.html')
         assert os.path.exists(f)
 
 
@@ -67,7 +67,7 @@ class TestArchiveFeedWriter(object):
     def test_run(self):
         writer = ArchiveFeedWriter()
         writer.run()
-        f = os.path.join(os.getcwd(), settings.deploydir, 'feed.xml')
+        f = os.path.join(os.getcwd(), g.output_directory, 'feed.xml')
         assert os.path.exists(f)
 
 
@@ -76,7 +76,7 @@ class TestFileWriter(object):
         writer = FileWriter()
         writer.run()
         #: travis-ci bug
-        #f = os.path.join(os.getcwd(), settings.deploydir, 'media/hold.txt')
+        #f = os.path.join(os.getcwd(), g.output_directory, 'media/hold.txt')
         #assert os.path.exists(f)
 
 
@@ -84,5 +84,5 @@ class TestStaticWriter(object):
     def test_run(self):
         writer = StaticWriter()
         writer.run()
-        f = os.path.join(os.getcwd(), settings.staticdir, 'style.css')
+        f = os.path.join(os.getcwd(), g.static_directory, 'style.css')
         assert os.path.exists(f)
