@@ -3,6 +3,7 @@
 
 import os
 import argparse
+import logging
 from liquidluck.options import enable_pretty_logging
 from liquidluck.options import g, settings
 from liquidluck.utils import import_object, walk_dir
@@ -17,14 +18,15 @@ def load_settings(path):
     for key in config:
         settings[key] = config[key]
 
+    g.source_directory = os.path.abspath(settings.postdir)
     g.output_directory = os.path.abspath(settings.deploydir)
     g.static_directory = os.path.abspath(settings.staticdir)
+    logging.info('Load Settings Finished')
+
     load_jinja()
 
 
 def load_posts(path):
-    g.source_directory = os.path.abspath(path)
-
     readers = []
     for reader in settings.readers:
         readers.append(import_object(reader))
@@ -50,6 +52,8 @@ def load_posts(path):
     g.public_posts = sorted(g.public_posts, key=lambda o: o.date, reverse=True)
     g.secure_posts = sorted(g.secure_posts, key=lambda o: o.date, reverse=True)
 
+    logging.info('Load Posts Finished')
+
 
 def write_posts():
     writers = []
@@ -63,9 +67,17 @@ def write_posts():
         writer.run()
 
 
+def generate(config='settings.py'):
+    load_settings(config)
+    load_posts(g.source_directory)
+    write_posts()
+
+
 def main():
     parser = argparse.ArgumentParser(prog='liquidluck')
 
+    parser.add_argument('command', nargs='?', default='build')
+    parser.add_argument('-f', '--config', default='settings.py')
     parser.add_argument('--disable-log', action='store_true',
                         dest='disable_log')
 
@@ -74,6 +86,9 @@ def main():
         enable_pretty_logging('warn')
     else:
         enable_pretty_logging()
+
+    if args.command == 'build':
+        generate(args.config)
 
 
 if __name__ == '__main__':
