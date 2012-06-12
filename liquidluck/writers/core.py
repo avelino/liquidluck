@@ -42,6 +42,8 @@ class ArchiveWriter(BaseWriter):
 
     def _write_posts(self):
         pagination = Pagination(g.public_posts, 1, settings.perpage)
+        pagination.title = 'Archive'
+
         dest = os.path.join(g.output_directory, self._output)
         self.render({'pagination': pagination}, self._template, dest)
 

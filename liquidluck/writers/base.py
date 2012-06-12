@@ -51,6 +51,9 @@ class BaseWriter(object):
 
 
 class Pagination(object):
+    title = None
+    url = None
+
     def __init__(self, items, page, per_page):
         self.total_items = items
         self.page = page
