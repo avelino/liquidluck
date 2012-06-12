@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import logging
 import shutil
 from liquidluck.options import g, settings
 from liquidluck.utils import UnicodeDict, walk_dir
@@ -13,14 +12,12 @@ class PostWriter(BaseWriter):
     def __init__(self):
         self._template = self.get('post_template', 'post.html')
 
-    def run(self):
+    def start(self):
         for post in g.public_posts:
             self.render({'post': post}, self._template, self._dest_of(post))
 
         for post in g.secure_posts:
             self.render({'post': post}, self._template, self._dest_of(post))
-
-        logging.info('PostWriter Finished')
 
     def _dest_of(self, post):
         slug = get_post_slug(post, settings.permalink)
@@ -31,7 +28,7 @@ class PageWriter(BaseWriter):
     def __init__(self):
         self._template = self.get('page_template', 'page.html')
 
-    def run(self):
+    def start(self):
         l = len(g.source_directory) + 1
         for post in g.pure_pages:
             dest = post.filepath[l:]
@@ -43,11 +40,7 @@ class ArchiveWriter(BaseWriter):
         self._template = self.get('archive_template', 'archive.html')
         self._output = self.get('archive_output', 'index.html')
 
-    def run(self):
-        self._write_posts()
-        logging.info('ArchiveWriter Finished')
-
-    def _write_posts(self):
+    def start(self):
         pagination = Pagination(g.public_posts, 1, self.perpage)
         pagination.title = 'Archive'
 
@@ -73,33 +66,29 @@ class ArchiveFeedWriter(BaseWriter):
         self._output = self.get('archive_feed_output', 'feed.xml')
         self.feed.feedurl = linkmaker(self._output)
 
-    def run(self):
+    def start(self):
         self.feed.posts = g.public_posts[:settings.feedcount]
         dest = os.path.join(g.output_directory, self._output)
         self.render({'feed': self.feed}, self._template, dest)
 
 
 class FileWriter(BaseWriter):
-    def run(self):
+    def start(self):
         l = len(g.source_directory) + 1
         for f in g.pure_files:
             path = f[l:]
             dest = os.path.join(g.output_directory, path)
             copy_to(f, dest)
 
-        logging.info('FileWriter Finished')
-
 
 class StaticWriter(BaseWriter):
-    def run(self):
+    def start(self):
         static_path = os.path.join(g.theme_directory, 'static')
         l = len(static_path) + 1
         for f in walk_dir(static_path):
             path = f[l:]
             dest = os.path.join(g.static_directory, path)
             copy_to(f, dest)
-
-        logging.info('StaticWriter Finished')
 
 
 def copy_to(source, dest):

@@ -51,6 +51,12 @@ class BaseReader(object):
     def render(self):
         raise NotImplementedError
 
+    def run(self):
+        try:
+            return self.render()
+        except Exception as e:
+            logging.error(e)
+
 
 class Post(object):
     meta = {}

@@ -25,8 +25,17 @@ from liquidluck.options import g
 class BaseWriter(object):
     """BaseWriter
     """
-    def run(self):
+    def start(self):
         raise NotImplementedError
+
+    def run(self):
+        try:
+            self.start()
+        except Exception as e:
+            logging.error(e)
+
+        name = self.__class__.__name__
+        logging.info('%s Finished' % name)
 
     def write(self, content, destination):
         folder = os.path.split(destination)[0]

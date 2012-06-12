@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import logging
 from liquidluck.options import g
 from liquidluck.writers.base import BaseWriter, Pagination
 
@@ -18,11 +17,9 @@ class YearWriter(BaseWriter):
             else:
                 self._posts[post.date.year].append(post)
 
-    def run(self):
+    def start(self):
         for year in self._posts:
             self._write_posts(year)
-
-        logging.info('YearWriter Finished')
 
     def _write_posts(self, year):
         posts = self._posts[year]
@@ -57,11 +54,9 @@ class TagWriter(BaseWriter):
                 else:
                     self._posts[tag].append(post)
 
-    def run(self):
+    def start(self):
         for tag in self._posts:
             self._write_posts(tag)
-
-        logging.info('TagWriter Finished')
 
     def _write_posts(self, tag):
         posts = self._posts[tag]

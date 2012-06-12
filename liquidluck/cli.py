@@ -38,7 +38,7 @@ def load_posts(path):
         for Reader in readers:
             reader = Reader(filepath)
             if reader.support():
-                return reader.render()
+                return reader.run()
         return None
 
     for filepath in walk_dir(path):
