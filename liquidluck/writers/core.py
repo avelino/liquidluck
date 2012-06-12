@@ -37,16 +37,21 @@ class ArchiveWriter(BaseWriter):
         self._output = self.get('archive_output', 'index.html')
 
     def run(self):
+        self._write_posts()
+        logging.info('ArchiveWriter Finished')
+
+    def _write_posts(self):
         pagination = Pagination(g.public_posts, 1, settings.perpage)
         dest = os.path.join(g.output_directory, self._output)
         self.render({'pagination': pagination}, self._template, dest)
+
+        if pagination.pages < 2:
+            return
 
         for page in range(1, pagination.pages + 1):
             pagination = Pagination(g.public_posts, page, settings.perpage)
             dest = os.path.join(g.output_directory, 'page/%s.html' % page)
             self.render({'pagination': pagination}, self._template, dest)
-
-        logging.info('ArchiveWriter Finished')
 
 
 class ArchiveFeedWriter(BaseWriter):
