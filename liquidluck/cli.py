@@ -18,7 +18,6 @@ def load_settings(path):
     for key in config:
         settings[key] = config[key]
 
-    g.source_directory = os.path.abspath(settings.source)
     g.output_directory = os.path.abspath(settings.output)
     g.static_directory = os.path.abspath(settings.static_output)
     logging.info('Load Settings Finished')
@@ -27,6 +26,7 @@ def load_settings(path):
 
 
 def load_posts(path):
+    g.source_directory = path
     from liquidluck.readers import alias
     readers = []
     for reader in settings.readers:
