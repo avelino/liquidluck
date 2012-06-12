@@ -2,6 +2,7 @@
 
 alias = {
     'post': 'liquidluck.writers.core.PostWriter',
+    'page': 'liquidluck.writers.core.PageWriter',
     'archive': 'liquidluck.writers.core.ArchiveWriter',
     'feed': 'liquidluck.writers.core.ArchiveFeedWriter',
     'file': 'liquidluck.writers.core.FileWriter',

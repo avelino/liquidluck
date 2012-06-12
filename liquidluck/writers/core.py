@@ -31,6 +31,17 @@ class PostWriter(BaseWriter):
         return os.path.join(g.output_directory, slug_to_destination(slug))
 
 
+class PageWriter(BaseWriter):
+    def __init__(self):
+        self._template = self.get('page_template', 'page.html')
+
+    def run(self):
+        l = len(g.source_directory) + 1
+        for post in g.pure_pages:
+            dest = post.filepath[l:]
+            self.render({'post': post}, self._template, dest)
+
+
 class ArchiveWriter(BaseWriter):
     def __init__(self):
         self._template = self.get('archive_template', 'archive.html')
