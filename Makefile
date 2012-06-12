@@ -19,3 +19,7 @@ clean-pyc:
 
 docs:
 	$(MAKE) -C docs html
+
+
+install:
+	python setup.py install
