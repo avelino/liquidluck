@@ -3,7 +3,7 @@
     <title>{{ site.name }}</title>
     <link href="{{feed.feedurl}}" rel="self" />
     <link href="{{feed.url}}" />
-    <updated>{{now|xmldatetime}}</updated>
+    <updated>{{system.time|xmldatetime}}</updated>
     <id>{{ site.url }}</id>
     {% for post in feed.posts -%}
     <entry>

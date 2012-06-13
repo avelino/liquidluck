@@ -1,1 +1,7 @@
-{{ post.content }}
+{% extends "layout.html" %}
+
+{% block main %}
+<div class="hentry">
+    <div class="entry-content">{{post.content}}</div>
+</div>
+{% endblock %}

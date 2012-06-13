@@ -5,16 +5,41 @@
         <title>{% block title %}{{site.name}}{% endblock %}</title>
         <script>if (top !== self) top.location = self.location;</script>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+        <link rel="stylesheet" href="{{static_url('style.css')}}" />
+        <link rel="stylesheet" href="{{static_url('pygments.css')}}" />
+        {% block afterstyle %}{% endblock %}
     </head>
     <body>
-        {%- block nav %}
-        {%- endblock %}
+        <div class="container">
+            <header id="header">
+                {% block header %}
+                <h1><a href="/">{{site.name}}</a></h1>
+                {% if site.description %}<p>{{site.description}}</p>{% endif %}
 
-        {%- block main %}
-        {% endblock -%}
+                {%- block nav %}
+                <nav role="navigation">
+                    {% for name, link in nav_items %}
+                    <a href="{{link}}">{{name}}</a>
+                    {% endfor %}
+                </nav>
+                {%- endblock %}
+                {% endblock %}
+            </header>
 
-        {%- block footer %}
-        <a href="{{theme.link}}">{{theme.name}}</a>
-        {%- endblock %}
+            <div id="main">
+            {%- block main %}
+            {% endblock -%}
+            </div>
+
+            <footer id="footer">
+                {%- block footer %}
+                <hr class="end" />
+                <p class="copyright">Powered by <a href="{{system.homepage}}">{{system.name}} {{system.version}}</a> Last generated at {{system.time|xmldatetime}}</p>
+                {%- endblock %}
+            </footer>
+
+            {% block beforejs %}{% endblock %}
+            {% block afterjs %}{% endblock %}
+        </div>
     </body>
 </html>
