@@ -107,7 +107,7 @@ class Pagination(object):
 
     @property
     def total(self):
-        return len(self.items)
+        return len(self.total_items)
 
     @property
     def items(self):

@@ -55,6 +55,7 @@ class ArchiveWriter(BaseWriter):
 
         for page in range(1, pagination.pages + 1):
             pagination = Pagination(g.public_posts, page, self.perpage)
+            pagination.title = 'Archive'
             dest = os.path.join(g.output_directory, 'page/%s.html' % page)
             self.render({'pagination': pagination}, self._template, dest)
 
