@@ -8,24 +8,24 @@ ROOT = os.path.abspath(os.path.dirname(__file__))
 
 
 class TestYearWriter(object):
-    def test_run(self):
+    def test_start(self):
         writer = YearWriter()
-        writer.run()
+        writer.start()
         f = os.path.join(g.output_directory, '2012/index.html')
         assert os.path.exists(f)
 
 
 class TestTagWriter(object):
-    def test_run(self):
+    def test_start(self):
         writer = TagWriter()
-        writer.run()
+        writer.start()
         f = os.path.join(g.output_directory, 'tags/tag1/index.html')
         assert os.path.exists(f)
 
 
 class TestCategoryWriter(object):
-    def test_run(self):
+    def test_start(self):
         writer = CategoryWriter()
-        writer.run()
+        writer.start()
         f = os.path.join(g.output_directory, 'work/index.html')
         assert os.path.exists(f)

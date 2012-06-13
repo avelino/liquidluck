@@ -88,49 +88,49 @@ def test_static_url():
 
 
 class TestPostWriter(object):
-    def test_run(self):
+    def test_start(self):
         #: if test_cli.py run first
         writer = PostWriter()
-        writer.run()
+        writer.start()
         settings.permalink = '{{date.year}}/{{filename}}.html'
-        writer.run()
+        writer.start()
 
 
 class TestPageWriter(object):
-    def test_run(self):
+    def test_start(self):
         writer = PageWriter()
-        writer.run()
+        writer.start()
         f = os.path.join(g.output_directory, 'demo-page.html')
         assert os.path.exists(f)
 
 
 class TestArchiveWriter(object):
-    def test_run(self):
+    def test_start(self):
         writer = ArchiveWriter()
-        writer.run()
+        writer.start()
         f = os.path.join(g.output_directory, 'index.html')
         assert os.path.exists(f)
 
 
 class TestArchiveFeedWriter(object):
-    def test_run(self):
+    def test_start(self):
         writer = ArchiveFeedWriter()
-        writer.run()
+        writer.start()
         f = os.path.join(g.output_directory, 'feed.xml')
         assert os.path.exists(f)
 
 
 class TestFileWriter(object):
-    def test_run(self):
+    def test_start(self):
         writer = FileWriter()
-        writer.run()
+        writer.start()
         f = os.path.join(g.output_directory, 'media/hold.txt')
         assert os.path.exists(f)
 
 
 class TestStaticWriter(object):
-    def test_run(self):
+    def test_start(self):
         writer = StaticWriter()
-        writer.run()
+        writer.start()
         f = os.path.join(g.static_directory, 'style.css')
         assert os.path.exists(f)

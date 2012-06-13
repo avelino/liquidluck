@@ -14,6 +14,7 @@ import datetime
 import hashlib
 import logging
 from jinja2 import Environment, FileSystemLoader
+import liquidluck
 from liquidluck.utils import import_object, to_unicode, utf8
 
 # blog settings
@@ -164,7 +165,12 @@ def load_jinja():
     #: default variables
     jinja.globals.update({
         'site': settings.site,
-        'now': datetime.datetime.now(),
+        'system': {
+            'name': 'Felix Felicis',
+            'version': liquidluck.__version__,
+            'homepage': liquidluck.__homepage__,
+            'time': datetime.datetime.now(),
+        },
         'content_url': content_url,
         'static_url': static_url(os.path.join(theme, 'static')),
     })
@@ -280,6 +286,10 @@ def static_url(base):
     def get_hsh(path):
         if path in _Cache:
             return _Cache[path]
+        path = os.path.join(base, path)
+        if not os.path.exists(path):
+            return ''
+
         with open(os.path.join(base, path)) as f:
             hsh = hashlib.md5(f.read()).hexdigest()
             _Cache[path] = hsh

@@ -31,3 +31,4 @@
 
 __version__ = '1.0'
 __author__ = 'Hsiaoming Yang <lepture@me.com>'
+__homepage__ = 'http://project.lepture.com/liquidluck/'

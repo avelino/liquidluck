@@ -16,13 +16,15 @@ except ImportError:
 
 
 import liquidluck
+from email.utils import parseaddr
+author, author_email = parseaddr(liquidluck.__author__)
 
 setup(
     name='liquidluck',
     version=liquidluck.__version__,
-    author=liquidluck.__author__,
-    author_email='lepture@me.com',
-    url='http://project.lepture.com/liquidluck/',
+    author=author,
+    author_email=author_email,
+    url=liquidluck.__homepage__,
     packages=['liquidluck', 'liquidluck.writers', 'liquidluck.readers'],
     description='A lightweight static weblog generator',
     license='BSD License',
