@@ -113,7 +113,6 @@ settings.template = None
 settings.theme = 'default'
 
 settings.permalink = '{{category}}/{{filename}}.html'
-settings.linktype = 'html'  # clean, slash, html
 settings.perpage = 30
 settings.feedcount = 20
 

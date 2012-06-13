@@ -52,7 +52,7 @@ def test_content_url():
     settings.site['url'] = url
     assert content_url('index.html') == (url + '/')
 
-    settings.linktype = 'html'
+    settings.permalink = '{{category}}/{{filename}}.html'
     assert content_url(10) == '%s/10.html' % url
     assert content_url('a') == '%s/a.html' % url
     assert content_url('a.html') == '%s/a.html' % url
@@ -62,7 +62,7 @@ def test_content_url():
     assert content_url('a/feed.xml') == '%s/a/feed.xml' % url
     assert content_url(10) == '%s/10.html' % url
 
-    settings.linktype = 'clean'
+    settings.permalink = '{{category}}/{{filename}}'
     assert content_url('a') == '%s/a' % url
     assert content_url('a.html') == '%s/a' % url
     assert content_url('a/') == '%s/a' % url
@@ -71,7 +71,7 @@ def test_content_url():
     assert content_url('a/feed.xml') == '%s/a/feed' % url
     assert content_url(10) == '%s/10' % url
 
-    settings.linktype = 'slash'
+    settings.permalink = '{{category}}/{{filename}}/'
     assert content_url('a') == '%s/a/' % url
     assert content_url('a.html') == '%s/a/' % url
     assert content_url('a/') == '%s/a/' % url

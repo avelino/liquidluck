@@ -169,7 +169,7 @@ def load_jinja():
             'name': 'Felix Felicis',
             'version': liquidluck.__version__,
             'homepage': liquidluck.__homepage__,
-            'time': datetime.datetime.now(),
+            'time': datetime.datetime.utcnow(),
         },
         'content_url': content_url,
         'static_url': static_url(os.path.join(theme, 'static')),
@@ -250,22 +250,14 @@ def content_url(base, *args):
     if url.endswith('/'):
         return url
 
-    if settings.linktype == 'html':
+    if settings.permalink.endswith('.html'):
         if url.endswith('.html'):
             return url
         if url.endswith('.xml'):
             return url
         return '%s.html' % url
 
-    if settings.linktype == 'clean':
-        if url.endswith('.html'):
-            url = fix_index(url)
-            return url.rstrip('.html')
-        if url.endswith('.xml'):
-            return url.rstrip('.xml')
-        return url
-
-    if settings.linktype == 'slash':
+    if settings.permalink.endswith('/'):
         if url.endswith('.html'):
             url = fix_index(url)
             url = url.rstrip('.html')
@@ -274,6 +266,11 @@ def content_url(base, *args):
 
         return '%s/' % url
 
+    if url.endswith('.html'):
+        url = fix_index(url)
+        return url.rstrip('.html')
+    if url.endswith('.xml'):
+        return url.rstrip('.xml')
     return url
 
 
