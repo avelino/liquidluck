@@ -71,7 +71,7 @@ class BaseWriter(object):
 
 class Pagination(object):
     title = None
-    url = None
+    root = ''
 
     def __init__(self, items, page, per_page):
         self.total_items = items
@@ -241,11 +241,11 @@ def content_url(base, *args):
             return url[:-10]
         return url
 
-    siteurl = settings.site['url'].rstrip('/')
     args = list(args)
     args.insert(0, base)
     args = map(lambda o: utf8(o).strip('/'), args)
-    url = '%s/%s' % (siteurl, '/'.join(args))
+    url = '/'.join(args).replace('//', '/')
+    url = '/' + url.lstrip('/')
     url = fix_index(url)
     if url.endswith('/'):
         return url
