@@ -5,41 +5,58 @@
         <title>{% block title %}{{site.name}}{% endblock %}</title>
         <script>if (top !== self) top.location = self.location;</script>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+        <link rel="stylesheet" href="{{static_url('typo.css')}}" />
         <link rel="stylesheet" href="{{static_url('style.css')}}" />
         <link rel="stylesheet" href="{{static_url('pygments.css')}}" />
+        {% if support.analytics %}
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', '{{support.analytics}}']);
+            _gaq.push(['_trackPageview']);
+            _gaq.push(['_trackPageLoadTime']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+        {% endif %}
         {% block afterstyle %}{% endblock %}
     </head>
     <body>
-        <div class="container">
-            <header id="header">
-                {% block header %}
-                <h1><a href="/">{{site.name}}</a></h1>
-                {% if site.description %}<p>{{site.description}}</p>{% endif %}
+        <header id="header">
+            {% block header %}
+            <h1 id="brand"><a href="/">{{site.name}}</a></h1>
+            {%- block nav %}
+            <nav id="nav" role="navigation">
+                {% for name, link in nav_items %}
+                <a href="{{link}}">{{name}}</a>
+                {% endfor %}
+            </nav>
+            {%- endblock %}
+            {% endblock %}
+        </header>
 
-                {%- block nav %}
-                <nav role="navigation">
-                    {% for name, link in nav_items %}
-                    <a href="{{link}}">{{name}}</a>
-                    {% endfor %}
-                </nav>
-                {%- endblock %}
-                {% endblock %}
-            </header>
-
-            <div id="main">
-            {%- block main %}
-            {% endblock -%}
+        <div id="main">
+            <div class="container">
+                {%- block main %}
+                {% endblock -%}
             </div>
-
-            <footer id="footer">
-                {%- block footer %}
-                <hr class="end" />
-                <p class="copyright">Powered by <a href="{{system.homepage}}">{{system.name}} {{system.version}}</a> Last generated at {{system.time|xmldatetime}}</p>
-                {%- endblock %}
-            </footer>
-
-            {% block beforejs %}{% endblock %}
-            {% block afterjs %}{% endblock %}
         </div>
+
+        <footer id="footer">
+            {%- block footer %}
+            <hr class="end" />
+            <nav class="elsewhere">
+                {% for name, link in social_items %}
+                <a href="{{link}}">{{name}}</a>
+                {% endfor %}
+            </nav>
+            <p class="copyright">Powered by <a href="{{system.homepage}}">{{system.name}} {{system.version}}</a> Last generated at {{system.time|xmldatetime}}</p>
+            {%- endblock %}
+        </footer>
+
+        {% block beforejs %}{% endblock %}
+        {% block afterjs %}{% endblock %}
     </body>
 </html>

@@ -2,6 +2,9 @@
 
 {% block main %}
 <div class="hentry">
-    <div class="entry-content">{{post.content}}</div>
+    <h1 class="entry-title">{{post.title}}</h1>
+    <div class="entry-content">
+        {{post.content}}
+    </div>
 </div>
 {% endblock %}

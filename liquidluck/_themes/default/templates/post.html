@@ -2,9 +2,27 @@
 
 {% block main %}
 <div class="hentry">
-    <h1>{{post.title}}</h1>
+    <h1 class="entry-title">{{post.title}}</h1>
+    <time class="updated" datetime="{{post.date|xmldatetime}}">{{post.date.strftime('%Y-%m-%d')}}</time>
     <div class="entry-content">
         {{post.content}}
     </div>
+    <div class="entry-tags">
+        {% for tag in post.tags %}
+        <a href="{{ content_url('tags', tag, 'index.html') }}">{{tag}}</a>
+        {% endfor %}
+    </div>
+    {% if support.disqus %}
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = '{{support.disqus}}';
+        var disqus_title = '{{post.title}}';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    {% endif %}
 </div>
 {% endblock %}

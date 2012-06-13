@@ -16,6 +16,11 @@ nav_items = [
     ('Home', '/'),
     ('About', '/about.html'),
 ]
+social_items = [
+    ('Twitter', 'https://twitter.com/lepture'),
+    ('GitHub', 'https://github.com/lepture'),
+    ('Dribbble', 'http://dribbble.com/lepture'),
+]
 
 support = {
     'disqus': None,
