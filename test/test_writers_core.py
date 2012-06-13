@@ -53,12 +53,14 @@ def test_linkmarker():
     assert linkmaker('index.html') == (url + '/')
 
     settings.linktype = 'html'
+    assert linkmaker(10) == '%s/10.html' % url
     assert linkmaker('a') == '%s/a.html' % url
     assert linkmaker('a.html') == '%s/a.html' % url
     assert linkmaker('a/') == '%s/a.html' % url
     assert linkmaker('a', 'b') == '%s/a/b.html' % url
     assert linkmaker('a/index.html') == '%s/a/' % url
     assert linkmaker('a/feed.xml') == '%s/a/feed.xml' % url
+    assert linkmaker(10) == '%s/10.html' % url
 
     settings.linktype = 'clean'
     assert linkmaker('a') == '%s/a' % url
@@ -67,6 +69,7 @@ def test_linkmarker():
     assert linkmaker('a', 'b') == '%s/a/b' % url
     assert linkmaker('a/index.html') == '%s/a/' % url
     assert linkmaker('a/feed.xml') == '%s/a/feed' % url
+    assert linkmaker(10) == '%s/10' % url
 
     settings.linktype = 'slash'
     assert linkmaker('a') == '%s/a/' % url
@@ -75,6 +78,7 @@ def test_linkmarker():
     assert linkmaker('a', 'b') == '%s/a/b/' % url
     assert linkmaker('a/index.html') == '%s/a/' % url
     assert linkmaker('a/feed.xml') == '%s/a/feed/' % url
+    assert linkmaker(10) == '%s/10/' % url
 
 
 class TestPostWriter(object):

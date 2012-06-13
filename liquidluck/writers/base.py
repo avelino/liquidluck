@@ -236,7 +236,7 @@ def linkmaker(base, *args):
     siteurl = settings.site['url'].rstrip('/')
     args = list(args)
     args.insert(0, base)
-    args = map(lambda o: str(o).strip('/'), args)
+    args = map(lambda o: utf8(o).strip('/'), args)
     url = '%s/%s' % (siteurl, '/'.join(args))
     url = fix_index(url)
     if url.endswith('/'):

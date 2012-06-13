@@ -18,6 +18,8 @@ def to_unicode(value):
 def utf8(value):
     if isinstance(value, (bytes, type(None), str)):
         return value
+    if isinstance(value, int):
+        return str(value)
     assert isinstance(value, unicode)
     return value.encode('utf-8')
 
