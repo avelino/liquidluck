@@ -11,6 +11,7 @@ Writer, write your content to html.
 import os
 import re
 import datetime
+import hashlib
 import logging
 from jinja2 import Environment, FileSystemLoader
 from liquidluck.utils import import_object, to_unicode, utf8
@@ -165,6 +166,7 @@ def load_jinja():
         'site': settings.site,
         'now': datetime.datetime.now(),
         'content_url': content_url,
+        'static_url': static_url(os.path.join(theme, 'static')),
     })
 
     #: load filters from settings
@@ -267,3 +269,25 @@ def content_url(base, *args):
         return '%s/' % url
 
     return url
+
+
+_Cache = {}
+
+
+def static_url(base):
+    global _Cache
+
+    def get_hsh(path):
+        if path in _Cache:
+            return _Cache[path]
+        with open(os.path.join(base, path)) as f:
+            hsh = hashlib.md5(f.read()).hexdigest()
+            _Cache[path] = hsh
+            return hsh
+
+    def create_url(path):
+        hsh = get_hsh(path)[:5]
+        url = '%s/%s?v=%s' % (settings.static_prefix.rstrip('/'), path, hsh)
+        return url
+
+    return create_url

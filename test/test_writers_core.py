@@ -3,7 +3,7 @@
 import os
 import datetime
 from liquidluck.writers.base import get_post_slug, slug_to_destination
-from liquidluck.writers.base import content_url
+from liquidluck.writers.base import content_url, static_url
 from liquidluck.writers.core import PostWriter, PageWriter
 from liquidluck.writers.core import ArchiveWriter, ArchiveFeedWriter
 from liquidluck.writers.core import FileWriter, StaticWriter
@@ -79,6 +79,12 @@ def test_content_url():
     assert content_url('a/index.html') == '%s/a/' % url
     assert content_url('a/feed.xml') == '%s/a/feed/' % url
     assert content_url(10) == '%s/10/' % url
+
+
+def test_static_url():
+    path = os.path.join(ROOT, 'source')
+    func = static_url(path)
+    func('settings.py')
 
 
 class TestPostWriter(object):
