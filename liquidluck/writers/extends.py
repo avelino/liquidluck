@@ -27,6 +27,7 @@ class YearWriter(BaseWriter):
         posts = self._posts[year]
         pagination = Pagination(posts, 1, self.perpage)
         pagination.title = year
+        pagination.root = str(year)
 
         dest = os.path.join(g.output_directory, str(year), 'index.html')
         self.render({'pagination': pagination}, self._template, dest)
@@ -40,6 +41,7 @@ class YearWriter(BaseWriter):
             )
             pagination = Pagination(posts, page, self.perpage)
             pagination.title = year
+            pagination.root = str(year)
             self.render({'pagination': pagination}, self._template, dest)
 
 
@@ -66,6 +68,7 @@ class TagWriter(BaseWriter):
         posts = self._posts[tag]
         pagination = Pagination(posts, 1, self.perpage)
         pagination.title = tag
+        pagination.root = 'tags/%s' % tag
 
         dest = os.path.join(g.output_directory, 'tags', tag, 'index.html')
         self.render({'pagination': pagination}, self._template, dest)
@@ -78,6 +81,7 @@ class TagWriter(BaseWriter):
                 g.output_directory, 'tags', tag, 'page/%s.html' % page)
             pagination = Pagination(posts, page, self.perpage)
             pagination.title = tag
+            pagination.root = 'tags/%s' % tag
             self.render({'pagination': pagination}, self._template, dest)
 
 
@@ -104,6 +108,7 @@ class CategoryWriter(BaseWriter):
         posts = self._posts[category]
         pagination = Pagination(posts, 1, self.perpage)
         pagination.title = category
+        pagination.root = category
 
         dest = os.path.join(g.output_directory, category, 'index.html')
         self.render({'pagination': pagination}, self._template, dest)
@@ -116,4 +121,5 @@ class CategoryWriter(BaseWriter):
                 g.output_directory, category, 'page/%s.html' % page)
             pagination = Pagination(posts, page, self.perpage)
             pagination.title = category
+            pagination.root = category
             self.render({'pagination': pagination}, self._template, dest)
