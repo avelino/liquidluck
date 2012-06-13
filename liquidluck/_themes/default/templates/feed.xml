@@ -14,7 +14,7 @@
         <published>{{ post.date|xmldatetime }}</published>
         <id>{{ post|postlink }}</id>
         {% for tag in post.tags -%}
-        <category scheme="{{ linkmaker('tag', tag) }}" term="{{tag}}" label="{{ tag|title }}" />
+        <category scheme="{{ content_url('tag', tag) }}" term="{{tag}}" label="{{ tag|title }}" />
         {% endfor -%}
         <content type="html" xml:base="{{ site.url }}" xml:lang="en">
             <![CDATA[ {{ post.content }} ]]>

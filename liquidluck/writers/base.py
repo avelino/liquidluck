@@ -164,7 +164,7 @@ def load_jinja():
     jinja.globals.update({
         'site': settings.site,
         'now': datetime.datetime.now(),
-        'linkmaker': linkmaker,
+        'content_url': content_url,
     })
 
     #: load filters from settings
@@ -227,7 +227,7 @@ def postlink(post):
     return '%s/%s' % (siteurl, slug)
 
 
-def linkmaker(base, *args):
+def content_url(base, *args):
     def fix_index(url):
         if url.endswith('/index.html'):
             return url[:-10]

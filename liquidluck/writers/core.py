@@ -4,7 +4,7 @@ import os
 import shutil
 from liquidluck.options import g, settings
 from liquidluck.utils import UnicodeDict, walk_dir
-from liquidluck.writers.base import BaseWriter, Pagination, linkmaker
+from liquidluck.writers.base import BaseWriter, Pagination, content_url
 from liquidluck.writers.base import get_post_slug, slug_to_destination
 
 
@@ -67,7 +67,7 @@ class ArchiveFeedWriter(BaseWriter):
         self.feed.url = settings.site['url']
 
         self._output = self.get('archive_feed_output', 'feed.xml')
-        self.feed.feedurl = linkmaker(self._output)
+        self.feed.feedurl = content_url(self._output)
 
     def start(self):
         self.feed.posts = g.public_posts[:settings.feedcount]

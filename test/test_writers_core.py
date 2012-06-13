@@ -3,7 +3,7 @@
 import os
 import datetime
 from liquidluck.writers.base import get_post_slug, slug_to_destination
-from liquidluck.writers.base import linkmaker
+from liquidluck.writers.base import content_url
 from liquidluck.writers.core import PostWriter, PageWriter
 from liquidluck.writers.core import ArchiveWriter, ArchiveFeedWriter
 from liquidluck.writers.core import FileWriter, StaticWriter
@@ -47,38 +47,38 @@ def test_slug_to_destination():
     assert slug_to_destination('a/b') == 'a/b.html'
 
 
-def test_linkmarker():
+def test_content_url():
     url = 'http://lepture.com'
     settings.site['url'] = url
-    assert linkmaker('index.html') == (url + '/')
+    assert content_url('index.html') == (url + '/')
 
     settings.linktype = 'html'
-    assert linkmaker(10) == '%s/10.html' % url
-    assert linkmaker('a') == '%s/a.html' % url
-    assert linkmaker('a.html') == '%s/a.html' % url
-    assert linkmaker('a/') == '%s/a.html' % url
-    assert linkmaker('a', 'b') == '%s/a/b.html' % url
-    assert linkmaker('a/index.html') == '%s/a/' % url
-    assert linkmaker('a/feed.xml') == '%s/a/feed.xml' % url
-    assert linkmaker(10) == '%s/10.html' % url
+    assert content_url(10) == '%s/10.html' % url
+    assert content_url('a') == '%s/a.html' % url
+    assert content_url('a.html') == '%s/a.html' % url
+    assert content_url('a/') == '%s/a.html' % url
+    assert content_url('a', 'b') == '%s/a/b.html' % url
+    assert content_url('a/index.html') == '%s/a/' % url
+    assert content_url('a/feed.xml') == '%s/a/feed.xml' % url
+    assert content_url(10) == '%s/10.html' % url
 
     settings.linktype = 'clean'
-    assert linkmaker('a') == '%s/a' % url
-    assert linkmaker('a.html') == '%s/a' % url
-    assert linkmaker('a/') == '%s/a' % url
-    assert linkmaker('a', 'b') == '%s/a/b' % url
-    assert linkmaker('a/index.html') == '%s/a/' % url
-    assert linkmaker('a/feed.xml') == '%s/a/feed' % url
-    assert linkmaker(10) == '%s/10' % url
+    assert content_url('a') == '%s/a' % url
+    assert content_url('a.html') == '%s/a' % url
+    assert content_url('a/') == '%s/a' % url
+    assert content_url('a', 'b') == '%s/a/b' % url
+    assert content_url('a/index.html') == '%s/a/' % url
+    assert content_url('a/feed.xml') == '%s/a/feed' % url
+    assert content_url(10) == '%s/10' % url
 
     settings.linktype = 'slash'
-    assert linkmaker('a') == '%s/a/' % url
-    assert linkmaker('a.html') == '%s/a/' % url
-    assert linkmaker('a/') == '%s/a/' % url
-    assert linkmaker('a', 'b') == '%s/a/b/' % url
-    assert linkmaker('a/index.html') == '%s/a/' % url
-    assert linkmaker('a/feed.xml') == '%s/a/feed/' % url
-    assert linkmaker(10) == '%s/10/' % url
+    assert content_url('a') == '%s/a/' % url
+    assert content_url('a.html') == '%s/a/' % url
+    assert content_url('a/') == '%s/a/' % url
+    assert content_url('a', 'b') == '%s/a/b/' % url
+    assert content_url('a/index.html') == '%s/a/' % url
+    assert content_url('a/feed.xml') == '%s/a/feed/' % url
+    assert content_url(10) == '%s/10/' % url
 
 
 class TestPostWriter(object):
