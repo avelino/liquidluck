@@ -22,8 +22,6 @@ def load_settings(path):
     g.static_directory = os.path.abspath(settings.static_output)
     logging.info('Load Settings Finished')
 
-    load_jinja()
-
 
 def load_posts(path):
     g.source_directory = path
@@ -65,6 +63,8 @@ def write_posts():
         if writer in alias:
             writer = alias[writer]
         writers.append(import_object(writer)())
+
+    load_jinja()
 
     for writer in writers:
         writer.run()

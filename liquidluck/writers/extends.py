@@ -17,6 +17,8 @@ class YearWriter(BaseWriter):
             else:
                 self._posts[post.date.year].append(post)
 
+        g.resource['year'] = self._posts
+
     def start(self):
         for year in self._posts:
             self._write_posts(year)
@@ -54,6 +56,8 @@ class TagWriter(BaseWriter):
                 else:
                     self._posts[tag].append(post)
 
+        g.resource['tag'] = self._posts
+
     def start(self):
         for tag in self._posts:
             self._write_posts(tag)
@@ -84,10 +88,13 @@ class CategoryWriter(BaseWriter):
         self._template = self.get('category_template', 'archive.html')
 
         for post in g.public_posts:
-            if post.category not in self._posts:
-                self._posts[post.category] = [post]
-            else:
-                self._posts[post.category].append(post)
+            if post.category:
+                if post.category not in self._posts:
+                    self._posts[post.category] = [post]
+                else:
+                    self._posts[post.category].append(post)
+
+        g.resource['category'] = self._posts
 
     def start(self):
         for category in self._posts:

@@ -178,6 +178,13 @@ def load_jinja():
         'postlink': postlink,
     })
 
+    #: load resource
+    g.resource['posts'] = g.public_posts
+    g.resource['pages'] = g.pure_pages
+    jinja.globals.update({
+        'resource': g.resource,
+    })
+
     g.jinja = jinja
     return jinja
 

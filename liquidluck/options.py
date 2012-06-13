@@ -150,6 +150,7 @@ g.source_directory = settings.source
 g.output_directory = settings.output
 g.static_directory = settings.static_output
 g.theme_directory = os.path.join(g.liquid_directory, '_themes', settings.theme)
+g.resource = {}
 g.public_posts = []
 g.secure_posts = []
 g.pure_files = []
