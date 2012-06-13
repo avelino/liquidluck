@@ -228,11 +228,20 @@ def postlink(post):
 
 
 def linkmaker(base, *args):
+    def fix_index(url):
+        if url.endswith('/index.html'):
+            return url[:-10]
+        return url
+
     siteurl = settings.site['url'].rstrip('/')
     args = list(args)
     args.insert(0, base)
     args = map(lambda o: str(o).strip('/'), args)
     url = '%s/%s' % (siteurl, '/'.join(args))
+    url = fix_index(url)
+    if url.endswith('/'):
+        return url
+
     if settings.linktype == 'html':
         if url.endswith('.html'):
             return url
@@ -242,6 +251,7 @@ def linkmaker(base, *args):
 
     if settings.linktype == 'clean':
         if url.endswith('.html'):
+            url = fix_index(url)
             return url.rstrip('.html')
         if url.endswith('.xml'):
             return url.rstrip('.xml')
@@ -249,8 +259,11 @@ def linkmaker(base, *args):
 
     if settings.linktype == 'slash':
         if url.endswith('.html'):
+            url = fix_index(url)
             url = url.rstrip('.html')
         if url.endswith('.xml'):
             url = url.rstrip('.xml')
 
         return '%s/' % url
+
+    return url

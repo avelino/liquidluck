@@ -3,6 +3,7 @@
 import os
 import datetime
 from liquidluck.writers.base import get_post_slug, slug_to_destination
+from liquidluck.writers.base import linkmaker
 from liquidluck.writers.core import PostWriter, PageWriter
 from liquidluck.writers.core import ArchiveWriter, ArchiveFeedWriter
 from liquidluck.writers.core import FileWriter, StaticWriter
@@ -46,6 +47,36 @@ def test_slug_to_destination():
     assert slug_to_destination('a/b') == 'a/b.html'
 
 
+def test_linkmarker():
+    url = 'http://lepture.com'
+    settings.site['url'] = url
+    assert linkmaker('index.html') == (url + '/')
+
+    settings.linktype = 'html'
+    assert linkmaker('a') == '%s/a.html' % url
+    assert linkmaker('a.html') == '%s/a.html' % url
+    assert linkmaker('a/') == '%s/a.html' % url
+    assert linkmaker('a', 'b') == '%s/a/b.html' % url
+    assert linkmaker('a/index.html') == '%s/a/' % url
+    assert linkmaker('a/feed.xml') == '%s/a/feed.xml' % url
+
+    settings.linktype = 'clean'
+    assert linkmaker('a') == '%s/a' % url
+    assert linkmaker('a.html') == '%s/a' % url
+    assert linkmaker('a/') == '%s/a' % url
+    assert linkmaker('a', 'b') == '%s/a/b' % url
+    assert linkmaker('a/index.html') == '%s/a/' % url
+    assert linkmaker('a/feed.xml') == '%s/a/feed' % url
+
+    settings.linktype = 'slash'
+    assert linkmaker('a') == '%s/a/' % url
+    assert linkmaker('a.html') == '%s/a/' % url
+    assert linkmaker('a/') == '%s/a/' % url
+    assert linkmaker('a', 'b') == '%s/a/b/' % url
+    assert linkmaker('a/index.html') == '%s/a/' % url
+    assert linkmaker('a/feed.xml') == '%s/a/feed/' % url
+
+
 class TestPostWriter(object):
     def test_run(self):
         #: if test_cli.py run first
@@ -83,9 +114,8 @@ class TestFileWriter(object):
     def test_run(self):
         writer = FileWriter()
         writer.run()
-        #: travis-ci bug
-        #f = os.path.join(g.output_directory, 'media/hold.txt')
-        #assert os.path.exists(f)
+        f = os.path.join(g.output_directory, 'media/hold.txt')
+        assert os.path.exists(f)
 
 
 class TestStaticWriter(object):
