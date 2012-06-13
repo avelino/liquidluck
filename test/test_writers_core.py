@@ -48,37 +48,35 @@ def test_slug_to_destination():
 
 
 def test_content_url():
-    url = 'http://lepture.com'
-    settings.site['url'] = url
-    assert content_url('index.html') == (url + '/')
+    assert content_url('index.html') == '/'
 
     settings.permalink = '{{category}}/{{filename}}.html'
-    assert content_url(10) == '%s/10.html' % url
-    assert content_url('a') == '%s/a.html' % url
-    assert content_url('a.html') == '%s/a.html' % url
-    assert content_url('a/') == '%s/a.html' % url
-    assert content_url('a', 'b') == '%s/a/b.html' % url
-    assert content_url('a/index.html') == '%s/a/' % url
-    assert content_url('a/feed.xml') == '%s/a/feed.xml' % url
-    assert content_url(10) == '%s/10.html' % url
+    assert content_url(10) == '/10.html'
+    assert content_url('a') == '/a.html'
+    assert content_url('a.html') == '/a.html'
+    assert content_url('a/') == '/a.html'
+    assert content_url('a', 'b') == '/a/b.html'
+    assert content_url('a/index.html') == '/a/'
+    assert content_url('a/feed.xml') == '/a/feed.xml'
+    assert content_url(10) == '/10.html'
 
     settings.permalink = '{{category}}/{{filename}}'
-    assert content_url('a') == '%s/a' % url
-    assert content_url('a.html') == '%s/a' % url
-    assert content_url('a/') == '%s/a' % url
-    assert content_url('a', 'b') == '%s/a/b' % url
-    assert content_url('a/index.html') == '%s/a/' % url
-    assert content_url('a/feed.xml') == '%s/a/feed' % url
-    assert content_url(10) == '%s/10' % url
+    assert content_url('a') == '/a'
+    assert content_url('a.html') == '/a'
+    assert content_url('a/') == '/a'
+    assert content_url('a', 'b') == '/a/b'
+    assert content_url('a/index.html') == '/a/'
+    assert content_url('a/feed.xml') == '/a/feed'
+    assert content_url(10) == '/10'
 
     settings.permalink = '{{category}}/{{filename}}/'
-    assert content_url('a') == '%s/a/' % url
-    assert content_url('a.html') == '%s/a/' % url
-    assert content_url('a/') == '%s/a/' % url
-    assert content_url('a', 'b') == '%s/a/b/' % url
-    assert content_url('a/index.html') == '%s/a/' % url
-    assert content_url('a/feed.xml') == '%s/a/feed/' % url
-    assert content_url(10) == '%s/10/' % url
+    assert content_url('a') == '/a/'
+    assert content_url('a.html') == '/a/'
+    assert content_url('a/') == '/a/'
+    assert content_url('a', 'b') == '/a/b/'
+    assert content_url('a/index.html') == '/a/'
+    assert content_url('a/feed.xml') == '/a/feed/'
+    assert content_url(10) == '/10/'
 
 
 def test_static_url():

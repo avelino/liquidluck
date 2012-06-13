@@ -288,7 +288,7 @@ def static_url(base):
             return ''
 
         with open(os.path.join(base, path)) as f:
-            hsh = hashlib.md5(f.read()).hexdigest()
+            hsh = hashlib.md5(utf8(f.read())).hexdigest()
             _Cache[path] = hsh
             return hsh
 
