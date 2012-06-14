@@ -19,7 +19,7 @@ class TestTagWriter(object):
     def test_start(self):
         writer = TagWriter()
         writer.start()
-        f = os.path.join(g.output_directory, 'tags/tag1/index.html')
+        f = os.path.join(g.output_directory, 'tag/tag1/index.html')
         assert os.path.exists(f)
 
 

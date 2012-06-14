@@ -68,9 +68,9 @@ class TagWriter(BaseWriter):
         posts = self._posts[tag]
         pagination = Pagination(posts, 1, self.perpage)
         pagination.title = tag
-        pagination.root = 'tags/%s' % tag
+        pagination.root = 'tag/%s' % tag
 
-        dest = os.path.join(g.output_directory, 'tags', tag, 'index.html')
+        dest = os.path.join(g.output_directory, 'tag', tag, 'index.html')
         self.render({'pagination': pagination}, self._template, dest)
 
         if pagination.pages < 2:
@@ -78,10 +78,10 @@ class TagWriter(BaseWriter):
 
         for page in range(1, pagination.pages + 1):
             dest = os.path.join(
-                g.output_directory, 'tags', tag, 'page/%s.html' % page)
+                g.output_directory, 'tag', tag, 'page/%s.html' % page)
             pagination = Pagination(posts, page, self.perpage)
             pagination.title = tag
-            pagination.root = 'tags/%s' % tag
+            pagination.root = 'tag/%s' % tag
             self.render({'pagination': pagination}, self._template, dest)
 
 

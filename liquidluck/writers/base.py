@@ -40,6 +40,7 @@ class BaseWriter(object):
         logging.info('%s Finished' % name)
 
     def write(self, content, destination):
+        destination = destination.lower()
         folder = os.path.split(destination)[0]
         # on Mac OSX, `folder` == `FOLDER`
         # then make sure destination is lowercase
@@ -246,7 +247,7 @@ def content_url(base, *args):
     args = map(lambda o: utf8(o).strip('/'), args)
     url = '/'.join(args).replace('//', '/')
     url = '/' + url.lstrip('/')
-    url = fix_index(url)
+    url = fix_index(url.lower())
     if url.endswith('/'):
         return url
 
