@@ -109,7 +109,6 @@ settings.source = 'content'
 settings.output = 'deploy'
 settings.static_output = 'deploy/static'
 settings.static_prefix = '/static/'
-settings.template = None
 settings.theme = 'default'
 
 settings.permalink = '{{category}}/{{filename}}.html'

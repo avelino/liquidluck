@@ -4,6 +4,7 @@
 import os
 import argparse
 import logging
+import liquidluck
 from liquidluck.options import enable_pretty_logging
 from liquidluck.options import g, settings
 from liquidluck.utils import import_object, walk_dir
@@ -76,20 +77,117 @@ def generate(config='settings.py'):
     write_posts()
 
 
+DEFAULT_SETTING = """
+permalink = '{{category}}/{{filename}}.html'
+perpage = 30
+feedcount = 20
+
+author = 'admin'  # choose a nickname
+authors = {
+    'admin': {
+        'name': 'Full Name',
+        'email': 'admin@example.com',
+        'website': 'http://example.com',
+    },
+}
+
+
+theme = 'default'
+# theme variables are defined by theme creator
+theme_variables = {}
+
+# readers = []
+# readers_variables = {}
+# writers = []
+# writers_variables = {}
+
+# template_variables = {}
+# template_filters = {}
+"""
+
+
+def create(config):
+    #: require site information
+    site_name = raw_input("Site Name: ")
+    site_url = raw_input("Site URL: ")
+    code = (
+        "#!/usr/bin/env python\n"
+        "# -*- coding: utf-8 -*-\n\n"
+        "site = {\n"
+        "    'name': '%s',\n"
+        "    'url': '%s',\n"
+        "}\n\n"
+    ) % (site_name, site_url)
+
+    source = raw_input("What is your directory for posts(content): ")
+    source = source or 'content'
+    code += "source = '%s'\n" % source
+    if not os.path.isdir(source):
+        os.makedirs(source)
+
+    output = raw_input("Where is your directory for output(deply): ")
+    output = output or 'deploy'
+    code += "output = '%s'\n" % output
+    code += "static_output = '%s/static'\n" % output
+    code += "static_prefix = '/static/'\n"
+    code += DEFAULT_SETTING
+
+    f = open(config, 'w')
+    f.write(code)
+    f.close()
+    print("\nYour site is created.\n\n\n")
+    print("Get help: http://liquidluck.readthedocs.org")
+
+
+def launch_help():
+    import webbrowser
+    webbrowser.open('http://liquidluck.readthedocs.org')
+
+
 def main():
     parser = argparse.ArgumentParser(prog='liquidluck')
 
-    parser.add_argument('command', nargs='?', default='build')
-    parser.add_argument('-f', '--config', default='settings.py')
-    parser.add_argument('-v', action='store_true', dest='detail_logging')
+    parser.add_argument('command', nargs='?', default='build',
+                        help='build | create | help')
+    parser.add_argument('-f', '--config', default='settings.py',
+                        help='setting file')
+    parser.add_argument(
+        '-v', '--verbose', action='store_true', dest='detail_logging',
+        help='show more logging'
+    )
+    parser.add_argument('--version', action='store_true',
+                        help='show version info')
 
     args = parser.parse_args()
+
+    if args.version:
+        print("Felix Felicis Version: %s" % liquidluck.__version__)
+        return
+
+    if args.command == 'help':
+        launch_help()
+        return
 
     g.detail_logging = args.detail_logging
     enable_pretty_logging()
 
+    if not os.path.exists(args.config):
+        answer = raw_input(
+            "Can't find your setting files, "
+            "would you like to create one?(Y/n) "
+        )
+        if answer.lower() == 'n':
+            return
+        create(args.config)
+        return
+
     if args.command == 'build':
         generate(args.config)
+        return
+
+    if args.command == 'init' or args.command == 'create':
+        create(args.config)
+        return
 
 
 if __name__ == '__main__':
