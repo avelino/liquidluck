@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 
+{% block title %}{{post.title}} - {{site.name}}{% endblock %}
+
 {% block main %}
 <div class="hentry">
     <h1 class="entry-title">{{post.title}}</h1>

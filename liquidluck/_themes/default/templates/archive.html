@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 
+{% block title %}{{pagination.title|title}} - {{site.name}}{% endblock %}
+
 {% block main %}
-<h1>{{pagination.title}}</h1>
+<h1>{{pagination.title|title}}</h1>
 
 <div class="entry-list">
     {% for item in pagination.items %}
