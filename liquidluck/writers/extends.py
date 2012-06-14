@@ -134,6 +134,10 @@ class CategoryFeedWriter(BaseWriter):
         self._template = self.get('category_feed_template', 'feed.xml')
         self._output = self.get('category_feed_output', 'feed.xml')
 
+        if 'category' in g.resource:
+            self._posts = g.resource['category']
+            return
+
         for post in g.public_posts:
             if post.category:
                 if post.category not in self._posts:
