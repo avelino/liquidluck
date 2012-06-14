@@ -1,15 +1,19 @@
-.. Felix Felicis documentation master file, created by
-   sphinx-quickstart on Mon May 14 19:16:09 2012.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to Felix Felicis's documentation!
 =========================================
+
+Felix Felicis (aka liquidluck) is a static generator.
+
 
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
+
+    install
+    getstart
+    config
+    design
+    theme
 
 
 
@@ -19,4 +23,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
