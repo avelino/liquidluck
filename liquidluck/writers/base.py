@@ -200,7 +200,7 @@ def load_jinja():
     #: default filters
     jinja.filters.update({
         'xmldatetime': lambda o: o.strftime('%Y-%m-%dT%H:%M:%SZ'),
-        'postlink': postlink,
+        'permalink': lambda o: '/' + get_post_slug(o, settings.permalink),
     })
 
     #: load resource
@@ -246,12 +246,6 @@ def slug_to_destination(slug, use_index=False):
     return slug.rstrip('/') + '.html'
 
 
-def postlink(post):
-    slug = get_post_slug(post, settings.permalink)
-    siteurl = settings.site['url'].rstrip('/')
-    return '%s/%s' % (siteurl, slug)
-
-
 def content_url(base, *args):
     def fix_index(url):
         if url.endswith('/index.html'):
@@ -259,10 +253,16 @@ def content_url(base, *args):
         return url
 
     args = list(args)
-    args.insert(0, base)
+    base = utf8(base)
+    if base.startswith('http://') or base.startswith('https://'):
+        prefix = '%s/' % base.rstrip('/')
+    else:
+        prefix = '/'
+        args.insert(0, base)
+
     args = map(lambda o: utf8(o).strip('/'), args)
     url = '/'.join(args).replace('//', '/')
-    url = '/' + url.lstrip('/')
+    url = prefix + url.lstrip('/')
     url = fix_index(url.lower())
     if url.endswith('/'):
         return url

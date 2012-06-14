@@ -3,7 +3,7 @@
 import os
 from liquidluck.utils import UnicodeDict
 from liquidluck.options import g, settings
-from liquidluck.writers.base import BaseWriter, Pagination, content_url
+from liquidluck.writers.base import BaseWriter, Pagination
 
 
 class YearWriter(BaseWriter):
@@ -143,8 +143,8 @@ class CategoryFeedWriter(BaseWriter):
     def start(self):
         for category in self._posts:
             feed = UnicodeDict()
-            feed.url = '%s/%s/' % (settings.site['url'], category)
-            feed.feedurl = content_url('%s/%s' % (category, self._output))
+            feed.url = '%s/index.html' % category
+            feed.feedurl = '%s/%s' % (category, self._output)
             feed.posts = self._posts[category][:settings.feedcount]
             dest = os.path.join(g.output_directory, category, self._output)
             self.render({'feed': feed}, self._template, dest)

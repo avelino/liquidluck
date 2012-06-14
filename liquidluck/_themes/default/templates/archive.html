@@ -7,7 +7,7 @@
     {% for item in pagination.items %}
     <div class="entry-item">
         <time class="updated" datetime="{{item.date|xmldatetime}}">{{item.date.strftime('%b, %d, %Y')}}</time>
-        <h3><a href="{{item|postlink}}">{{item.title}}</a></h3>
+        <h3><a href="{{item|permalink}}">{{item.title}}</a></h3>
     </div>
     {% endfor %}
 </div>

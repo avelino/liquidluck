@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>{{ site.name }}</title>
-    <link href="{{feed.feedurl}}" rel="self" />
-    <link href="{{feed.url}}" />
+    <link href="{{content_url(site.url, feed.feedurl)}}" rel="self" />
+    <link href="{{content_url(site.url, feed.url)}}" />
     <updated>{{system.time|xmldatetime}}</updated>
     <id>{{ site.url }}</id>
     {% for post in feed.posts -%}
     <entry>
         <title type="html"><![CDATA[{{ post.title }}]]></title>
         <author><name>{{ post.author }}</name>{%if post.author.website%}<uri>{{post.author.website}}</uri>{%endif%}</author>
-        <link href="{{ post|postlink }}"/>
+        <link href="{{ content_url(site.url, post|permalink) }}"/>
         <updated>{{ post.date|xmldatetime }}</updated>
         <published>{{ post.date|xmldatetime }}</published>
-        <id>{{ post|postlink }}</id>
+        <id>{{ content_url(site.url, post|permalink) }}</id>
         {% for tag in post.tags -%}
-        <category scheme="{{ content_url('tag', tag) }}" term="{{tag}}" label="{{ tag|title }}" />
+        <category scheme="{{ content_url(site.url, 'tag', tag) }}" term="{{tag}}" label="{{ tag|title }}" />
         {% endfor -%}
         <content type="html" xml:base="{{ site.url }}" xml:lang="en">
             <![CDATA[ {{ post.content }} ]]>
