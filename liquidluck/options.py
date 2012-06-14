@@ -121,16 +121,23 @@ settings.authors = {}
 
 settings.readers = [
     'liquidluck.readers.markdown.MarkdownReader',
+    'liquidluck.readers.restructuredtext.RestructuredTextReader',
 ]
 settings.readers_variables = {
 }
 
 settings.writers = [
     'liquidluck.writers.core.PostWriter',
+    'liquidluck.writers.core.PageWriter',
     'liquidluck.writers.core.ArchiveWriter',
     'liquidluck.writers.core.ArchiveFeedWriter',
     'liquidluck.writers.core.FileWriter',
     'liquidluck.writers.core.StaticWriter',
+
+    'liquidluck.writers.extends.YearWriter',
+    'liquidluck.writers.extends.TagWriter',
+    'liquidluck.writers.extends.CategoryWriter',
+    'liquidluck.writers.extends.CategoryFeedWriter',
 ]
 settings.writers_variables = {}
 
