@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 import os
-from liquidluck.options import g
-from liquidluck.writers.base import BaseWriter, Pagination
+from liquidluck.utils import UnicodeDict
+from liquidluck.options import g, settings
+from liquidluck.writers.base import BaseWriter, Pagination, content_url
 
 
 class YearWriter(BaseWriter):
@@ -123,3 +124,27 @@ class CategoryWriter(BaseWriter):
             pagination.title = category
             pagination.root = category
             self.render({'pagination': pagination}, self._template, dest)
+
+
+class CategoryFeedWriter(BaseWriter):
+    _posts = {}
+
+    def __init__(self):
+        self._template = self.get('category_feed_template', 'feed.xml')
+        self._output = self.get('category_feed_output', 'feed.xml')
+
+        for post in g.public_posts:
+            if post.category:
+                if post.category not in self._posts:
+                    self._posts[post.category] = [post]
+                else:
+                    self._posts[post.category].append(post)
+
+    def start(self):
+        for category in self._posts:
+            feed = UnicodeDict()
+            feed.url = '%s/%s/' % (settings.site['url'], category)
+            feed.feedurl = content_url('%s/%s' % (category, self._output))
+            feed.posts = self._posts[category][:settings.feedcount]
+            dest = os.path.join(g.output_directory, category, self._output)
+            self.render({'feed': feed}, self._template, dest)
