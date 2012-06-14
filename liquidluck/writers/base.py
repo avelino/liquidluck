@@ -149,32 +149,48 @@ def load_jinja():
         autoescape=False,  # blog don't need autoescape
         extensions=settings.template_extensions or [],
     )
+    #: initialize globals
+    jinja.globals = {}
 
-    #: load theme config
+    #: load template variables
+    jinja.globals.update({
+        'site': settings.site,
+        'template': settings.template_variables,
+    })
+
+    #: load theme variables
     config = {}
-    theme_config = os.path.join(theme, 'config.py')
+    theme_config = os.path.join(theme, 'settings.py')
     if os.path.exists(theme_config):
         execfile(theme_config, {}, config)
 
-    filters = config.pop('filters', {})
-    jinja.globals = config
-    jinja.filters.update(filters)
-
-    # load variables from settings
-    jinja.globals.update(settings.template_variables or {})
+    #: user can reset theme variables
+    config.update(settings.theme_variables)
+    jinja.globals.update({'theme': config})
 
     #: default variables
     jinja.globals.update({
-        'site': settings.site,
         'system': {
             'name': 'Felix Felicis',
             'version': liquidluck.__version__,
             'homepage': liquidluck.__homepage__,
             'time': datetime.datetime.utcnow(),
-        },
+        }
+    })
+
+    #: function helpers
+    jinja.globals.update({
         'content_url': content_url,
         'static_url': static_url(os.path.join(theme, 'static')),
     })
+
+    #: load theme filters
+    config = {}
+    theme_config = os.path.join(theme, 'filters.py')
+    if os.path.exists(theme_config):
+        execfile(theme_config, {}, config)
+
+    jinja.filters.update(config)
 
     #: load filters from settings
     filters = settings.template_filters or {}
@@ -284,11 +300,12 @@ def static_url(base):
     def get_hsh(path):
         if path in _Cache:
             return _Cache[path]
-        path = os.path.join(base, path)
-        if not os.path.exists(path):
+        abspath = os.path.join(base, path)
+        if not os.path.exists(abspath):
+            logging.warn('%s does not exists' % path)
             return ''
 
-        with open(os.path.join(base, path)) as f:
+        with open(abspath) as f:
             content = f.read()
             hsh = hashlib.md5(content.encode('utf-8')).hexdigest()
             _Cache[path] = hsh

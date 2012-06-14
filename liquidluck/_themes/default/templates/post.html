@@ -12,10 +12,10 @@
         <a href="{{ content_url('tag', tag, 'index.html') }}">{{tag}}</a>
         {% endfor %}
     </div>
-    {% if support.disqus %}
+    {% if theme.disqus %}
     <div id="disqus_thread"></div>
     <script type="text/javascript">
-        var disqus_shortname = '{{support.disqus}}';
+        var disqus_shortname = '{{theme.disqus}}';
         var disqus_title = '{{post.title}}';
         (function() {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

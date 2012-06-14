@@ -8,10 +8,18 @@
         <link rel="stylesheet" href="{{static_url('typo.css')}}" />
         <link rel="stylesheet" href="{{static_url('style.css')}}" />
         <link rel="stylesheet" href="{{static_url('pygments.css')}}" />
-        {% if support.analytics %}
+        {% if site.feed -%}
+        <link rel="alternate" type="application/rss+xml" href="{{site.feed}}" title="{{site.name}}" />
+        {% else %}
+        <link rel="alternate" type="application/rss+xml" href="{{ content_url('feed.xml') }}" title="{{site.name}}" />
+        {%- endif %}
+        <!--[if lt IE 9]>
+        <script type="text/javascript" src="{{ static_url('html5.js') }}"></script>
+        <![endif]-->
+        {% if theme.analytics %}
         <script type="text/javascript">
             var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', '{{support.analytics}}']);
+            _gaq.push(['_setAccount', '{{theme.analytics}}']);
             _gaq.push(['_trackPageview']);
             _gaq.push(['_trackPageLoadTime']);
             (function() {
@@ -29,7 +37,7 @@
             <h1 id="brand"><a href="/">{{site.name}}</a></h1>
             {%- block nav %}
             <nav id="nav" role="navigation">
-                {% for name, link in nav_items %}
+                {% for name, link in theme.navigation %}
                 <a href="{{link}}">{{name}}</a>
                 {% endfor %}
             </nav>
@@ -48,7 +56,7 @@
             {%- block footer %}
             <hr class="end" />
             <nav class="elsewhere">
-                {% for name, link in social_items %}
+                {% for name, link in theme.elsewhere %}
                 <a href="{{link}}">{{name}}</a>
                 {% endfor %}
             </nav>

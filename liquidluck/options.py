@@ -140,6 +140,7 @@ settings.site = {
 }
 settings.template_variables = {}
 settings.template_filters = {}
+settings.theme_variables = {}
 
 
 #: settings for liquidluck
