@@ -42,10 +42,11 @@ class ArchiveWriter(BaseWriter):
     def __init__(self):
         self._template = self.get('archive_template', 'archive.html')
         self._output = self.get('archive_output', 'index.html')
+        self._title = self.get('archive_title', 'Archive')
 
     def start(self):
         pagination = Pagination(g.public_posts, 1, self.perpage)
-        pagination.title = 'Archive'
+        pagination.title = self._title
 
         dest = os.path.join(g.output_directory, self._output)
         self.render({'pagination': pagination}, self._template, dest)
@@ -55,7 +56,7 @@ class ArchiveWriter(BaseWriter):
 
         for page in range(1, pagination.pages + 1):
             pagination = Pagination(g.public_posts, page, self.perpage)
-            pagination.title = 'Archive'
+            pagination.title = self._title
             dest = os.path.join(g.output_directory, 'page/%s.html' % page)
             self.render({'pagination': pagination}, self._template, dest)
 

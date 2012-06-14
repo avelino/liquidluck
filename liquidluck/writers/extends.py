@@ -91,6 +91,7 @@ class CategoryWriter(BaseWriter):
 
     def __init__(self):
         self._template = self.get('category_template', 'archive.html')
+        self._title = self.get('category_title', {})
 
         for post in g.public_posts:
             if post.category:
@@ -108,7 +109,7 @@ class CategoryWriter(BaseWriter):
     def _write_posts(self, category):
         posts = self._posts[category]
         pagination = Pagination(posts, 1, self.perpage)
-        pagination.title = category
+        pagination.title = self._title.get(category, category)
         pagination.root = category
 
         dest = os.path.join(g.output_directory, category, 'index.html')
@@ -121,7 +122,7 @@ class CategoryWriter(BaseWriter):
             dest = os.path.join(
                 g.output_directory, category, 'page/%s.html' % page)
             pagination = Pagination(posts, page, self.perpage)
-            pagination.title = category
+            pagination.title = self._title.get(category, category)
             pagination.root = category
             self.render({'pagination': pagination}, self._template, dest)
 
