@@ -1,5 +1,5 @@
-Welcome to Felix Felicis's documentation!
-=========================================
+Welcome to Felix Felicis
+========================
 
 Felix Felicis (aka liquidluck) is a static generator.
 
@@ -14,12 +14,3 @@ Contents:
     config
     design
     theme
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
