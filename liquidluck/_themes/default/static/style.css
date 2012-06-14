@@ -1,10 +1,3 @@
-a {
-    color: #D14;
-    font-weight: normal;
-}
-a:hover {
-    color: #D10;
-}
 #header {
     position: relative;
     background: #fff;
@@ -48,10 +41,12 @@ a:hover {
 }
 #nav a {
     font-weight: bold;
+    font-family: "Helvetica Neue", "Helvetica", arial, sans-serif;
     margin-right: 6px;
     padding: 6px 10px;
     text-decoration: none;
     border-radius: 4px;
+    color: #D14;
 }
 #nav a:hover {
     background: rgba(0,0,0,0.1);
@@ -91,10 +86,15 @@ a:hover {
     margin: 20px 0;
 }
 .entry-tags a {
+    background: #ccc;
+    color: #fff;
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 3px;
     margin-right: 14px;
 }
-.entry-tags a:before {
-    content: "#";
+.entry-tags a:hover {
+    background: #ddd;
 }
 .entry-item {
     line-height: 40px;
@@ -122,6 +122,8 @@ a:hover {
     position: relative;
     margin-top: 40px;
     text-align: center;
+    text-transform: uppercase;
+    font: normal 12px "Helvetica", arial, sans-serif;
     color: #9f9f99;
 }
 .pagination .prev {

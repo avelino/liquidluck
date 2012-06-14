@@ -18,6 +18,13 @@ h2 {
 h3 {
     margin: 20px 0 5px;
 }
+h1 a, h2 a, h3 a {
+    font-weight: normal;
+}
+h1 a:hover, h2 a:hover, h3 a:hover {
+    text-decoration: none;
+}
+
 
 /* block level */
 blockquote {
@@ -90,7 +97,7 @@ strong {
 }
 
 /* code */
-pre, code{
+pre, code, tt {
     font: 12px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
 }
 pre {
@@ -109,22 +116,22 @@ pre code {
     background-color: #eee;
     border: none;
 }
-code {
+code, tt {
     font-size:12px;
     background-color:#f8f8ff;
-    color:#444;
+    color:#d14;
     padding:0 .2em;
     border:1px solid #dedede;
 }
 
 /* form */
-textarea {
+textarea, input {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
     padding: 5px 8px;
 }
-textarea:focus {
+textarea:focus, input:focus {
     border-color: #999;
     outline: 0 none;
 }
