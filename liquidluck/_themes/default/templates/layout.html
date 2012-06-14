@@ -52,7 +52,10 @@
                 <a href="{{link}}">{{name}}</a>
                 {% endfor %}
             </nav>
-            <p class="copyright">Powered by <a href="{{system.homepage}}">{{system.name}} {{system.version}}</a> Last generated at {{system.time|xmldatetime}}</p>
+            <p class="copyright">
+            Powered by <a href="{{system.homepage}}">{{system.name}}</a> {{system.version}}
+            <span>Last generated at {{system.time|xmldatetime}}</span>
+            </p>
             {%- endblock %}
         </footer>
 

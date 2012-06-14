@@ -113,6 +113,7 @@ pre {
 }
 pre code {
     padding:0;
+    color: #444;
     background-color: #eee;
     border: none;
 }
