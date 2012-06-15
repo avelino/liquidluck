@@ -98,6 +98,9 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
         return highlight(text, lexer, formatter)
 
     def autolink(self, link, is_email):
+        if is_email:
+            return '<a href="mailto:%(link)s">%(link)s</a>' % {'link': link}
+
         title = link.replace('http://', '').replace('https://', '')
 
         #: youtube.com
@@ -136,9 +139,6 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
                      '%(title)s</a></div>'
                     ) % {'id': match.group(1), 'link': link, 'title': title}
             return value
-        if is_email:
-            return '<a href="mailto:%(link)s">%(link)s</a>' % {'link': link}
-
         return '<a href="%s">%s</a>' % (link, title)
 
 

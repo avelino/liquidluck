@@ -80,14 +80,19 @@ img {
     max-width: 100%;
 }
 a {
-    color: #556270;
+    color: #000;
     text-decoration: none;
     overflow: hidden;
     word-wrap: break-word;
+    border-bottom: 1px dotted #ddd;
+    border-bottom: 1px dotted rgba(0,0,0,0.2);
 }
 a:hover {
-    color: #4183C4;
-    text-decoration: underline;
+    color: #d14;
+    cursor: pointer;
+    -webkit-transition: color .5s ease;
+    -moz-transition: color .5s ease;
+    transition: color .5s ease;
 }
 a img {
     vertical-align: middle;

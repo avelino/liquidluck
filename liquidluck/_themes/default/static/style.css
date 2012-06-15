@@ -1,3 +1,7 @@
+::selection {
+    background: rgba(240,17,68,0.8);
+    color: #fff;
+}
 #header {
     position: relative;
     background: #fff;
@@ -24,7 +28,7 @@
 #brand a {
     color: #dddfdf;
     color: rgba(0,0,0,0.1);
-    text-decoration: none;
+    border-bottom: 0 none;
 }
 #brand a:hover {
     color: #dadada;
@@ -40,13 +44,13 @@
     z-index: 9;
 }
 #nav a {
+    color: #d14;
     font-weight: bold;
     font-family: "Helvetica Neue", "Helvetica", arial, sans-serif;
     margin-right: 6px;
     padding: 6px 10px;
-    text-decoration: none;
     border-radius: 4px;
-    color: #D14;
+    border-bottom: 0 none;
 }
 #nav a:hover {
     background: rgba(0,0,0,0.1);
@@ -80,10 +84,19 @@
 #footer .copyright a {
     color: #bbb;
 }
+#footer .copyright a:hover {
+    color: #d14;
+}
 /* article */
+.hentry {
+    overflow: hidden;
+}
 .updated, .updated a {
     color: #999;
     font-size: 14px;
+}
+.updated a:hover {
+    color: #d14;
 }
 .entry-tags {
     margin: 20px 0;
@@ -91,7 +104,7 @@
 .entry-tags a {
     background: #ccc;
     color: #fff;
-    text-decoration: none;
+    border-bottom: 0 none;
     padding: 4px 10px;
     border-radius: 3px;
     margin-right: 14px;
