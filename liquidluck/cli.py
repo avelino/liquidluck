@@ -144,6 +144,49 @@ def launch_help():
     webbrowser.open('http://liquidluck.readthedocs.org')
 
 
+def __load_themes():
+    import tempfile
+    f = os.path.join(tempfile.gettempdir(), 'liquidluck.json')
+    if os.path.exists(f):
+        content = open(f).read()
+    else:
+        import urllib
+        content = urllib.open(
+            'http://project.lepture.com/liquidluck/themes.json'
+        ).read()
+        open(f, 'w').write(content)
+
+    try:
+        import json
+        json_decode = json.loads
+    except ImportError:
+        import simplejson
+        json_decode = simplejson.loads
+
+    themes = json_decode(content)
+    return themes
+
+
+def search(keyword=None):
+    #TODO
+    themes = __load_themes()
+    if not keyword:
+        return themes
+    if keyword not in themes:
+        return None
+    return themes[keyword]
+
+
+def install(keyword):
+    #TODO
+    themes = __load_themes()
+    if keyword not in themes:
+        print("can't find theme %s" % keyword)
+        return
+    theme = themes[keyword]
+    return theme
+
+
 def main():
     parser = argparse.ArgumentParser(prog='liquidluck')
 
