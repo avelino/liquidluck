@@ -55,13 +55,22 @@
         <footer id="footer">
             {%- block footer %}
             <hr class="end" />
+            {% if theme.elsewhere %}
             <nav class="elsewhere">
                 {% for name, link in theme.elsewhere %}
                 <a href="{{link}}">{{name}}</a>
                 {% endfor %}
             </nav>
+            {% endif %}
             <p class="copyright">
-            Powered by <a href="{{system.homepage}}">{{system.name}}</a> {{system.version}}
+            <span class="software">
+                Powered by <a href="{{system.homepage}}">{{system.name}}</a> {{system.version}},
+            </span>
+            <span class="theme">
+                Theme {{theme.name}} {{theme.version}} by <a href="{{theme.author.website}}">{{theme.author.name}}</a></span>
+            </span>
+            </p>
+            <p class="system-info">
             <span>Last generated at {{system.time|xmldatetime}}</span>
             </p>
             {%- endblock %}

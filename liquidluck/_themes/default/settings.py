@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
 name = 'moment'
-website = 'http://project.lepture.com/liquidluck/'
 version = '0.1'
+author = {
+    'name': 'Hsiaoming Yang',
+    'website': 'http://lepture.com',
+}
 
-show_summary = False
 
 navigation = [
     ('Home', '/'),

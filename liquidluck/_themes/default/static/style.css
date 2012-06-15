@@ -56,6 +56,7 @@
     clear: both;
 }
 #footer {
+    padding: 20px;
     max-width: 560px;
     *width: 560px;
     margin: 0 auto 30px;
@@ -66,11 +67,13 @@
 }
 #footer .elsewhere {
     text-align: center;
+    margin-bottom: 40px;
 }
 #footer .elsewhere a {
     margin: 0 10px;
 }
-#footer .copyright {
+#footer .copyright, #footer .system-info {
+    margin: 0;
     color: #ccc;
     font-size: 12px;
 }
