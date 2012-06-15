@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Felix Felicis</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+        <meta name="author" content="lepture" />
+        <link rel="alternate" type="application/rss+xml" href="http://feeds.lepture.com/lepture" title="Website Feed" />
+        <link rel="stylesheet" href="http://python-assets.b0.upaiyun.com/project/typo.css" />
+        <link rel="stylesheet" href="http://python-assets.b0.upaiyun.com/project/pygments.css" />
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-21475122-1']);
+            _gaq.push(['_trackPageview']);
+            _gaq.push(['_trackPageLoadTime']);
+            _gaq.push(['_setCustomVar', 1, 'Project', 'Felix Felicis', 2]);
+            (function() {
+             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+             })();
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Felix Felicis</h1>
+
+<p>Felix Felicis is a magical potion, also known as liquidluck.
+It was first introduced in Harry Porter, and this is where the name comes.</p>
+
+<p>Felix Felicis (aka liquidluck) is a simple lightweight static blog
+generator written in Python.</p>
+
+<ul>
+<li><a href="http://liquidluck.readthedocs.org">Documentation</a></li>
+</ul>
+
+<p><strong>There are so many static blog generators, why create a new one?</strong></p>
+
+<p>The main design pattern of Felix Felicis:</p>
+
+<ol>
+<li>We don&#39;t create any syntax that is only available in Felix Felicis</li>
+<li>Document should always be valid, it will be pretty even without Felix Felicis</li>
+</ol>
+
+<h2>Post Style Overview</h2>
+
+<p><strong>A post in Markdown</strong></p>
+
+<pre><code># Hello World
+
+- date: 2012-06-11
+- tags: python, javascript
+
+-------
+
+Hello World in Python
+
+```python
+def hello(name=&quot;World&quot;):
+    print &quot;Hello %s&quot; % name
+```
+
+Hello World in JavaScript
+
+```javascript
+function hello(name) {
+    alert('Hello ' + name);
+}
+```</code></pre>
+
+<p><strong>A post in reStructuredText</strong></p>
+
+<pre><code>Hello World
+============
+
+:date: 2012-06-11
+:tags: python, javascript
+
+Hello World in Python::
+
+    def hello(name=&quot;World&quot;):
+        print &quot;Hello %s&quot; % name
+
+Hello World in JavaScript:
+
+.. sourcecode:: javascript
+
+    function hello(name) {
+        alert('Hello ' + name);
+    }</code></pre>
+
+<p>Both of these two posts are valid in their markup language, even without Felix Felicis they should be displayed well.</p>
+
+<p>And in this case, your documents will always be yours, not tied to Felix Felicis.</p>
+
+<h2>Compatibility</h2>
+
+<ul>
+<li><p>Markup:</p>
+
+<ul>
+<li>reStructuredText</li>
+<li>markdown</li>
+</ul></li>
+<li><p>Python:</p>
+
+<ul>
+<li>2.6</li>
+<li>2.7</li>
+<li>3.2</li>
+</ul></li>
+</ul>
+
+        </div>
+        <hr class="end" />
+        <div id="footer">
+            <a href="https://github.com/lepture">GitHub</a>
+            <a href="http://lepture.com">Website</a>
+            <a href="https://twitter.com/lepture">Twitter</a>
+        </div>
+        <a id="github" href="https://github.com/lepture/liquidluck" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0; z-index:999" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+    </body>
+</html>
+
