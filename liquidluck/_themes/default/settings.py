@@ -4,6 +4,8 @@ name = 'moment'
 website = 'http://project.lepture.com/liquidluck/'
 version = '0.1'
 
+show_summary = False
+
 navigation = [
     ('Home', '/'),
     ('About', '/about.html'),

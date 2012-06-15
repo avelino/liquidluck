@@ -4,7 +4,7 @@
     <link href="{{content_url(site.url, feed.feedurl)}}" rel="self" />
     <link href="{{content_url(site.url, feed.url)}}" />
     <updated>{{system.time|xmldatetime}}</updated>
-    <id>{{ site.url }}</id>
+    <id>{{ content_url(site.url, feed.url) }}</id>
     {% for post in feed.posts -%}
     <entry>
         <title type="html"><![CDATA[{{ post.title }}]]></title>
