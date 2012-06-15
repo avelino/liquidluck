@@ -149,7 +149,7 @@ def main():
 
     parser.add_argument('command', nargs='?', default='build',
                         help='build | create | help')
-    parser.add_argument('-f', '--config', default='settings.py',
+    parser.add_argument('-s', '--settings', default='settings.py',
                         help='setting file')
     parser.add_argument(
         '-v', '--verbose', action='store_true', dest='detail_logging',

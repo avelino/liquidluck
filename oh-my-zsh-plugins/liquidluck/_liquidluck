@@ -1,0 +1,37 @@
+#compdef liquidluck
+#autoload
+
+# pip zsh completion, based on homebrew completion
+
+
+local -a _1st_arguments
+_1st_arguments=(
+  'build:Build the website'
+  'create:Create a settings file'
+  'help:Open documentation in browser'
+)
+
+local expl
+local -a pkgs installed_pkgs
+
+_arguments \
+  '(--version)--version[show version number of program and exit]' \
+  '(-s --settings)'{-s,--settings}'[specify a setting file]' \
+  '(-h --help)'{-h,--help}'[show help]' \
+  '(-v --verbose)'{-v,--verbose}'[give more output]' \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "liquidluck subcommand" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  build)
+    _arguments \
+      '(-s --settings)'{-s,--settings}'[specify a setting file]' \
+      '(-v --verbose)'{-v,--verbose}'[give more output]' ;;
+  create)
+    _arguments \
+      '(-s --settings)'{-s,--settings}'[specify a setting file]' ;;
+esac
