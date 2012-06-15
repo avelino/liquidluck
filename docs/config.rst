@@ -42,19 +42,17 @@ A demo setting file (settings.py)::
     }
 
     #: active readers
-    # readers = ['markdown', 'rst']
+    # readers = {}
 
     #: active writers
-    # writers = ['post', 'file', 'archive']
+    # writers = {}
     writers_variables = {
         'archive_output': 'archive.html',
     }
 
-    template_variables = {
-    }
+    # template_variables = {}
 
-    template_filters = {
-    }
+    # template_filters = {}
 
     theme_variables = {
         'disqus': 'lepture',
