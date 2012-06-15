@@ -17,7 +17,11 @@ def load_settings(path):
     execfile(path, {}, config)
 
     for key in config:
-        settings[key] = config[key]
+        setting = config[key]
+        if isinstance(setting, dict):
+            settings[key].update(setting)
+        else:
+            settings[key] = setting
 
     g.output_directory = os.path.abspath(settings.output)
     g.static_directory = os.path.abspath(settings.static_output)
@@ -26,12 +30,11 @@ def load_settings(path):
 
 def load_posts(path):
     g.source_directory = path
-    from liquidluck.readers import alias
     readers = []
-    for reader in settings.readers:
-        if reader in alias:
-            reader = alias[reader]
-        readers.append(import_object(reader))
+    for name in settings.readers:
+        reader = settings.readers[name]
+        if reader:
+            readers.append(import_object(reader))
 
     def detect_reader(filepath):
         for Reader in readers:
@@ -58,12 +61,11 @@ def load_posts(path):
 
 
 def write_posts():
-    from liquidluck.writers import alias
     writers = []
-    for writer in settings.writers:
-        if writer in alias:
-            writer = alias[writer]
-        writers.append(import_object(writer)())
+    for name in settings.writers:
+        writer = settings.writers[name]
+        if writer:
+            writers.append(import_object(writer)())
 
     load_jinja()
 
@@ -96,9 +98,9 @@ theme = 'default'
 # theme variables are defined by theme creator
 theme_variables = {}
 
-# readers = []
+# readers = {}
 # readers_variables = {}
-# writers = []
+# writers = {}
 # writers_variables = {}
 
 # template_variables = {}
@@ -214,6 +216,10 @@ def main():
     g.detail_logging = args.detail_logging
     enable_pretty_logging()
 
+    if args.command == 'init' or args.command == 'create':
+        create(args.settings)
+        return
+
     if not os.path.exists(args.settings):
         answer = raw_input(
             "Can't find your setting files, "
@@ -227,11 +233,6 @@ def main():
     if args.command == 'build':
         generate(args.settings)
         return
-
-    if args.command == 'init' or args.command == 'create':
-        create(args.settings)
-        return
-
 
 if __name__ == '__main__':
     main()

@@ -118,26 +118,25 @@ settings.feedcount = 20
 settings.author = 'admin'
 settings.authors = {}
 
-settings.readers = [
-    'liquidluck.readers.markdown.MarkdownReader',
-    'liquidluck.readers.restructuredtext.RestructuredTextReader',
-]
-settings.readers_variables = {
+settings.readers = {
+    'markdown': 'liquidluck.readers.markdown.MarkdownReader',
+    'rst': 'liquidluck.readers.restructuredtext.RestructuredTextReader',
 }
+settings.readers_variables = {}
 
-settings.writers = [
-    'liquidluck.writers.core.PostWriter',
-    'liquidluck.writers.core.PageWriter',
-    'liquidluck.writers.core.ArchiveWriter',
-    'liquidluck.writers.core.ArchiveFeedWriter',
-    'liquidluck.writers.core.FileWriter',
-    'liquidluck.writers.core.StaticWriter',
+settings.writers = {
+    'post': 'liquidluck.writers.core.PostWriter',
+    'page': 'liquidluck.writers.core.PageWriter',
+    'archive': 'liquidluck.writers.core.ArchiveWriter',
+    'archive_feed': 'liquidluck.writers.core.ArchiveFeedWriter',
+    'file': 'liquidluck.writers.core.FileWriter',
+    'static': 'liquidluck.writers.core.StaticWriter',
 
-    'liquidluck.writers.extends.YearWriter',
-    'liquidluck.writers.extends.TagWriter',
-    'liquidluck.writers.extends.CategoryWriter',
-    'liquidluck.writers.extends.CategoryFeedWriter',
-]
+    'year': 'liquidluck.writers.extends.YearWriter',
+    'tag': 'liquidluck.writers.extends.TagWriter',
+    'category': 'liquidluck.writers.extends.CategoryWriter',
+    'category_feed': 'liquidluck.writers.extends.CategoryFeedWriter',
+}
 settings.writers_variables = {}
 
 settings.site = {
