@@ -5,7 +5,9 @@
 {% block main %}
 <div class="hentry">
     <h1 class="entry-title">{{post.title}}</h1>
-    <time class="updated" datetime="{{post.date|xmldatetime}}">{{post.date.strftime('%Y-%m-%d')}}</time>
+    <time class="updated" datetime="{{post.date|xmldatetime}}">
+        <a href="{{ content_url(post.date.year, 'index.html') }}">{{post.date.strftime('%Y-%m-%d')}}</a>
+        </time>
     <div class="entry-content">
         {{post.content}}
     </div>

@@ -78,7 +78,7 @@
     color: #bbb;
 }
 /* article */
-.updated {
+.updated, .updated a {
     color: #999;
     font-size: 14px;
 }
@@ -117,6 +117,11 @@
 .entry-item h3 {
     float: left;
     margin: 0;
+}
+@media (max-width: 400px) {
+    .entry-item .updated, .entry-item h3 {
+        float: none;
+    }
 }
 .pagination {
     position: relative;
