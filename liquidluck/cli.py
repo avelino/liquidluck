@@ -111,12 +111,12 @@ def create(config):
     site_name = raw_input("Site Name: ")
     site_url = raw_input("Site URL: ")
     code = (
-        "#!/usr/bin/env python\n"
-        "# -*- coding: utf-8 -*-\n\n"
+        '#!/usr/bin/env python\n'
+        '# -*- coding: utf-8 -*-\n\n'
         "site = {\n"
-        "    'name': '%s',\n"
-        "    'url': '%s',\n"
-        "}\n\n"
+        '    "name": "%s",\n'
+        '    "url": "%s",\n'
+        '}\n\n'
     ) % (site_name, site_url)
 
     source = raw_input("What is your directory for posts(content): ")
