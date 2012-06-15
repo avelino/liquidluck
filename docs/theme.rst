@@ -43,3 +43,11 @@ If you are creating a theme, you can define some variables for your theme.
 
 Filters
 ---------
+
+
+Contributors
+-------------
+
+If you have designed a theme, you can submit it to the `Theme Gallery`_
+
+.. _`Theme Gallery`: https://github.com/lepture/liquidluck/wiki/Themes

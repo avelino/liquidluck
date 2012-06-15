@@ -107,7 +107,7 @@ class _LogFormatter(logging.Formatter):
 settings = _Options()
 settings.source = 'content'
 settings.output = 'deploy'
-settings.static_output = 'deploy/static'
+settings.static_output = '%s/static' % settings.output
 settings.static_prefix = '/static/'
 settings.theme = 'default'
 

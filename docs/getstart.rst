@@ -74,8 +74,28 @@ Write more
 Write more posts to test for yourself.
 
 
+.. _markup:
+
 Markup
 ---------
 
 Felix Felicis (liquidluck) supports markup of Markdown and reStructuredText.
 It is suggested that you write in Markdown, it's easier.
+
+There are three parts in each post:
+
++ title -- ``Hello World`` in the example
++ meta -- ``date``, ``category``, ``tags`` in the example
++ content -- everything below the first ``-------``
+
+Metadata that Felix Felicis supports navtively:
+
++ date
++ public  -- default is ``true``, if set to ``false``, this post won't be included in archive
++ tags -- tags are seprated by comma
++ category
++ summary
++ author  -- see :ref:`multi-authors` for detail
++ template  -- see :ref:`template` for detail
+
+which means you can access them in template with a shortcut, for example: ``{{psot.tags}}``.

@@ -41,6 +41,7 @@ class BaseWriter(object):
 
     def write(self, content, destination):
         destination = destination.lower()
+        destination = destination.replace(' ', '-')
         folder = os.path.split(destination)[0]
         # on Mac OSX, `folder` == `FOLDER`
         # then make sure destination is lowercase
