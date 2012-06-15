@@ -171,22 +171,22 @@ def main():
     g.detail_logging = args.detail_logging
     enable_pretty_logging()
 
-    if not os.path.exists(args.config):
+    if not os.path.exists(args.settings):
         answer = raw_input(
             "Can't find your setting files, "
             "would you like to create one?(Y/n) "
         )
         if answer.lower() == 'n':
             return
-        create(args.config)
+        create(args.settings)
         return
 
     if args.command == 'build':
-        generate(args.config)
+        generate(args.settings)
         return
 
     if args.command == 'init' or args.command == 'create':
-        create(args.config)
+        create(args.settings)
         return
 
 
