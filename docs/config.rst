@@ -10,6 +10,9 @@ but you can specify another file with::
     $ liquidluck -s another-settings.py
 
 
+Overview
+----------
+
 A demo setting file (settings.py)::
 
     # -*- coding: utf-8 -*-

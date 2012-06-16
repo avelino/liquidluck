@@ -99,3 +99,9 @@ Metadata that Felix Felicis supports navtively:
 + template  -- see :ref:`template` for detail
 
 which means you can access them in template with a shortcut, for example: ``{{psot.tags}}``.
+
+
+Post, Page and File
+----------------------
+
+Page is the post without date.
