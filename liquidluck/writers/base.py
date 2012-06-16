@@ -233,7 +233,7 @@ def get_post_slug(post, slug_format):
         return to_unicode(value)
 
     slug = regex.sub(replace, slug_format)
-    slug = slug.lstrip('/').replace('//', '/')
+    slug = slug.lstrip('/').replace('//', '/').repace(' ', '-')
     return slug
 
 
@@ -254,17 +254,19 @@ def content_url(base, *args):
         return url
 
     args = list(args)
-    base = utf8(base)
+    base = to_unicode(base)
+
     if base.startswith('http://') or base.startswith('https://'):
         prefix = '%s/' % base.rstrip('/')
     else:
         prefix = '/'
         args.insert(0, base)
 
-    args = map(lambda o: utf8(o).strip('/'), args)
-    url = '/'.join(args).replace('//', '/')
+    args = map(lambda o: o.strip('/'), args)
+    url = '/'.join(args).replace('//', '/').repace(' ', '-')
     url = prefix + url.lstrip('/')
-    url = fix_index(url.lower())
+    url = to_unicode(fix_index(url.lower()))
+
     if url.endswith('/'):
         return url
 
