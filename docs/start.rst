@@ -1,9 +1,9 @@
-.. _getstart:
+.. _get-started:
 
-Get Start
-==========
+Get Started
+============
 
-This section assumes you already have Felix Felicis (liquidlukc) installed.
+This section assumes that you already have Felix Felicis (liquidluck) installed.
 If you do not, header over to the :ref:`installation` section.
 
 
@@ -18,7 +18,7 @@ Now, you have Felix Felicis installed. Let's create a website::
     $ liquidluck create
 
 
-You will be asked some questions, if the question has a default value,
+You will be asked some questions. If the question has a default value,
 we don't change it, just hit Enter.
 
 See what happens::
@@ -53,14 +53,14 @@ Write with you favorite editor, for example vim::
 Build the website
 ------------------
 
-You have written a post, let's create the website::
+Now that you have written a post, let's create the website::
 
     $ cd ~/website
     $ liquidluck build -v
     $ ls
     content     deploy      settings.py
 
-The website is created, test your website::
+The website is created, you can test your website::
 
     $ cd deploy
     $ python -m SimpleHTTPServer
@@ -71,7 +71,7 @@ Open your browser: ``http://127.0.0.1:8000``
 Write more
 ------------
 
-Write more posts to test for yourself.
+You can test more posts yourself.
 
 
 .. _markup:
@@ -88,7 +88,7 @@ There are three parts in each post:
 + meta -- ``date``, ``category``, ``tags`` in the example
 + content -- everything below the first ``-------``
 
-Metadata that Felix Felicis supports navtively:
+Metadata that Felix Felicis supports natively:
 
 + date
 + public  -- default is ``true``, if set to ``false``, this post won't be included in archive
@@ -98,7 +98,7 @@ Metadata that Felix Felicis supports navtively:
 + author  -- see :ref:`multi-authors` for detail
 + template  -- see :ref:`template` for detail
 
-which means you can access them in template with a shortcut, for example: ``{{psot.tags}}``.
+which means you can access them in template with a shortcut, for example: ``{{post.tags}}``.
 
 
 Post, Page and File

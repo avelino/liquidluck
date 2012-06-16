@@ -18,7 +18,7 @@ User's Guide
     :maxdepth: 2
 
     install
-    getstart
+    start
     config
     design
     theme
@@ -28,7 +28,8 @@ User's Guide
 Bug Report
 ------------
 
-We keep a issue tracker at GitHub_, you can report bug by openning a new issue.
+We keep a issue tracker at GitHub_, you can report bugs by `openning a new issue`_.
 If you want any help, please contact lepture@me.com , English and Chinese are accepted.
 
 .. _GitHub: https://github.com/lepture/liquidluck/issues
+.. _`openning a new issue`: https://github.com/lepture/liquidluck/issues/new

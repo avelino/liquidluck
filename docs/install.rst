@@ -22,7 +22,7 @@ If no pip available, try easy_install::
 
 
 Sorry, I have no knowledge about Windows, but it really works on Windows.
-Cygwin and MinGW would make a better life with UNIX software.
+Cygwin and MinGW would make a better life with UNIX software on Windows.
 
 
 Install with GIT
@@ -39,10 +39,10 @@ Mac User Attention
 We use misaka_ (python wrapper for sundown_) as the Markdown engine. It requires
 C compiler, which means you should install Xcode.
 
-Then open Xcode's preference (command + ,), select ``Downloads`` tab, and install
-``Command Line Tools``.
+Then open Xcode's preference (command + ,), select `Downloads` tab, and install
+`Command Line Tools`.
 
-I strongly suggest that you install the ``Command Line Tools``, even if you don't
+I strongly suggest that you install the `Command Line Tools`, even if you don't
 use Felix Felicis. You will need it somewhere else.
 
 .. _misaka: http://misaka.61924.nl
