@@ -39,7 +39,7 @@
     max-width: 560px;
     *width: 560px;
     margin: 0 auto;
-    padding: 10px 20px;
+    padding: 10px 20px 6px;
     background: #fff;
     z-index: 9;
 }
@@ -90,6 +90,7 @@
 /* article */
 .hentry {
     overflow: hidden;
+    font-family: 'Palatino', 'Xin Gothic', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;
 }
 .updated, .updated a {
     color: #999;
