@@ -27,6 +27,7 @@ setup(
     url=liquidluck.__homepage__,
     packages=['liquidluck', 'liquidluck.writers', 'liquidluck.readers'],
     description='A lightweight static weblog generator',
+    long_description=open('README.rst').read(),
     license='BSD License',
     entry_points={
         'console_scripts': ['liquidluck= liquidluck.cli:main'],

@@ -1,10 +1,10 @@
 Changelog
 ===========
 
-All history are listed here:
+All history since the new Felix Felicis are listed here:
 
 
 Version 1.0
 -------------
 
-The new Felix Felicis.
+Released on Jun 16th 2012. The new Felix Felicis.
