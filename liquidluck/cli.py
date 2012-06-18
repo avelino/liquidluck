@@ -153,7 +153,7 @@ def __load_themes():
         content = open(f).read()
     else:
         import urllib
-        content = urllib.open(
+        content = urllib.urlopen(
             'http://project.lepture.com/liquidluck/themes.json'
         ).read()
         open(f, 'w').write(content)
@@ -169,33 +169,50 @@ def __load_themes():
     return themes
 
 
+SEARCH_TEMPLATE = '''
+Theme: %(name)s
+Author: %(author)s
+Homepage: %(homepage)s
+
+'''
+
+
 def search(keyword=None):
-    #TODO
     themes = __load_themes()
     if not keyword:
-        return themes
+        for keyword in themes:
+            theme = themes[keyword]
+            theme.update({'name': keyword})
+            print(SEARCH_TEMPLATE % theme)
+        return
     if keyword not in themes:
+        print("Can't find theme: %s" % keyword)
         return None
-    return themes[keyword]
+    theme = themes[keyword]
+    theme.update({'name': keyword})
+    print(SEARCH_TEMPLATE % theme)
 
 
 def install(keyword):
-    #TODO
     themes = __load_themes()
     if keyword not in themes:
         print("can't find theme %s" % keyword)
         return
     theme = themes[keyword]
-    return theme
+    repo = theme['git']
+    output = '_themes/%s' % keyword
+    import subprocess
+    subprocess.call(['git', 'clone', repo, output])
 
 
 def main():
     parser = argparse.ArgumentParser(prog='liquidluck')
 
     parser.add_argument('command', nargs='?', default='build',
-                        help='build | create | help')
+                        help='build | create | search | install | help')
     parser.add_argument('-s', '--settings', default='settings.py',
                         help='setting file')
+    parser.add_argument('-t', '--theme', help='theme name')
     parser.add_argument(
         '-v', '--verbose', action='store_true', dest='detail_logging',
         help='show more logging'
@@ -211,6 +228,14 @@ def main():
 
     if args.command == 'help':
         launch_help()
+        return
+
+    if args.command == 'search':
+        search(args.theme)
+        return
+
+    if args.command == 'install':
+        install(args.theme)
         return
 
     g.detail_logging = args.detail_logging
