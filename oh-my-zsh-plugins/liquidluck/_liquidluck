@@ -8,6 +8,8 @@ local -a _1st_arguments
 _1st_arguments=(
   'build:Build the website'
   'create:Create a settings file'
+  'search:Search a theme'
+  'install:Install a theme'
   'help:Open documentation in browser'
 )
 
@@ -17,6 +19,7 @@ local -a pkgs installed_pkgs
 _arguments \
   '(--version)--version[show version number of program and exit]' \
   '(-s --settings)'{-s,--settings}'[specify a setting file]' \
+  '(-t --theme)'{-t,--theme}'[theme name]' \
   '(-h --help)'{-h,--help}'[show help]' \
   '(-v --verbose)'{-v,--verbose}'[give more output]' \
   '*:: :->subcmds' && return 0
@@ -34,4 +37,10 @@ case "$words[1]" in
   create)
     _arguments \
       '(-s --settings)'{-s,--settings}'[specify a setting file]' ;;
+  search)
+    _arguments \
+      '(-t --theme)'{-t,--theme}'[theme name]' ;;
+  install)
+    _arguments \
+      '(-t --theme)'{-t,--theme}'[theme name]' ;;
 esac
