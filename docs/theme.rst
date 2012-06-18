@@ -51,7 +51,9 @@ in your blog directory, create a post.html template::
         _templates/
             post.html
 
-And edit this post.html::
+And edit this post.html:
+
+.. sourcecode:: html+jinja
 
     {% extends "layout.html" %}
 

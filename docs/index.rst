@@ -19,10 +19,12 @@ User's Guide
 
     install
     start
+    write
     config
     design
     theme
     develop
+    changelog
 
 
 Bug Report
