@@ -4,6 +4,7 @@ import os
 from liquidluck.utils import UnicodeDict
 from liquidluck.options import g, settings
 from liquidluck.writers.base import BaseWriter, Pagination
+from liquidluck.writers.base import get_post_slug, slug_to_destination
 
 
 class YearWriter(BaseWriter):
@@ -153,3 +154,54 @@ class CategoryFeedWriter(BaseWriter):
             feed.posts = self._posts[category][:settings.feedcount]
             dest = os.path.join(g.output_directory, category, self._output)
             self.render({'feed': feed}, self._template, dest)
+
+
+class RelationalPostWriter(BaseWriter):
+    def __init__(self):
+        self._template = self.get('relational_post_template', 'post.html')
+
+    def start(self):
+        for index, post in enumerate(g.public_posts):
+            template = post.template or self._template
+
+            relation = self._get_relations(post, index)
+            params = {'post': post, 'relation': relation}
+            self.render(params, template, self._dest_of(post))
+
+        for post in g.secure_posts:
+            self.render({'post': post}, template, self._dest_of(post))
+
+    def _dest_of(self, post):
+        slug = get_post_slug(post, settings.permalink)
+        return os.path.join(g.output_directory, slug_to_destination(slug))
+
+    def _get_relations(self, post, index):
+        total = len(g.public_posts)
+
+        newer = None
+        if index > 0:
+            newer = g.public_posts[index - 1]
+
+        older = None
+        if index < total - 1:
+            older = g.public_posts[index + 1]
+
+        def get_related_by_tags():
+            tags = set(post.tags)
+            base = len(post.tags)
+
+            for p in g.public_posts:
+                prior = len(tags - set(p.tags))
+                if prior < base and p.title != post.title:
+                    p.related_priority = base - prior
+                    yield p
+
+        related = sorted(get_related_by_tags(),
+                         key=lambda o: o.related_priority,
+                         reverse=True)
+        relation = {
+            'newer': newer,
+            'older': older,
+            'related': related[:4],
+        }
+        return relation
