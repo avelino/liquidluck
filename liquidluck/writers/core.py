@@ -40,12 +40,14 @@ class PageWriter(BaseWriter):
 class ArchiveWriter(BaseWriter):
     def __init__(self):
         self._template = self.get('archive_template', 'archive.html')
-        self._output = self.get('archive_output', 'index.html')
+        self._output = self.get(
+            'archive_output', self.prefix_dest('index.html'))
         self._title = self.get('archive_title', 'Archive')
 
     def start(self):
         pagination = Pagination(g.public_posts, 1, self.perpage)
         pagination.title = self._title
+        pagination.root = self.prefix_dest('')
 
         dest = os.path.join(g.output_directory, self._output)
         self.render({'pagination': pagination}, self._template, dest)
@@ -56,18 +58,37 @@ class ArchiveWriter(BaseWriter):
         for page in range(1, pagination.pages + 1):
             pagination = Pagination(g.public_posts, page, self.perpage)
             pagination.title = self._title
+            pagination.root = self.prefix_dest('')
             dest = os.path.join(g.output_directory, 'page/%s.html' % page)
+            if pagination.root:
+                dest = os.path.join(
+                    g.output_directory,
+                    pagination.root,
+                    'page/%s.html' % page
+                )
             self.render({'pagination': pagination}, self._template, dest)
 
+    def prefix_dest(self, dest):
+        prefix = settings.post_prefix.rstrip('/')
+        if not dest:
+            return prefix
+        if prefix:
+            return '%s/%s' % (prefix, dest)
+        if isinstance(dest, int):
+            dest = str(dest)
+        return dest
 
-class ArchiveFeedWriter(BaseWriter):
+
+class ArchiveFeedWriter(ArchiveWriter):
     def __init__(self):
         self._template = self.get('archive_feed_template', 'feed.xml')
-        self._output = self.get('archive_feed_output', 'feed.xml')
+        self._output = self.get(
+            'archive_feed_output', self.prefix_dest('feed.xml')
+        )
 
     def start(self):
         feed = UnicodeDict()
-        feed.url = 'index.html'
+        feed.url = self.prefix_dest('index.html')
         feed.feedurl = self._output
         feed.posts = g.public_posts[:settings.feedcount]
 
@@ -94,7 +115,7 @@ class StaticWriter(BaseWriter):
             copy_to(f, dest)
 
 
-class YearWriter(BaseWriter):
+class YearWriter(ArchiveWriter):
     _posts = {}
 
     def __init__(self):
@@ -116,25 +137,28 @@ class YearWriter(BaseWriter):
         posts = self._posts[year]
         pagination = Pagination(posts, 1, self.perpage)
         pagination.title = year
-        pagination.root = str(year)
+        pagination.root = self.prefix_dest(year)
 
-        dest = os.path.join(g.output_directory, str(year), 'index.html')
+        dest = os.path.join(g.output_directory, pagination.root, 'index.html')
         self.render({'pagination': pagination}, self._template, dest)
 
         if pagination.pages < 2:
             return
 
         for page in range(1, pagination.pages + 1):
-            dest = os.path.join(
-                g.output_directory, str(year), 'page/%s.html' % page
-            )
             pagination = Pagination(posts, page, self.perpage)
             pagination.title = year
-            pagination.root = str(year)
+            pagination.root = self.prefix_dest(year)
+
+            dest = os.path.join(
+                g.output_directory,
+                pagination.root,
+                'page/%s.html' % page
+            )
             self.render({'pagination': pagination}, self._template, dest)
 
 
-class TagWriter(BaseWriter):
+class TagWriter(ArchiveWriter):
     _posts = {}
 
     def __init__(self):
@@ -157,24 +181,26 @@ class TagWriter(BaseWriter):
         posts = self._posts[tag]
         pagination = Pagination(posts, 1, self.perpage)
         pagination.title = tag
-        pagination.root = 'tag/%s' % tag
+        pagination.root = self.prefix_dest('tag/%s' % tag)
 
-        dest = os.path.join(g.output_directory, 'tag', tag, 'index.html')
+        dest = os.path.join(g.output_directory, pagination.root, 'index.html')
         self.render({'pagination': pagination}, self._template, dest)
 
         if pagination.pages < 2:
             return
 
         for page in range(1, pagination.pages + 1):
-            dest = os.path.join(
-                g.output_directory, 'tag', tag, 'page/%s.html' % page)
             pagination = Pagination(posts, page, self.perpage)
             pagination.title = tag
-            pagination.root = 'tag/%s' % tag
+            pagination.root = self.prefix_dest('tag/%s' % tag)
+
+            dest = os.path.join(
+                g.output_directory, pagination.root, 'page/%s.html' % page
+            )
             self.render({'pagination': pagination}, self._template, dest)
 
 
-class CategoryWriter(BaseWriter):
+class CategoryWriter(ArchiveWriter):
     _posts = {}
 
     def __init__(self):
@@ -198,24 +224,26 @@ class CategoryWriter(BaseWriter):
         posts = self._posts[category]
         pagination = Pagination(posts, 1, self.perpage)
         pagination.title = self._title.get(category, category)
-        pagination.root = category
+        pagination.root = self.prefix_dest(category)
 
-        dest = os.path.join(g.output_directory, category, 'index.html')
+        dest = os.path.join(g.output_directory, pagination.root, 'index.html')
         self.render({'pagination': pagination}, self._template, dest)
 
         if pagination.pages < 2:
             return
 
         for page in range(1, pagination.pages + 1):
-            dest = os.path.join(
-                g.output_directory, category, 'page/%s.html' % page)
             pagination = Pagination(posts, page, self.perpage)
             pagination.title = self._title.get(category, category)
-            pagination.root = category
+            pagination.root = self.prefix_dest(category)
+
+            dest = os.path.join(
+                g.output_directory, pagination.root, 'page/%s.html' % page
+            )
             self.render({'pagination': pagination}, self._template, dest)
 
 
-class CategoryFeedWriter(BaseWriter):
+class CategoryFeedWriter(ArchiveWriter):
     _posts = {}
 
     def __init__(self):
@@ -236,8 +264,8 @@ class CategoryFeedWriter(BaseWriter):
     def start(self):
         for category in self._posts:
             feed = UnicodeDict()
-            feed.url = '%s/index.html' % category
-            feed.feedurl = '%s/%s' % (category, self._output)
+            feed.url = self.prefix_dest('%s/index.html' % category)
+            feed.feedurl = self.prefix_dest('%s/%s' % (category, self._output))
             feed.posts = self._posts[category][:settings.feedcount]
-            dest = os.path.join(g.output_directory, category, self._output)
+            dest = os.path.join(g.output_directory, feed.feedurl)
             self.render({'feed': feed}, self._template, dest)

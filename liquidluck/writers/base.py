@@ -234,6 +234,8 @@ def get_post_slug(post, slug_format):
 
     slug = regex.sub(replace, slug_format)
     slug = slug.lstrip('/').replace('//', '/').replace(' ', '-')
+    if settings.post_prefix:
+        return '%s/%s' % (settings.post_prefix.rstrip('/'), slug)
     return slug
 
 
