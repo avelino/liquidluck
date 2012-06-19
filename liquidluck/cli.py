@@ -128,7 +128,7 @@ def create(config):
     if not os.path.isdir(source):
         os.makedirs(source)
 
-    output = raw_input("Where is your directory for output(deply): ")
+    output = raw_input("Where is your directory for output(deploy): ")
     output = output or 'deploy'
     code += "output = '%s'\n" % output
     code += "static_output = '%s/static'\n" % output
