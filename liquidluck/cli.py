@@ -75,7 +75,7 @@ def write_posts():
 
 def generate(config='settings.py'):
     load_settings(config)
-    load_posts(g.source_directory)
+    load_posts(settings.source)
     write_posts()
 
 
