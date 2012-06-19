@@ -7,6 +7,8 @@ from liquidluck.writers.base import content_url, static_url
 from liquidluck.writers.core import PostWriter, PageWriter
 from liquidluck.writers.core import ArchiveWriter, ArchiveFeedWriter
 from liquidluck.writers.core import FileWriter, StaticWriter
+from liquidluck.writers.core import YearWriter, TagWriter
+from liquidluck.writers.core import CategoryWriter, CategoryFeedWriter
 from liquidluck.options import settings, g
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -131,4 +133,36 @@ class TestStaticWriter(object):
         writer = StaticWriter()
         writer.start()
         f = os.path.join(g.static_directory, 'style.css')
+        assert os.path.exists(f)
+
+
+class TestYearWriter(object):
+    def test_start(self):
+        writer = YearWriter()
+        writer.start()
+        f = os.path.join(g.output_directory, '2012/index.html')
+        assert os.path.exists(f)
+
+
+class TestTagWriter(object):
+    def test_start(self):
+        writer = TagWriter()
+        writer.start()
+        f = os.path.join(g.output_directory, 'tag/tag1/index.html')
+        assert os.path.exists(f)
+
+
+class TestCategoryWriter(object):
+    def test_start(self):
+        writer = CategoryWriter()
+        writer.start()
+        f = os.path.join(g.output_directory, 'work/index.html')
+        assert os.path.exists(f)
+
+
+class TestCategoryFeedWriter(object):
+    def test_start(self):
+        writer = CategoryFeedWriter()
+        writer.start()
+        f = os.path.join(g.output_directory, 'work/feed.xml')
         assert os.path.exists(f)

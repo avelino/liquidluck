@@ -3,6 +3,7 @@
 
 import re
 import os
+import shutil
 
 
 def to_unicode(value):
@@ -38,6 +39,21 @@ def walk_dir(dest):
         for f in files:
             path = os.path.join(root, f)
             yield path
+
+
+def copy_to(source, dest):
+    if os.path.exists(dest) and \
+       os.stat(source).st_mtime <= os.stat(dest).st_mtime:
+        return
+
+    folder = os.path.split(dest)[0]
+    # on Mac OSX, `folder` == `FOLDER`
+    # then make sure destination is lowercase
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+
+    shutil.copy(source, dest)
+    return
 
 
 class UnicodeDict(dict):
