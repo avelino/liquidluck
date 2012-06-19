@@ -27,7 +27,7 @@ def test_get_post_slug():
 
     post = Post()
 
-    settings.permalink_prefix = ''
+    settings.site['prefix'] = ''
     slug_format = '{{category}}/{{filename}}.html'
     assert get_post_slug(post, slug_format) == 'life/demo.html'
 
@@ -37,13 +37,13 @@ def test_get_post_slug():
     slug_format = '{{folder}}/{{filename}}.html'
     assert get_post_slug(post, slug_format) == 'demo.html'
 
-    settings.permalink_prefix = 'blog'
+    settings.site['prefix'] = 'blog'
     slug_format = '{{category}}/{{filename}}.html'
     assert get_post_slug(post, slug_format) == 'blog/life/demo.html'
 
 
 def test_slug_to_destination():
-    settings.permalink_prefix = ''
+    settings.site['prefix'] = ''
     assert slug_to_destination('a/b.html') == 'a/b.html'
     assert slug_to_destination('a/b/') == 'a/b.html'
     assert slug_to_destination('a/b/', True) == 'a/b/index.html'

@@ -234,8 +234,9 @@ def get_post_slug(post, slug_format):
 
     slug = regex.sub(replace, slug_format)
     slug = slug.lstrip('/').replace('//', '/').replace(' ', '-')
-    if settings.permalink_prefix:
-        return '%s/%s' % (settings.permalink_prefix.rstrip('/'), slug)
+    prefix = settings.site.get('prefix', '').rstrip('/')
+    if prefix:
+        return '%s/%s' % (prefix, slug)
     return slug
 
 

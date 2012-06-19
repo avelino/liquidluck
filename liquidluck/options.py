@@ -112,9 +112,14 @@ settings.static_prefix = '/static/'
 settings.theme = 'default'
 
 settings.permalink = '{{category}}/{{filename}}.html'
-settings.permalink_prefix = ''
 settings.perpage = 30
 settings.feedcount = 20
+
+settings.site = {
+    'name': 'Felix Felicis',
+    'url': 'http://github.com',
+    'prefix': '',
+}
 
 settings.author = 'admin'
 settings.authors = {}
@@ -138,11 +143,6 @@ settings.writers = {
     'category_feed': 'liquidluck.writers.core.CategoryFeedWriter',
 }
 settings.writers_variables = {}
-
-settings.site = {
-    'name': 'Felix Felicis',
-    'url': 'http://github.com',
-}
 settings.template_variables = {}
 settings.template_filters = {}
 settings.theme_variables = {}

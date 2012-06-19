@@ -8,7 +8,7 @@ Version 1.2
 
 Released on Jun 19th 2012.
 
-+ permalink_prefix configuration
++ site['prefix'] configuration
 
 
 Version 1.1
