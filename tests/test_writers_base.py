@@ -22,11 +22,12 @@ class TestPagination(object):
         assert p.pages == 3
 
     def test_items(self):
-        p = Pagination(range(6), 1, 3)
-        assert list(p.items) == [0, 1, 2]
+        items = [0, 1, 2, 3, 4, 5]
+        p = Pagination(items, 1, 3)
+        assert p.items == [0, 1, 2]
 
-        p = Pagination(range(6), 2, 3)
-        assert list(p.items) == [3, 4, 5]
+        p = Pagination(items, 2, 3)
+        assert p.items == [3, 4, 5]
 
 
 def test_get_post_slug():
