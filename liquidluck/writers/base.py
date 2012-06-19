@@ -272,7 +272,7 @@ def content_url(base, *args):
         prefix = '/'
         args.insert(0, base)
 
-    args = map(lambda o: o.strip('/'), args)
+    args = map(lambda o: to_unicode(o).strip('/'), args)
     url = '/'.join(args).replace('//', '/').replace(' ', '-')
     url = prefix + url.lstrip('/')
     url = to_unicode(fix_index(url.lower()))

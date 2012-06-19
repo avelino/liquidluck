@@ -81,7 +81,6 @@ def generate(config='settings.py'):
 
 DEFAULT_SETTING = """
 permalink = '{{category}}/{{filename}}.html'
-# permalink_prefix = 'blog'
 perpage = 30
 feedcount = 20
 
@@ -119,6 +118,7 @@ def create(config):
         "site = {\n"
         '    "name": "%s",\n'
         '    "url": "%s",\n'
+        '    # "prefix": "blog",\n'
         '}\n\n'
     ) % (site_name, site_url)
 
