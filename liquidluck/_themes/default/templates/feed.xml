@@ -9,10 +9,10 @@
     <entry>
         <title type="html"><![CDATA[{{ post.title }}]]></title>
         <author><name>{{ post.author }}</name>{%if post.author.website%}<uri>{{post.author.website}}</uri>{%endif%}</author>
-        <link href="{{ content_url(site.url, post|permalink) }}"/>
+        <link href="{{ post|permalink(True) }}"/>
         <updated>{{ post.date|xmldatetime }}</updated>
         <published>{{ post.date|xmldatetime }}</published>
-        <id>{{ content_url(site.url, post|permalink) }}</id>
+        <id>{{ post|permalink(True) }}</id>
         {% for tag in post.tags -%}
         <category scheme="{{ content_url(site.url, 'tag', tag) }}" term="{{tag}}" label="{{ tag|title }}" />
         {% endfor -%}

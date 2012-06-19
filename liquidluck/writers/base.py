@@ -201,7 +201,7 @@ def load_jinja():
     #: default filters
     jinja.filters.update({
         'xmldatetime': lambda o: o.strftime('%Y-%m-%dT%H:%M:%SZ'),
-        'permalink': lambda o: '/' + get_post_slug(o, settings.permalink),
+        'permalink': permalink,
     })
 
     #: load resource
@@ -248,6 +248,13 @@ def slug_to_destination(slug, use_index=False):
         return slug + 'index.html'
 
     return slug.rstrip('/') + '.html'
+
+
+def permalink(post, prepend_site=False):
+    slug = get_post_slug(post, settings.permalink)
+    if prepend_site:
+        return '%s/%s' % (settings.site['url'].rstrip('/'), slug)
+    return '/%s' % slug
 
 
 def content_url(base, *args):
