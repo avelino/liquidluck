@@ -35,7 +35,7 @@ setup(
     install_requires=install_requires,
     include_package_data=True,
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'License :: OSI Approved :: BSD License',
         'Operating System :: MacOS',
