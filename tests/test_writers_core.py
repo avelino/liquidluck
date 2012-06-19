@@ -15,7 +15,7 @@ class TestPostWriter(object):
     def test_start(self):
         writer = PostWriter()
         settings.permalink = '{{category}}/{{filename}}.html'
-        settings.post_prefix = ''
+        settings.permalink_prefix = ''
         writer.start()
         f = os.path.join(g.output_directory, 'work/demo-markdown-1.html')
         assert os.path.exists(f)
@@ -25,7 +25,7 @@ class TestPostWriter(object):
         f = os.path.join(g.output_directory, '2012/demo-markdown-1.html')
         assert os.path.exists(f)
 
-        settings.post_prefix = 'blog'
+        settings.permalink_prefix = 'blog'
         writer.start()
         f = os.path.join(g.output_directory, 'blog/2012/demo-markdown-1.html')
         assert os.path.exists(f)
@@ -41,13 +41,13 @@ class TestPageWriter(object):
 
 class TestArchiveWriter(object):
     def test_start(self):
-        settings.post_prefix = ''
+        settings.permalink_prefix = ''
         writer = ArchiveWriter()
         writer.start()
         f = os.path.join(g.output_directory, 'index.html')
         assert os.path.exists(f)
 
-        settings.post_prefix = 'blog'
+        settings.permalink_prefix = 'blog'
         writer = ArchiveWriter()
         writer.start()
         f = os.path.join(g.output_directory, 'blog/index.html')
@@ -56,13 +56,13 @@ class TestArchiveWriter(object):
 
 class TestArchiveFeedWriter(object):
     def test_start(self):
-        settings.post_prefix = ''
+        settings.permalink_prefix = ''
         writer = ArchiveFeedWriter()
         writer.start()
         f = os.path.join(g.output_directory, 'feed.xml')
         assert os.path.exists(f)
 
-        settings.post_prefix = 'blog'
+        settings.permalink_prefix = 'blog'
         writer = ArchiveFeedWriter()
         writer.start()
         f = os.path.join(g.output_directory, 'blog/feed.xml')
@@ -87,13 +87,13 @@ class TestStaticWriter(object):
 
 class TestYearWriter(object):
     def test_start(self):
-        settings.post_prefix = ''
+        settings.permalink_prefix = ''
         writer = YearWriter()
         writer.start()
         f = os.path.join(g.output_directory, '2012/index.html')
         assert os.path.exists(f)
 
-        settings.post_prefix = 'blog'
+        settings.permalink_prefix = 'blog'
         writer = YearWriter()
         writer.start()
         f = os.path.join(g.output_directory, 'blog/2012/index.html')
@@ -102,13 +102,13 @@ class TestYearWriter(object):
 
 class TestTagWriter(object):
     def test_start(self):
-        settings.post_prefix = ''
+        settings.permalink_prefix = ''
         writer = TagWriter()
         writer.start()
         f = os.path.join(g.output_directory, 'tag/tag1/index.html')
         assert os.path.exists(f)
 
-        settings.post_prefix = 'blog'
+        settings.permalink_prefix = 'blog'
         writer = TagWriter()
         writer.start()
         f = os.path.join(g.output_directory, 'blog/tag/tag1/index.html')
@@ -117,13 +117,13 @@ class TestTagWriter(object):
 
 class TestCategoryWriter(object):
     def test_start(self):
-        settings.post_prefix = ''
+        settings.permalink_prefix = ''
         writer = CategoryWriter()
         writer.start()
         f = os.path.join(g.output_directory, 'work/index.html')
         assert os.path.exists(f)
 
-        settings.post_prefix = 'blog'
+        settings.permalink_prefix = 'blog'
         writer = CategoryWriter()
         writer.start()
         f = os.path.join(g.output_directory, 'blog/work/index.html')
@@ -132,13 +132,13 @@ class TestCategoryWriter(object):
 
 class TestCategoryFeedWriter(object):
     def test_start(self):
-        settings.post_prefix = ''
+        settings.permalink_prefix = ''
         writer = CategoryFeedWriter()
         writer.start()
         f = os.path.join(g.output_directory, 'work/feed.xml')
         assert os.path.exists(f)
 
-        settings.post_prefix = 'blog'
+        settings.permalink_prefix = 'blog'
         writer = CategoryFeedWriter()
         writer.start()
         f = os.path.join(g.output_directory, 'blog/work/feed.xml')

@@ -107,12 +107,12 @@ class _LogFormatter(logging.Formatter):
 settings = _Options()
 settings.source = 'content'
 settings.output = 'deploy'
-settings.post_prefix = ''
 settings.static_output = '%s/static' % settings.output
 settings.static_prefix = '/static/'
 settings.theme = 'default'
 
 settings.permalink = '{{category}}/{{filename}}.html'
+settings.permalink_prefix = ''
 settings.perpage = 30
 settings.feedcount = 20
 

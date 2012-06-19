@@ -3,6 +3,14 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+Version 1.2
+-------------
+
+Released on Jun 19th 2012.
+
++ permalink_prefix configuration
+
+
 Version 1.1
 -------------
 
