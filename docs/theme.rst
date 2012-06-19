@@ -73,7 +73,7 @@ And edit this post.html:
         </div>
         <div class="entry-tags">
             {% for tag in post.tags %}
-            <a href="{{ content_url('tag', tag, 'index.html') }}">{{tag}}</a>
+            <a href="{{ content_url(site.prefix, 'tag', tag, 'index.html') }}">{{tag}}</a>
             {% endfor %}
         </div>
 

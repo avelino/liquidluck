@@ -21,6 +21,7 @@ A demo setting file (settings.py)::
     site = {
         'name': 'Just lepture',
         'url': 'http://lepture.com',
+        # 'prefix': 'blog',
     }
 
     #: posts lay here
@@ -113,6 +114,10 @@ If you don't like ``.html`` as a part of the permalink, you can set your permali
 In this case, you need to make some config of your server, so that everything will be ok.
 A good example of nginx conf for slash style permalink: `nginx.conf`_.
 
+Issues about permalink:
+
+- https://github.com/lepture/liquidluck/issues/21
+
 .. _`nginx.conf`: https://github.com/lepture/lepture.com/blob/master/nginx.conf
 
 .. _multi-authors:
@@ -154,3 +159,66 @@ For more information on template or theme design, head over to :ref:`theme` sect
 
 The default theme doesn't show any information of the author, it is designed for
 personal blogging.
+
+Readers
+----------
+
+There are two readers in Felix Felicis, one is Markdown, and the other is reStructuredText.
+They are both active by default, but you can disable it. For example, you want to
+disable reStructuredText::
+
+    readers = {
+        'rst': None,
+    }
+
+
+Writers
+---------
+
+There are many writers in Felix Felicis, and you can add more. If you want to add your
+own writer to Felix Felics, head over to :ref:`development`.
+
+Core writers are active by default, and they are::
+
+    writers = {
+        'post': 'liquidluck.writers.core.PostWriter',
+        'page': 'liquidluck.writers.core.PageWriter',
+        'archive': 'liquidluck.writers.core.ArchiveWriter',
+        'archive_feed': 'liquidluck.writers.core.ArchiveFeedWriter',
+        'file': 'liquidluck.writers.core.FileWriter',
+        'static': 'liquidluck.writers.core.StaticWriter',
+        'year': 'liquidluck.writers.core.YearWriter',
+        'tag': 'liquidluck.writers.core.TagWriter',
+        'category': 'liquidluck.writers.core.CategoryWriter',
+        'category_feed': 'liquidluck.writers.core.CategoryFeedWriter',
+    }
+
+You can deactive a writer as the way you disable a reader, for example category feed::
+
+    writers = {
+        'category_feed': None,
+    }
+
+
+Writer Variables
+~~~~~~~~~~~~~~~~~~
+
+Every writer can has its own variable, for example the archive write, if you set::
+
+    writers_variables = {
+        'archive_output': 'archive.html',
+    }
+
+The archive page will be write to **archive.html** instead of **index.html**.
+
+Available writers variables (but you won't need to change them):
+
+- post_template (post.html)
+- page_template (page.html)
+- archive_template (archive.html)
+- **archive_output** (index.html)
+- archive_feed_template (feed.xml)
+- year_template (archive.html)
+- tag_template (archive.html)
+- category_template (archive.html)
+- category_feed_template (feed.xml)
