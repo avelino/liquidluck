@@ -2,11 +2,31 @@
 
 import os
 import datetime
+from liquidluck.writers.base import Pagination
 from liquidluck.writers.base import get_post_slug, slug_to_destination
 from liquidluck.writers.base import content_url, static_url
 from liquidluck.options import settings
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
+
+
+class TestPagination(object):
+    def test_pages(self):
+        p = Pagination(range(6), 1, 3)
+        assert p.pages == 2
+
+        p = Pagination(range(5), 1, 3)
+        assert p.pages == 2
+
+        p = Pagination(range(7), 1, 3)
+        assert p.pages == 3
+
+    def test_items(self):
+        p = Pagination(range(6), 1, 3)
+        assert p.items == [0, 1, 2]
+
+        p = Pagination(range(6), 2, 3)
+        assert p.items == [3, 4, 5]
 
 
 def test_get_post_slug():
