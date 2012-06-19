@@ -10,8 +10,21 @@ from liquidluck.writers.base import get_post_slug, slug_to_destination
 
 
 class PostWriter(BaseWriter):
+    """Replace the default post writer, edit settings::
+
+        writers = {
+            'post': 'liquidluck.writers.exends.PostWriter',
+        }
+
+    Get related posts in template with::
+
+        - {{post.relation.newer}}
+        - {{post.relation.older}}
+        - {% for item in post.relation.related %}
+    """
+
     def __init__(self):
-        self._template = self.get('relational_post_template', 'post.html')
+        self._template = self.get('post_template', 'post.html')
 
     def start(self):
         for index, post in enumerate(g.public_posts):
