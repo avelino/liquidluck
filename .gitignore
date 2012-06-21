@@ -13,3 +13,4 @@ parts
 deploy
 content
 docs/_build
+.tox
