@@ -59,8 +59,8 @@ A demo setting file (settings.py)::
     # template_filters = {}
 
     theme_variables = {
-        'disqus': 'lepture',
-        'analytics': 'UA-21475122-1',
+        'disqus': 'your_disqus_shortname',
+        'analytics': 'your_google_analytics_id',
 
         'navigation': [
             ('Blog', '/archive/'),
@@ -172,6 +172,19 @@ disable reStructuredText::
         'rst': None,
     }
 
+Issues that contain information on readers:
+
+- https://github.com/lepture/liquidluck/issues/26
+
+
+Readers Variables
+```````````````````
+
+
+Issues that contain information on readers variables:
+
+- https://github.com/lepture/liquidluck/issues/25
+
 
 Writers
 ---------
@@ -201,8 +214,8 @@ You can deactive a writer as the way you disable a reader, for example category 
     }
 
 
-Writer Variables
-~~~~~~~~~~~~~~~~~~
+Writers Variables
+````````````````````
 
 Every writer can has its own variable, for example the archive write, if you set::
 

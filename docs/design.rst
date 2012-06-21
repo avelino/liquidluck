@@ -16,14 +16,8 @@ And hence there will be no plugin or extension like::
     {% gist id %}
 
 
-The only things we do:
+Just like the zen of Python:
 
-    Parse your posts correctly.
+    Beautiful is better than ugly.
 
-    Organize your posts correctly.
-
-
-Readers should parse your posts correctly. And, Writers should organize your posts
-correctly.
-
-And we won't do any more.
+    Nothing is better than everything.
