@@ -33,7 +33,7 @@ from docutils.parsers.rst import directives, Directive
 from pygments.formatters import HtmlFormatter
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name, TextLexer
-from liquidluck.readers.base import BaseReader, Post
+from liquidluck.readers.base import BaseReader
 from liquidluck.options import settings, g
 from liquidluck.utils import to_unicode, utf8
 
@@ -60,7 +60,7 @@ class RestructuredTextReader(BaseReader):
         meta = parts['docinfo']
 
         meta = self._parse_meta(meta)
-        return Post(self.filepath, body, title=title, meta=meta)
+        return self.post_class(self.filepath, body, title=title, meta=meta)
 
     def _parse_meta(self, meta):
         content = meta.replace('\n', '')

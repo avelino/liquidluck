@@ -35,7 +35,7 @@ from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 
-from liquidluck.readers.base import BaseReader, Post
+from liquidluck.readers.base import BaseReader
 from liquidluck.options import settings, g
 from liquidluck.utils import to_unicode, cjk_nowrap, import_object
 
@@ -63,7 +63,7 @@ class MarkdownReader(BaseReader):
 
         meta = self._parse_meta(header)
         content = markdown(body)
-        return Post(self.filepath, content, meta=meta)
+        return self.post_class(self.filepath, content, meta=meta)
 
     def _parse_meta(self, header):
         header = markdown(header)

@@ -10,7 +10,7 @@ Reader, read content, parse to html.
 import os
 import logging
 from liquidluck.options import settings, g
-from liquidluck.utils import to_datetime
+from liquidluck.utils import to_datetime, import_object
 
 
 class BaseReader(object):
@@ -48,11 +48,18 @@ class BaseReader(object):
                     return True
         return False
 
-    def render(self):
-        raise NotImplementedError
-
     def get(self, key, value=None):
         return settings.readers_variables.get(key, value)
+
+    @property
+    def post_class(self):
+        cls = self.get('post_class', Post)
+        if isinstance(cls, str):
+            return import_object(cls)
+        return cls
+
+    def render(self):
+        raise NotImplementedError
 
     def run(self):
         try:
