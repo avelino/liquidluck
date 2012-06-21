@@ -141,7 +141,7 @@ def escape(value):
 
 def transform_youtube(link):
     #: youtube.com
-    title = link.replace('http://', '').replace('https://', '')
+    title = link.replace('http://', '')
     pattern = r'http://www.youtube.com/watch\?v=([a-zA-Z0-9\-\_]+)'
     match = re.match(pattern, link)
     if not match:
@@ -174,12 +174,27 @@ def transform_gist(link):
 
 def transform_vimeo(link):
     #: vimeo.com
-    title = link.replace('http://', '').replace('https://', '')
+    title = link.replace('http://', '')
     pattern = r'http://vimeo.com/([\d]+)'
     match = re.match(pattern, link)
     if match:
         value = ('<iframe width="500" height="281" frameborder="0" '
                  'src="http://player.vimeo.com/video/%(id)s" '
+                 'allowFullScreen></iframe>'
+                 '<div><a rel="nofollow" href="%(link)s">'
+                 '%(title)s</a></div>'
+                ) % {'id': match.group(1), 'link': link, 'title': title}
+        return value
+    return None
+
+
+def transform_screenr(link):
+    title = link.replace('http://', '')
+    pattern = r'http://www.screenr.com/([a-zA-Z0-9]+)'
+    match = re.match(pattern, link)
+    if match:
+        value = ('<iframe width="500" height="305" frameborder="0" '
+                 'src="http://www.screenr.com/embed/%(id)s" '
                  'allowFullScreen></iframe>'
                  '<div><a rel="nofollow" href="%(link)s">'
                  '%(title)s</a></div>'
