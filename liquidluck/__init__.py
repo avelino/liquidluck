@@ -29,6 +29,6 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__version__ = '1.2'
+__version__ = '1.3'
 __author__ = 'Hsiaoming Yang <lepture@me.com>'
 __homepage__ = 'http://project.lepture.com/liquidluck/'

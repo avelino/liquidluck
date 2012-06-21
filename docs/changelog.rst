@@ -3,6 +3,16 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+Version 1.3
+-------------
+
+Released on Jun 21th 2012.
+
++ customize markdown link transform
++ customize post class
++ add filedir property for post
+
+
 Version 1.2
 -------------
 
