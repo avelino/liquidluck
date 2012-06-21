@@ -37,7 +37,7 @@ from pygments.lexers import get_lexer_by_name
 
 from liquidluck.readers.base import BaseReader, Post
 from liquidluck.options import settings, g
-from liquidluck.utils import to_unicode, cjk_nowrap
+from liquidluck.utils import to_unicode, cjk_nowrap, import_object
 
 
 class MarkdownReader(BaseReader):
@@ -101,44 +101,17 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
         if is_email:
             return '<a href="mailto:%(link)s">%(link)s</a>' % {'link': link}
 
+        for func in settings.readers_variables.get(
+            'markdown_transform', [
+                'liquidluck.readers.markdown.transform_youtube',
+                'liquidluck.readers.markdown.transform_gist',
+                'liquidluck.readers.markdown.transform_vimeo',
+            ]):
+            func = import_object(func)
+            value = func(link)
+            if value:
+                return value
         title = link.replace('http://', '').replace('https://', '')
-
-        #: youtube.com
-        pattern = r'http://www.youtube.com/watch\?v=([a-zA-Z0-9\-\_]+)'
-        match = re.match(pattern, link)
-        if not match:
-            pattern = r'http://youtu.be/([a-zA-Z0-9\-\_]+)'
-            match = re.match(pattern, link)
-        if match:
-            value = ('<iframe width="560" height="315" src='
-                     '"http://www.youtube.com/embed/%(id)s" '
-                     'frameborder="0" allowfullscreen></iframe>'
-                     '<div><a rel="nofollow" href="%(link)s">'
-                     '%(title)s</a></div>'
-                    ) % {'id': match.group(1), 'link': link, 'title': title}
-            return value
-
-        #: gist support
-        pattern = r'(https?://gist.github.com/[\d]+)'
-        match = re.match(pattern, link)
-        if match:
-            value = ('<script src="%(link)s.js"></script>'
-                     '<div><a rel="nofollow" href="%(link)s">'
-                     '%(title)s</a></div>'
-                    ) % {'link': match.group(1), 'title': title}
-            return value
-
-        #: vimeo.com
-        pattern = r'http://vimeo.com/([\d]+)'
-        match = re.match(pattern, link)
-        if match:
-            value = ('<iframe width="500" height="281" frameborder="0" '
-                     'src="http://player.vimeo.com/video/%(id)s" '
-                     'allowFullScreen></iframe>'
-                     '<div><a rel="nofollow" href="%(link)s">'
-                     '%(title)s</a></div>'
-                    ) % {'id': match.group(1), 'link': link, 'title': title}
-            return value
         return '<a href="%s">%s</a>' % (link, title)
 
 
@@ -162,3 +135,54 @@ def escape(value):
         value = value.decode('utf-8')
     return _XHTML_ESCAPE_RE.sub(
         lambda match: _XHTML_ESCAPE_DICT[match.group(0)], value)
+
+
+#: markdown autolink transform
+
+def transform_youtube(link):
+    #: youtube.com
+    title = link.replace('http://', '').replace('https://', '')
+    pattern = r'http://www.youtube.com/watch\?v=([a-zA-Z0-9\-\_]+)'
+    match = re.match(pattern, link)
+    if not match:
+        pattern = r'http://youtu.be/([a-zA-Z0-9\-\_]+)'
+        match = re.match(pattern, link)
+    if match:
+        value = ('<iframe width="560" height="315" src='
+                 '"http://www.youtube.com/embed/%(id)s" '
+                 'frameborder="0" allowfullscreen></iframe>'
+                 '<div><a rel="nofollow" href="%(link)s">'
+                 '%(title)s</a></div>'
+                ) % {'id': match.group(1), 'link': link, 'title': title}
+        return value
+    return None
+
+
+def transform_gist(link):
+    #: gist support
+    title = link.replace('http://', '').replace('https://', '')
+    pattern = r'(https?://gist.github.com/[\d]+)'
+    match = re.match(pattern, link)
+    if match:
+        value = ('<script src="%(link)s.js"></script>'
+                 '<div><a rel="nofollow" href="%(link)s">'
+                 '%(title)s</a></div>'
+                ) % {'link': match.group(1), 'title': title}
+        return value
+    return None
+
+
+def transform_vimeo(link):
+    #: vimeo.com
+    title = link.replace('http://', '').replace('https://', '')
+    pattern = r'http://vimeo.com/([\d]+)'
+    match = re.match(pattern, link)
+    if match:
+        value = ('<iframe width="500" height="281" frameborder="0" '
+                 'src="http://player.vimeo.com/video/%(id)s" '
+                 'allowFullScreen></iframe>'
+                 '<div><a rel="nofollow" href="%(link)s">'
+                 '%(title)s</a></div>'
+                ) % {'id': match.group(1), 'link': link, 'title': title}
+        return value
+    return None

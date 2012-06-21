@@ -51,6 +51,9 @@ class BaseReader(object):
     def render(self):
         raise NotImplementedError
 
+    def get(self, key, value=None):
+        return settings.readers_variables.get(key, value)
+
     def run(self):
         try:
             return self.render()
