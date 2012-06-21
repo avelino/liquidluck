@@ -31,7 +31,7 @@ class BaseReader(object):
         self.filepath = filepath
 
     @property
-    def short_filepath(self):
+    def relative_filepath(self):
         return self.filepath[len(g.source_directory) + 1:]
 
     def start(self):
@@ -138,6 +138,14 @@ class Post(object):
     def filename(self):
         path = os.path.split(self.filepath)[1]
         return os.path.splitext(path)[0]
+
+    @property
+    def filedir(self):
+        path = self.filepath
+        if path.startswith(g.source_directory):
+            path = path[len(g.source_directory) + 1:]
+
+        return os.path.split(path)[0]
 
     def __getattr__(self, key):
         try:

@@ -45,7 +45,7 @@ class RestructuredTextReader(BaseReader):
         f = open(self.filepath)
 
         if g.detail_logging:
-            logging.info('read ' + self.short_filepath)
+            logging.info('read ' + self.relative_filepath)
 
         content = f.read()
         f.close()

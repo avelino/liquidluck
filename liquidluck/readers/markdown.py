@@ -47,7 +47,7 @@ class MarkdownReader(BaseReader):
         f = open(self.filepath)
 
         if g.detail_logging:
-            logging.info('read ' + self.short_filepath)
+            logging.info('read ' + self.relative_filepath)
 
         header = ''
         body = None
