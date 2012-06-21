@@ -4,6 +4,7 @@
 import re
 import os
 import shutil
+import datetime
 
 
 def to_unicode(value):
@@ -80,3 +81,24 @@ def cjk_nowrap(text):
     cjk = re.compile(pattern + r'(\n|\r\n|\r)' + pattern)
     text = cjk.sub(r'\1\3', text)
     return text
+
+
+def to_datetime(value):
+    if isinstance(value, datetime.datetime):
+        return value
+    supported_formats = [
+        '%a %b %d %H:%M:%S %Y',
+        '%Y-%m-%d %H:%M:%S',
+        '%Y-%m-%d %H:%M',
+        '%Y-%m-%dT%H:%M',
+        '%Y%m%d %H:%M:%S',
+        '%Y%m%d %H:%M',
+        '%Y-%m-%d',
+        '%Y%m%d',
+    ]
+    for format in supported_formats:
+        try:
+            return datetime.datetime.strptime(value, format)
+        except ValueError:
+            pass
+    raise ValueError('Unrecognized date/time: %r' % value)

@@ -8,9 +8,9 @@ Reader, read content, parse to html.
 '''
 
 import os
-import datetime
 import logging
 from liquidluck.options import settings, g
+from liquidluck.utils import to_datetime
 
 
 class BaseReader(object):
@@ -141,9 +141,8 @@ class Post(object):
             return super(Post, self).__getattr__(key)
         except:
             pass
-        if key in self.meta:
-            return self.meta[key]
-        raise AttributeError
+        #: won't raise AttributeError
+        return self.meta.get(key)
 
 
 class Author(object):
@@ -170,23 +169,3 @@ class Author(object):
     @property
     def email(self):
         return self._d.get('email', None)
-
-
-def to_datetime(value):
-    supported_formats = [
-        '%a %b %d %H:%M:%S %Y',
-        '%Y-%m-%d %H:%M:%S',
-        '%Y-%m-%d %H:%M',
-        '%Y-%m-%dT%H:%M',
-        '%Y%m%d %H:%M:%S',
-        '%Y%m%d %H:%M',
-        '%Y-%m-%d',
-        '%Y%m%d',
-    ]
-    for format in supported_formats:
-        try:
-            return datetime.datetime.strptime(value, format)
-        except ValueError:
-            pass
-    logging.error('Unrecognized date/time: %r' % value)
-    raise ValueError('Unrecognized date/time: %r' % value)
