@@ -200,6 +200,31 @@ class TagWriter(ArchiveWriter):
             self.render({'pagination': pagination}, self._template, dest)
 
 
+class TagCloudWriter(ArchiveWriter):
+    _posts = {}
+
+    def __init__(self):
+        self._template = self.get('tagcloud_template', 'tagcloud.html')
+        if 'tag' in g.resource:
+            self._posts = g.resource['tag']
+            return
+
+        for post in g.public_posts:
+            for tag in post.tags:
+                if tag not in self._posts:
+                    self._posts[tag] = [post]
+                else:
+                    self._posts[tag].append(post)
+
+        g.resource['tag'] = self._posts
+
+    def start(self):
+        dest = os.path.join(
+            g.output_directory, self.prefix_dest('tag/index.html')
+        )
+        self.render({'tags': self._posts}, self._template, dest)
+
+
 class CategoryWriter(ArchiveWriter):
     _posts = {}
 
