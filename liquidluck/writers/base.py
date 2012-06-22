@@ -53,13 +53,13 @@ class BaseWriter(object):
         return
 
     def render(self, params, template, destination):
+        filepath = destination[len(g.output_directory) + 1:]
+        filepath = filepath.lower()
         if g.detail_logging:
-            filepath = destination[len(g.output_directory) + 1:]
             logging.info('write %s' % filepath)
         tpl = g.jinja.get_template(template)
         html = tpl.render(params)
-        self.write(html, destination)
-        #: logging
+        self.write(html, os.path.join(g.output_directory, filepath))
         return
 
     def get(self, key, value=None):
