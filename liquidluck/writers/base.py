@@ -40,7 +40,6 @@ class BaseWriter(object):
         logging.info('%s Finished' % name)
 
     def write(self, content, destination):
-        destination = destination.lower()
         destination = destination.replace(' ', '-')
         folder = os.path.split(destination)[0]
         # on Mac OSX, `folder` == `FOLDER`
@@ -235,6 +234,7 @@ def get_post_slug(post, slug_format):
     slug = regex.sub(replace, slug_format)
     slug = slug.lstrip('/').replace('//', '/').replace(' ', '-')
     prefix = settings.site.get('prefix', '').rstrip('/')
+    slug = slug.lower()
     if prefix:
         return '%s/%s' % (prefix, slug)
     return slug
