@@ -128,6 +128,8 @@ def load_jinja():
     theme = os.path.join(os.path.abspath('_themes'), settings.theme)
     if not os.path.exists(theme):
         theme = os.path.join(g.liquid_directory, '_themes', settings.theme)
+    if not os.path.exists(theme):
+        logging.error("Can't find theme: %s" % settings.theme)
 
     #: global variable
     g.theme_directory = theme
