@@ -50,14 +50,15 @@ class MarkdownReader(BaseReader):
             logging.info('read ' + self.relative_filepath)
 
         header = ''
-        body = None
+        body = ''
+        recording = True
         for line in f:
-            if line.startswith('---'):
-                body = ''
-            elif body is not None:
-                body += line
-            else:
+            if recording and line.startswith('---'):
+                recording = False
+            elif recording:
                 header += line
+            else:
+                body += line
 
         f.close()
 
