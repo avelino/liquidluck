@@ -3,6 +3,15 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+Version 1.4
+------------
+
+Released on Jun 25th, 2012.
+
++ add TagCloudWriter
++ bugfix #24 #29
+
+
 Version 1.3
 -------------
 
