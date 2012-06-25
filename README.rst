@@ -12,8 +12,11 @@ written in Python.
 
 The main design pattern of Felix Felicis:
 
-1. We don't create any syntax that is only available in Felix Felicis
-2. Document should always be valid, it will be pretty even without Felix Felicis
+1. Beautiful is better than ugly.
+2. Nothing is better than everything.
+
+
+[Documentation](http://liquidluck.readthedocs.org) is available on RTD.
 
 Overview
 ---------
