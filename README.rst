@@ -16,7 +16,7 @@ The main design pattern of Felix Felicis:
 2. Nothing is better than everything.
 
 
-[Documentation](http://liquidluck.readthedocs.org) is available on RTD.
+`Documentation <http://liquidluck.readthedocs.org>`_ is available on RTD.
 
 Overview
 ---------
