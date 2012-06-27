@@ -26,6 +26,13 @@ def utf8(value):
     return value.encode('utf-8')
 
 
+def to_bytes(value):
+    if isinstance(value, bytes):
+        return value
+    assert isinstance(value, str)
+    return value.encode('utf-8')
+
+
 def import_object(name):
     if '.' not in name:
         return __import__(name)

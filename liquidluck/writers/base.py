@@ -15,7 +15,7 @@ import hashlib
 import logging
 from jinja2 import Environment, FileSystemLoader
 import liquidluck
-from liquidluck.utils import import_object, to_unicode, utf8
+from liquidluck.utils import import_object, to_unicode, to_bytes, utf8
 
 # blog settings
 from liquidluck.options import settings
@@ -325,7 +325,7 @@ def static_url(base):
 
         with open(abspath) as f:
             content = f.read()
-            hsh = hashlib.md5(utf8(content)).hexdigest()
+            hsh = hashlib.md5(to_bytes(content)).hexdigest()
             _Cache[path] = hsh
             return hsh
 
