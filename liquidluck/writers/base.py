@@ -325,7 +325,7 @@ def static_url(base):
 
         with open(abspath) as f:
             content = f.read()
-            hsh = hashlib.md5(content.encode('utf-8')).hexdigest()
+            hsh = hashlib.md5(utf8(content)).hexdigest()
             _Cache[path] = hsh
             return hsh
 
