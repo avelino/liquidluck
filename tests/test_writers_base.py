@@ -107,3 +107,6 @@ def test_static_url():
     path = os.path.join(ROOT, 'source')
     func = static_url(path)
     func('settings.py')
+    path = os.path.join(ROOT, 'source', 'post')
+    func = static_url(path)
+    func('demo-rst-1.rst')
