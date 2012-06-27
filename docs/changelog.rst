@@ -3,6 +3,12 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+Version 1.5
+------------
+
++ bugfix for ``static_url`` encoding error
+
+
 Version 1.4
 ------------
 
