@@ -31,10 +31,13 @@ class BaseWriter(object):
         raise NotImplementedError
 
     def run(self):
-        try:
+        if g.detail_logging:
             self.start()
-        except Exception as e:
-            logging.error(e)
+        else:
+            try:
+                self.start()
+            except Exception as e:
+                logging.error(e)
 
         name = self.__class__.__name__
         logging.info('%s Finished' % name)
