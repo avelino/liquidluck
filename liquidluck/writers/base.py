@@ -234,6 +234,10 @@ def get_post_slug(post, slug_format):
 
         if not value:
             return ''
+
+        if isinstance(value, int) and value < 10:
+            #: fix on month and date value
+            value = '0%d' % value
         return to_unicode(value)
 
     slug = regex.sub(replace, slug_format)
