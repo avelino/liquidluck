@@ -143,9 +143,6 @@ def install(keyword):
 
 def main():
     parser = argparse.ArgumentParser(prog='liquidluck')
-    parser.add_argument(
-        '-s', '--settings', default='settings.py', help='setting file'
-    )
 
     subparser = parser.add_subparsers(
         title='available commands', dest='subparser'
@@ -153,6 +150,8 @@ def main():
 
     subparser.add_parser(
         'create', help='create a blog repo',
+    ).add_argument(
+        '-s', '--settings', default='settings.py', help='setting file'
     )
 
     parser_gen = subparser.add_parser(
@@ -161,6 +160,9 @@ def main():
     parser_gen.add_argument(
         '-v', '--verbose', action='store_true',
         help='show more logging'
+    )
+    parser_gen.add_argument(
+        '-s', '--settings', default='settings.py', help='setting file'
     )
 
     subparser.add_parser(
