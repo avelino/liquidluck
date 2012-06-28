@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="{{theme.lang}}">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}{{site.name}}{% endblock %}</title>
@@ -16,7 +16,7 @@
         <!--[if lt IE 9]>
         <script type="text/javascript" src="{{ static_url('html5shiv.js') }}"></script>
         <![endif]-->
-        {% if theme.analytics %}
+        {% if theme.analytics -%}
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', '{{theme.analytics}}']);
@@ -28,21 +28,21 @@
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();
         </script>
-        {% endif %}
+        {%- endif %}
         {% block afterstyle %}{% endblock %}
     </head>
     <body>
         <header id="header">
-            {% block header %}
+            {% block header -%}
             <h1 id="brand"><a href="/">{{site.name}}</a></h1>
             {%- block nav %}
             <nav id="nav" role="navigation">
                 {% for name, link in theme.navigation %}
                 <a href="{{link}}">{{name}}</a>
-                {% endfor %}
+                {%- endfor %}
             </nav>
             {%- endblock %}
-            {% endblock %}
+            {%- endblock %}
         </header>
 
         <div id="main">
@@ -55,19 +55,19 @@
         <footer id="footer">
             {%- block footer %}
             <hr class="end" />
-            {% if theme.elsewhere %}
+            {% if theme.elsewhere -%}
             <nav class="elsewhere">
-                {% for name, link in theme.elsewhere %}
+                {% for name, link in theme.elsewhere -%}
                 <a href="{{link}}">{{name}}</a>
-                {% endfor %}
+                {%- endfor %}
             </nav>
-            {% endif %}
+            {%- endif %}
             <p class="copyright">
             <span class="software">
                 Powered by <a href="{{system.homepage}}">{{system.name}}</a> {{system.version}},
             </span>
             <span class="theme">
-                Theme {{theme.name}} {{theme.version}} by <a href="{{theme.author.website}}">{{theme.author.name}}</a></span>
+                Theme <a href="{{theme.website}}">{{theme.name}}</a> {{theme.version}} by <a href="{{theme.author.website}}">{{theme.author.name}}</a>
             </span>
             </p>
             <p class="system-info">
@@ -76,7 +76,7 @@
             {%- endblock %}
         </footer>
 
-        {% block beforejs %}{% endblock %}
+        {%- block beforejs %}{% endblock %}
         {% block afterjs %}{% endblock %}
     </body>
 </html>
