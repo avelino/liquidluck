@@ -6,8 +6,11 @@ All history since the new Felix Felicis are listed here:
 Version 1.5
 ------------
 
+Released on Jun 28th, 2012.
+
 + bugfix for ``static_url`` encoding error
 + command line interface changed #31
++ update the default theme
 
 
 Version 1.4
