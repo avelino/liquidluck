@@ -10,6 +10,7 @@ Reader, read content, parse to html.
 import os
 import logging
 import datetime
+import re
 from liquidluck.options import settings, g
 from liquidluck.utils import to_datetime, import_object
 
@@ -82,6 +83,14 @@ class Post(object):
 
         if meta:
             self.meta = meta
+
+    @property
+    def clean_title(self):
+        #: https://github.com/lepture/liquidluck/issues/32
+        title = re.sub(
+            r'[<>,~!#&\{\}\(\)\[\]\.\*\^\$\?]', ' ', self.title
+        )
+        return '-'.join(title.strip().split())
 
     @property
     def author(self):
