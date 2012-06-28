@@ -7,6 +7,7 @@ Version 1.6
 ------------
 
 + webhook support #33
++ add clean_title #32
 + table support in markdown
 
 
