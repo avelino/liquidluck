@@ -12,6 +12,7 @@ _1st_arguments=(
   'install:Install a theme'
   'document:Open documentation in browser'
   'version:Show Felix Felicis version'
+  'webhook:Start webhook server'
 )
 
 local expl
@@ -21,6 +22,7 @@ _arguments \
   '(-s --settings)'{-s,--settings}'[specify a setting file]' \
   '(-h --help)'{-h,--help}'[show help]' \
   '(-v --verbose)'{-v,--verbose}'[give more output]' \
+  '(-p --port)'{-p,--port}'[webhook server port]' \
   '*:: :->subcmds' && return 0
 
 if (( CURRENT == 1 )); then
@@ -36,4 +38,7 @@ case "$words[1]" in
   create)
     _arguments \
       '(-s --settings)'{-s,--settings}'[specify a setting file]' ;;
+  webhook)
+    _arguments \
+      '(-p --port)'{-p,--port}'[webhook server port]' ;;
 esac
