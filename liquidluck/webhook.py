@@ -9,9 +9,11 @@ from liquidluck.options import g
 
 
 def app(environ, start_response):
+    path = environ['PATH_INFO']
     start_response('200 OK', [('Content-type', 'text/plain')])
-    subprocess.call(['git', 'pull'])
-    subprocess.call(['liquidluck', 'build'])
+    if path == '/webhook':
+        subprocess.call(['git', 'pull'])
+        subprocess.call(['liquidluck', 'build'])
     yield 'Ok'
 
 
