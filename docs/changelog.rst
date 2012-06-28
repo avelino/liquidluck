@@ -3,6 +3,13 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+Version 1.6
+------------
+
++ webhook support #33
++ refactor cli
+
+
 Version 1.5
 ------------
 
