@@ -161,6 +161,19 @@ For more information on template or theme design, head over to :ref:`theme` sect
 The default theme doesn't show any information of the author, it is designed for
 personal blogging.
 
+
+Unicode in Settings
+---------------------
+
+https://github.com/lepture/liquidluck/issues/34
+
+For python under python3, unicode variable should be wrapped by **u**::
+
+    theme_variables = {
+        "key": u"測試",
+    }
+
+
 Readers
 ----------
 
