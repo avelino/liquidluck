@@ -9,6 +9,7 @@ Reader, read content, parse to html.
 
 import os
 import logging
+import datetime
 from liquidluck.options import settings, g
 from liquidluck.utils import to_datetime, import_object
 
@@ -111,6 +112,11 @@ class Post(object):
         if date:
             return to_datetime(date)
         return None
+
+    @property
+    def updated(self):
+        mtime = os.stat(self.filepath).st_mtime
+        return datetime.datetime.fromtimestamp(mtime)
 
     @property
     def public(self):

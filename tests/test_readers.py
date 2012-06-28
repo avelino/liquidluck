@@ -56,6 +56,11 @@ class TestPost(object):
         post = Post('filepath', 'content', title='title', meta=self.meta)
         assert post.date == datetime.datetime(2012, 12, 12)
 
+    def test_updated(self):
+        path = os.path.join(ROOT, 'source', 'post', 'demo-rst-1.rst')
+        post = Post(path, 'content', title='title', meta=self.meta)
+        assert isinstance(post.updated, datetime.datetime)
+
     def test_public(self):
         meta = {'public': 'false'}
         post = Post('filepath', 'content', title='title', meta=meta)
