@@ -5,6 +5,7 @@ import datetime
 from liquidluck.writers.base import Pagination
 from liquidluck.writers.base import get_post_slug, slug_to_destination
 from liquidluck.writers.base import content_url, static_url
+from liquidluck.writers.base import load_jinja
 from liquidluck.options import settings
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -110,3 +111,7 @@ def test_static_url():
     path = os.path.join(ROOT, 'source', 'post')
     func = static_url(path)
     func('demo-rst-1.rst')
+
+
+def test_load_jinja():
+    load_jinja()

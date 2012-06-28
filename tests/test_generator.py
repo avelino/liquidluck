@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 import os.path
-from liquidluck.cli import load_settings, load_posts
-from liquidluck.writers.base import load_jinja
+from liquidluck.generator import load_settings, load_posts
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -20,7 +19,3 @@ def test_load_posts():
     load_posts(os.path.join(ROOT, 'source/post'))
     from liquidluck.options import g
     assert len(g.public_posts) > 0
-
-
-def test_load_jinja():
-    load_jinja()
