@@ -141,3 +141,10 @@ class Daemon(object):
 class ServerDaemon(Daemon):
     def run(self):
         make_server('', g.port, app).serve_forever()
+
+
+def webhook(port):
+    g.port = int(port)
+    make_server('', g.port, app).serve_forever()
+    #d = ServerDaemon('/tmp/liquidluck.pid')
+    #d.start()
