@@ -11,7 +11,7 @@ from liquidluck.options import g
 def app(environ, start_response):
     start_response('200 OK', [('Content-type', 'text/plain')])
     subprocess.call(['git', 'pull'])
-    #: TODO
+    subprocess.call(['liquidluck', 'build'])
     yield 'Ok'
 
 
