@@ -141,6 +141,13 @@ def install(keyword):
     subprocess.call(['git', 'clone', repo, output])
 
 
+def webhook(port):
+    g.port = int(port)
+    from liquidluck.webhook import ServerDaemon
+    d = ServerDaemon('/tmp/liquidluck.pid')
+    d.start()
+
+
 def main():
     parser = argparse.ArgumentParser(prog='liquidluck')
     parser.add_argument(
@@ -179,6 +186,13 @@ def main():
         'version', help='show Felix Felicis version'
     )
 
+    subparser.add_parser(
+        'webhook', help='start a webhook server',
+    ).add_argument(
+        '-p', '--port', nargs='?', default=8000,
+        help='server port'
+    )
+
     args = parser.parse_args()
 
     if args.subparser == 'version':
@@ -199,6 +213,10 @@ def main():
 
     if args.subparser == 'create':
         create(args.settings)
+        return
+
+    if args.subparser == 'webhook':
+        webhook(args.port)
         return
 
     #: args.subparser == 'build'
