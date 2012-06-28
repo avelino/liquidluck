@@ -193,8 +193,7 @@ def search(keyword=None):
     if keyword:
         themes = [themes[keyword]]
 
-    for keyword in themes:
-        theme = themes[keyword]
+    for theme in themes:
         theme.update({'name': keyword})
         print(SEARCH_TEMPLATE % theme)
     return
@@ -214,44 +213,64 @@ def install(keyword):
 
 def main():
     parser = argparse.ArgumentParser(prog='liquidluck')
+    subparser = parser.add_subparsers(
+        title='available commands', dest='subparser'
+    )
 
-    parser.add_argument('command', nargs='?', default='build',
-                        help='build | create | search | install | help')
-    parser.add_argument('-s', '--settings', default='settings.py',
-                        help='setting file')
-    parser.add_argument('-t', '--theme', help='theme name')
-    parser.add_argument(
-        '-v', '--verbose', action='store_true', dest='detail_logging',
+    subparser.add_parser(
+        'init', help='create a blog repo',
+    )
+
+    parser_gen = subparser.add_parser(
+        'build', help='build the site'
+    )
+    parser_gen.add_argument(
+        '-v', '--verbose', action='store_true',
         help='show more logging'
     )
-    parser.add_argument('--version', action='store_true',
-                        help='show version info')
+    parser_gen.add_argument(
+        '-s', '--settings', default='settings.py', help='setting file'
+    )
+
+    subparser.add_parser(
+        'search', help='search theme'
+    ).add_argument('theme', nargs='?', help='theme name')
+
+    subparser.add_parser(
+        'install', help='install a theme'
+    ).add_argument('theme', nargs='?', help='theme name')
+
+    subparser.add_parser(
+        'document', help='launch documentation in browser'
+    )
+
+    subparser.add_parser(
+        'version', help='show Felix Felicis version'
+    )
 
     args = parser.parse_args()
 
-    if args.version:
+    if args.subparser == 'version':
         print("Felix Felicis Version: %s" % liquidluck.__version__)
         return
 
-    if args.command == 'help':
+    if args.subparser == 'document':
         launch_help()
         return
 
-    if args.command == 'search':
+    if args.subparser == 'search':
         search(args.theme)
         return
 
-    if args.command == 'install':
+    if args.subparser == 'install':
         install(args.theme)
         return
 
-    g.detail_logging = args.detail_logging
-    enable_pretty_logging()
-
-    if args.command == 'init' or args.command == 'create':
+    if args.subparser == 'init':
         create(args.settings)
         return
 
+    #: args.subparser == 'build'
     if not os.path.exists(args.settings):
         answer = raw_input(
             "Can't find your setting files, "
@@ -262,9 +281,10 @@ def main():
         create(args.settings)
         return
 
-    if args.command == 'build':
-        generate(args.settings)
-        return
+    g.detail_logging = args.verbose
+    enable_pretty_logging()
+    generate(args.settings)
+
 
 if __name__ == '__main__':
     main()
