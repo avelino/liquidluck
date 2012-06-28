@@ -218,7 +218,7 @@ def main():
     )
 
     subparser.add_parser(
-        'init', help='create a blog repo',
+        'create', help='create a blog repo',
     )
 
     parser_gen = subparser.add_parser(
@@ -266,7 +266,7 @@ def main():
         install(args.theme)
         return
 
-    if args.subparser == 'init':
+    if args.subparser == 'create':
         create(args.settings)
         return
 

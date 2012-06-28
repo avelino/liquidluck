@@ -7,6 +7,7 @@ Version 1.5
 ------------
 
 + bugfix for ``static_url`` encoding error
++ command line interface changed #31
 
 
 Version 1.4
