@@ -64,12 +64,22 @@ table {
     border-spacing: 0;
     border-color: #bbb;
 }
+table tr {
+    border-top: 1px solid #ccc;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
 table tr:nth-child(2n) {
-    background: #eee;
+    background-color: #eee;
 }
 table th, table td {
-    text-align: left;
-    padding: 4px 6px;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+}
+table td {
+    font-size: 14px;
+    font-family: "Lucida Grande", "Arial", sans-serif;
 }
 /* span level */
 img {

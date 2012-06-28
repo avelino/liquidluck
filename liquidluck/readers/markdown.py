@@ -121,7 +121,10 @@ def markdown(text):
     render = JuneRender(flags=m.HTML_USE_XHTML)
     md = m.Markdown(
         render,
-        extensions=m.EXT_FENCED_CODE | m.EXT_AUTOLINK,
+        extensions=(
+            m.EXT_FENCED_CODE | m.EXT_AUTOLINK | m.EXT_TABLES |
+            m.EXT_NO_INTRA_EMPHASIS | m.EXT_STRIKETHROUGH
+        ),
     )
     return md.render(text)
 

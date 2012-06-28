@@ -7,7 +7,7 @@ Version 1.6
 ------------
 
 + webhook support #33
-+ refactor cli
++ table support in markdown
 
 
 Version 1.5
