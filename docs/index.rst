@@ -24,6 +24,7 @@ User's Guide
     design
     theme
     develop
+    gift
     changelog
 
 
