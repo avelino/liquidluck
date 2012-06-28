@@ -8,12 +8,15 @@ from wsgiref.simple_server import make_server
 from liquidluck.options import g
 
 
+g.cwd_path = os.path.abspath('.')
+
+
 def app(environ, start_response):
     path = environ['PATH_INFO']
     start_response('200 OK', [('Content-type', 'text/plain')])
     if path == '/webhook':
-        subprocess.call(['git', 'pull'])
-        subprocess.call(['liquidluck', 'build'])
+        subprocess.call(['git', 'pull'], cwd=g.cwd_path)
+        subprocess.call(['liquidluck', 'build'], cwd=g.cwd_path)
     yield 'Ok'
 
 
@@ -147,6 +150,5 @@ class ServerDaemon(Daemon):
 
 def webhook(port):
     g.port = int(port)
-    make_server('', g.port, app).serve_forever()
-    #d = ServerDaemon('/tmp/liquidluck.pid')
-    #d.start()
+    d = ServerDaemon('/tmp/liquidluck.pid')
+    d.start()
