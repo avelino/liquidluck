@@ -28,14 +28,19 @@ Metadata that Felix Felicis supports natively:
 
 which means you can access them in template with a shortcut, for example: ``{{post.tags}}``.
 
+Metadata that Felix Felicis created itself:
 
-Post, Page and File
-----------------------
++ filepath
++ filename
++ clean_title  -- https://github.com/lepture/liquidluck/issues/32
++ updated
 
-Post contains date, page doesn't. Post follows permalink, page doesn't.
 
 Page
-``````
+------
+
+Page is the same as post, except that post contains date, page doesn't,
+post follows permalink, page doesn't.
 
 A example of page in Markdown::
 
@@ -82,7 +87,7 @@ and you want to you pages to be rendered to ``blog`` folder, you have to::
 
 
 File
-``````
+-----
 
 Any file without a valid markup suffix (e.g. ``.md``, ``.rst``, ``.mkd`` ...) is
 a **File**. It will be copied to the same path::
