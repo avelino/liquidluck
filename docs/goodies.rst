@@ -10,6 +10,12 @@ Gifts that makes Felix Felicis easy to use.
 Preview Server
 ---------------
 
+Preview your blog with::
+
+    $ liquidluck server
+    $ liquidluck server -p 8888
+    $ liquidluck server -p 8888 -s settings.py
+
 
 Oh My Zsh Plugin
 ------------------
