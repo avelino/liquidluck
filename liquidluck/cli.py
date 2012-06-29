@@ -3,18 +3,21 @@
 
 import os
 import argparse
-import liquidluck
-from liquidluck.generator import build
+from liquidluck.tools import theme
+from liquidluck.tools import creator
+from liquidluck.tools import webhook
+from liquidluck import generator
 from liquidluck.options import enable_pretty_logging
 from liquidluck.options import g
 
 
-def launch_help():
-    import webbrowser
-    webbrowser.open('http://liquidluck.readthedocs.org')
-
-
 def main():
+    parser = create_parser()
+    args = parser.parse_args()
+    run_parser(args)
+
+
+def create_parser():
     parser = argparse.ArgumentParser(prog='liquidluck')
 
     subparser = parser.add_subparsers(
@@ -71,37 +74,36 @@ def main():
         '-s', '--settings', default='settings.py', help='setting file'
     )
 
-    args = parser.parse_args()
+    return parser
 
+
+def run_parser(args):
     if args.subparser == 'version':
+        import liquidluck
         print("Felix Felicis Version: %s" % liquidluck.__version__)
         return
 
     if args.subparser == 'document':
-        launch_help()
+        import webbrowser
+        webbrowser.open('http://liquidluck.readthedocs.org')
         return
 
     if args.subparser == 'search':
-        from liquidluck.tools.theme import search
-        search(args.theme)
+        theme.search(args.theme)
         return
 
     if args.subparser == 'install':
-        from liquidluck.tools.theme import install
-        install(args.theme)
-        return
-
-    if args.subparser == 'create':
-        from liquidluck.tools.creator import create
-        create(args.settings)
+        theme.install(args.theme)
         return
 
     if args.subparser == 'webhook':
-        from liquidluck.tools.webhook import webhook
-        webhook(args.port, args.daemon, args.settings)
+        webhook.webhook(args.port, args.daemon, args.settings)
         return
 
-    #: args.subparser == 'build'
+    if args.subparser == 'create':
+        creator.create(args.settings)
+        return
+
     if not os.path.exists(args.settings):
         answer = raw_input(
             "Can't find your setting files, "
@@ -109,12 +111,12 @@ def main():
         )
         if answer.lower() == 'n':
             return
-        create(args.settings)
+        creator.create(args.settings)
         return
 
     g.detail_logging = args.verbose
     enable_pretty_logging()
-    build(args.settings)
+    generator.build(args.settings)
 
 
 if __name__ == '__main__':
