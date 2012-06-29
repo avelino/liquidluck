@@ -165,6 +165,7 @@ def main():
         '-s', '--settings', default='settings.py', help='setting file'
     )
 
+    #: theme support
     subparser.add_parser(
         'search', help='search theme'
     ).add_argument('theme', nargs='?', help='theme name')
@@ -173,6 +174,7 @@ def main():
         'install', help='install a theme'
     ).add_argument('theme', nargs='?', help='theme name')
 
+    #: utils
     subparser.add_parser(
         'document', help='launch documentation in browser'
     )
@@ -181,6 +183,7 @@ def main():
         'version', help='show Felix Felicis version'
     )
 
+    #: webhook command
     parser_webhook = subparser.add_parser(
         'webhook', help='start a webhook server',
     )
@@ -190,6 +193,9 @@ def main():
     parser_webhook.add_argument(
         '-p', '--port', nargs='?', default=8000,
         help='server port'
+    )
+    parser_webhook.add_argument(
+        '-s', '--settings', default='settings.py', help='setting file'
     )
 
     args = parser.parse_args()
@@ -216,7 +222,7 @@ def main():
 
     if args.subparser == 'webhook':
         from liquidluck.webhook import webhook
-        webhook(args.port, args.daemon)
+        webhook(args.port, args.daemon, args.settings)
         return
 
     #: args.subparser == 'build'

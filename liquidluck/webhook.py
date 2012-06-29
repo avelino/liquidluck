@@ -33,7 +33,7 @@ def app(environ, start_response):
     start_response('200 OK', [('Content-type', 'text/plain')])
     if path == '/webhook':
         _update()
-        _call('liquidluck build')
+        _call('liquidluck build -s %s' % g.settings)
     yield 'Ok'
 
 
@@ -165,8 +165,9 @@ class ServerDaemon(Daemon):
         make_server('', g.port, app).serve_forever()
 
 
-def webhook(port, command='start'):
+def webhook(port, command='start', settings='settings.py'):
     g.port = int(port)
+    g.settings = settings
     d = ServerDaemon('/tmp/liquidluck.pid')
     if command == 'start':
         d.start()
