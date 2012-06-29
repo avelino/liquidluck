@@ -31,3 +31,33 @@ Now you can tab complete every Felix Felicis command::
 
 Webhook
 ----------
+
+Felix Felicis supports webhook since v1.6. When you push to GitHub or BitBucket,
+your blog can generate itself.
+
+First, you need to install Felix Felicis on your server::
+
+    $ pip install liquidluck
+
+Second, your blog repo on your server::
+
+    $ git clone git://path/to/your/repo blog
+
+Then, start webhook daemon in your blog::
+
+    $ cd blog
+    $ liquidluck webhook start -p 9876
+
+
+Configure webhook on GitHub or BitBucket. We take GitHub as an example.
+
+Head over to your blog source repo admin, select **Service Hooks**
+
+.. image:: http://i.imgur.com/dE4rX.jpg
+    :alt: service hooks
+
+If your server ip is 88.88.88.88, you can add a URL::
+
+    http://88.88.88.88:9876/webhook
+
+And when you push to GitHub, your server will update the repo and generate the whole site.
