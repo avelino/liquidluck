@@ -20,6 +20,7 @@ _1st_arguments=(
   'document:Open documentation in browser'
   'version:Show Felix Felicis version'
   'webhook:Start webhook server'
+  'server:Start preview server'
 )
 
 local expl
@@ -54,4 +55,8 @@ case "$words[1]" in
         _webhook_subcommand
         _wanted webhook_subcommand expl 'webhook subcommand' compadd -a webhook_subcommand
     fi;;
+  server)
+    _arguments \
+      '(-p --port)'{-p,--port}'[webhook server port]' \
+      '(-s --settings)'{-s,--settings}'[specify a setting file]' ;;
 esac
