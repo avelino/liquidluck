@@ -45,10 +45,11 @@ def search(keyword=None):
         return None
 
     if keyword:
-        themes = [themes[keyword]]
+        themes = {keyword: themes[keyword]}
 
-    for theme in themes:
-        theme.update({'name': keyword})
+    for name in themes:
+        theme = themes[name]
+        theme.update({'name': name})
         print(SEARCH_TEMPLATE % theme)
     return
 
@@ -63,3 +64,7 @@ def install(keyword):
     output = '_themes/%s' % keyword
     import subprocess
     subprocess.call(['git', 'clone', repo, output])
+
+
+if __name__ == '__main__':
+    search('moment')
