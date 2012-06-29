@@ -181,9 +181,13 @@ def main():
         'version', help='show Felix Felicis version'
     )
 
-    subparser.add_parser(
+    parser_webhook = subparser.add_parser(
         'webhook', help='start a webhook server',
-    ).add_argument(
+    )
+    parser_webhook.add_argument(
+        'daemon', nargs='?', default='start',
+    )
+    parser_webhook.add_argument(
         '-p', '--port', nargs='?', default=8000,
         help='server port'
     )
@@ -212,7 +216,7 @@ def main():
 
     if args.subparser == 'webhook':
         from liquidluck.webhook import webhook
-        webhook(args.port)
+        webhook(args.port, args.daemon)
         return
 
     #: args.subparser == 'build'

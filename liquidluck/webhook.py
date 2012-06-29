@@ -148,7 +148,14 @@ class ServerDaemon(Daemon):
         make_server('', g.port, app).serve_forever()
 
 
-def webhook(port):
+def webhook(port, command='start'):
     g.port = int(port)
     d = ServerDaemon('/tmp/liquidluck.pid')
-    d.start()
+    if command == 'start':
+        d.start()
+    elif command == 'stop':
+        d.stop()
+    elif command == 'restart':
+        d.restart()
+    else:
+        print("Invalid Command")
