@@ -5,25 +5,26 @@ import atexit
 import signal
 import subprocess
 from wsgiref.simple_server import make_server
-from liquidluck.options import g
 
 
-g.cwd_path = os.path.abspath('.')
+CWDPATH = os.path.abspath('.')
+SETTINGS = 'settings.py'
+PORT = 8000
 
 
 def _call(cmd):
-    subprocess.call(cmd.split(), cwd=g.cwd_path)
+    subprocess.call(cmd.split(), cwd=CWDPATH)
 
 
 def _update():
-    if os.path.isdir(os.path.join(g.cwd_path, '.git')):
+    if os.path.isdir(os.path.join(CWDPATH, '.git')):
         _call('git pull')
-        if os.path.exists(os.path.join(g.cwd_path, '.gitmodules')):
+        if os.path.exists(os.path.join(CWDPATH, '.gitmodules')):
             _call('git submodule init')
             _call('git submodule update')
         return
 
-    if os.path.isdir(os.path.join(g.cwd_path, '.hg')):
+    if os.path.isdir(os.path.join(CWDPATH, '.hg')):
         _call('hg pull')
         return
 
@@ -33,7 +34,7 @@ def app(environ, start_response):
     start_response('200 OK', [('Content-type', 'text/plain')])
     if path == '/webhook':
         _update()
-        _call('liquidluck build -s %s' % g.settings)
+        _call('liquidluck build -s %s' % SETTINGS)
     yield 'Ok'
 
 
@@ -162,12 +163,15 @@ class Daemon(object):
 
 class ServerDaemon(Daemon):
     def run(self):
-        make_server('', g.port, app).serve_forever()
+        global PORT
+        make_server('', PORT, app).serve_forever()
 
 
 def webhook(port, command='start', settings='settings.py'):
-    g.port = int(port)
-    g.settings = settings
+    global PORT
+    global SETTINGS
+    PORT = int(port)
+    SETTINGS = settings
     d = ServerDaemon('/tmp/liquidluck.pid')
     if command == 'start':
         d.start()
