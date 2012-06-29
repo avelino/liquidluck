@@ -221,7 +221,7 @@ def main():
         return
 
     if args.subparser == 'webhook':
-        from liquidluck.webhook import webhook
+        from liquidluck.tools.webhook import webhook
         webhook(args.port, args.daemon, args.settings)
         return
 
