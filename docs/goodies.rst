@@ -1,7 +1,7 @@
-.. _gifts:
+.. _goodies:
 
 
-Gifts
+Goodies
 ==========
 
 Gifts that makes Felix Felicis easy to use.

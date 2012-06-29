@@ -24,7 +24,7 @@ User's Guide
     design
     theme
     develop
-    gift
+    goodies
     changelog
 
 
