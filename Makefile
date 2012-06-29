@@ -5,7 +5,7 @@
 
 
 doc:
-	doki.py -t default --title=Felix\ Felicis --github=liquidluck README.md > index.html
+	doki.py -t default --title=Felix\ Felicis --github=liquidluck README.rst > index.html
 
 publish:
 	git push origin gh-pages

@@ -23,32 +23,21 @@
     </head>
     <body>
         <div class="container">
-            <h1>Felix Felicis</h1>
-
-<p>Felix Felicis is a magical potion, also known as liquidluck.
-It was first introduced in Harry Porter, and this is where the name comes.</p>
-
-<p>Felix Felicis (aka liquidluck) is a simple lightweight static blog
-generator written in Python.</p>
-
-<ul>
-<li><a href="http://liquidluck.readthedocs.org">Documentation</a></li>
-</ul>
-
+            <h1>Felix Felicis</h1><a class="reference external image-reference" href="https://secure.travis-ci.org/lepture/liquidluck"><img alt="https://secure.travis-ci.org/lepture/liquidluck.png" src="https://secure.travis-ci.org/lepture/liquidluck.png" /></a>
+<p>Felix Felicis (aka <tt class="docutils literal">liquidluck</tt>) is a simple lightweight static blog generator
+written in Python.</p>
 <p><strong>There are so many static blog generators, why create a new one?</strong></p>
-
 <p>The main design pattern of Felix Felicis:</p>
-
-<ol>
-<li>We don&#39;t create any syntax that is only available in Felix Felicis</li>
-<li>Document should always be valid, it will be pretty even without Felix Felicis</li>
+<ol class="arabic simple">
+<li>Beautiful is better than ugly.</li>
+<li>Nothing is better than everything.</li>
 </ol>
-
-<h2>Post Style Overview</h2>
-
-<p><strong>A post in Markdown</strong></p>
-
-<pre><code># Hello World
+<p><a class="reference external" href="http://liquidluck.readthedocs.org">Documentation</a> is available on RTD.</p>
+<div class="section" id="post-syntax-overview">
+<h2>Post Syntax Overview</h2>
+<p>A post in markdown:</p>
+<pre class="literal-block">
+# Hello World
 
 - date: 2012-06-11
 - tags: python, javascript
@@ -68,11 +57,11 @@ Hello World in JavaScript
 function hello(name) {
     alert('Hello ' + name);
 }
-```</code></pre>
-
-<p><strong>A post in reStructuredText</strong></p>
-
-<pre><code>Hello World
+```
+</pre>
+<p>A post in restructuredText:</p>
+<pre class="literal-block">
+Hello World
 ============
 
 :date: 2012-06-11
@@ -89,30 +78,40 @@ Hello World in JavaScript:
 
     function hello(name) {
         alert('Hello ' + name);
-    }</code></pre>
-
-<p>Both of these two posts are valid in their markup language, even without Felix Felicis they should be displayed well.</p>
-
+    }
+</pre>
+<p>Both of these two posts are valid in their markup language, even without Felix Felicis
+they should be displayed well.</p>
 <p>And in this case, your documents will always be yours, not tied to Felix Felicis.</p>
-
+</div>
+<div class="section" id="features">
+<h2>Features</h2>
+<ul class="simple">
+<li>Category, Tag, Post, Page, Feed and everything a blog should have</li>
+<li>Beautiful and valid syntax supports</li>
+<li>Full customizable theme supports</li>
+<li>No extension system (Is this a feature? YES!)</li>
+<li>GitHub and BitBucket web hook service</li>
+<li>Live preview server</li>
+</ul>
+</div>
+<div class="section" id="compatibility">
 <h2>Compatibility</h2>
-
-<ul>
-<li><p>Markup:</p>
-
-<ul>
-<li>reStructuredText</li>
-<li>markdown</li>
-</ul></li>
-<li><p>Python:</p>
-
-<ul>
+<ul class="simple">
+<li>Markup:<ul>
+<li><a class="reference external" href="http://docutils.sourceforge.net/rst.html">restructedText</a></li>
+<li><a class="reference external" href="http://daringfireball.net/projects/markdown/">markdown</a></li>
+</ul>
+</li>
+<li>Python:<ul>
 <li>2.6</li>
 <li>2.7</li>
 <li>3.1</li>
 <li>3.2</li>
-</ul></li>
 </ul>
+</li>
+</ul>
+</div>
 
         </div>
         <hr class="end" />
