@@ -12,7 +12,7 @@ def to_unicode(value):
         return value
     if isinstance(value, basestring):
         return value.decode('utf-8')
-    if isinstance(value, int):
+    if isinstance(value, (bytes, int)):
         return str(value)
     return value
 
