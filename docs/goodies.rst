@@ -54,7 +54,12 @@ Configure webhook on GitHub or BitBucket. We take GitHub as an example.
 Head over to your blog source repo admin, select **Service Hooks**
 
 .. image:: http://i.imgur.com/dE4rX.jpg
-    :alt: service hooks
+    :alt: github service hook
+
+If you prefer BitBucket, you should select the POST service:
+
+.. image:: http://i.imgur.com/K4HfA.jpg
+    :alt: bitbucket service hook
 
 If your server ip is 88.88.88.88, you can add a URL::
 
