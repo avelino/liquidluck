@@ -1,8 +1,15 @@
 #compdef liquidluck
 #autoload
 
-# pip zsh completion, based on homebrew completion
+# liquidluck zsh completion, based on homebrew completion
 
+_webhook_subcommand() {
+    webhook_subcommand=(
+        'start'
+        'stop'
+        'restart'
+    )
+}
 
 local -a _1st_arguments
 _1st_arguments=(
@@ -16,7 +23,7 @@ _1st_arguments=(
 )
 
 local expl
-local -a pkgs installed_pkgs
+local -a webhook_subcommand
 
 _arguments \
   '(-s --settings)'{-s,--settings}'[specify a setting file]' \
@@ -40,5 +47,10 @@ case "$words[1]" in
       '(-s --settings)'{-s,--settings}'[specify a setting file]' ;;
   webhook)
     _arguments \
-      '(-p --port)'{-p,--port}'[webhook server port]' ;;
+      '(-p --port)'{-p,--port}'[webhook server port]' \
+      '1: :->webhookcmd' && return 0
+    if [[ "$state" == webhookcmd ]]; then
+        _webhook_subcommand
+        _wanted webhook_subcommand expl 'webhook subcommand' compadd -a webhook_subcommand
+    fi;;
 esac
