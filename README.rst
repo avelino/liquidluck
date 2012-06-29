@@ -80,6 +80,7 @@ Features
 - Full customizable theme supports
 - No extension system (Is this a feature? YES!)
 - GitHub and BitBucket web hook service
+- Live preview server
 
 
 Compatibility
