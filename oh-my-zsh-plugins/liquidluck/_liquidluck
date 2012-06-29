@@ -48,6 +48,7 @@ case "$words[1]" in
   webhook)
     _arguments \
       '(-p --port)'{-p,--port}'[webhook server port]' \
+      '(-s --settings)'{-s,--settings}'[specify a setting file]' \
       '1: :->webhookcmd' && return 0
     if [[ "$state" == webhookcmd ]]; then
         _webhook_subcommand
