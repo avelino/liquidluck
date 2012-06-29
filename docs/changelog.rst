@@ -6,6 +6,8 @@ All history since the new Felix Felicis are listed here:
 Version 1.6
 ------------
 
+Released on Jun 29th, 2012
+
 + webhook support #33
 + add clean_title #32
 + table support in markdown
