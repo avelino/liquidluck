@@ -58,6 +58,7 @@ def app(environ, start_response):
 
 def start_server():
     global PORT
+    print('Start server at 0.0.0.0:%s' % PORT)
     make_server('', PORT, app).serve_forever()
 
 
