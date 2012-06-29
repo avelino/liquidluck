@@ -2,14 +2,32 @@
 
 import os
 import mimetypes
-from liquidluck.options import g
-from liquidluck.generator import load_settings
-#from wsgiref.simple_server import make_server
+from wsgiref.simple_server import make_server
+
+PORT = 8000
+ROOT = os.path.abspath('.')
+PERMALINK = 'html'
+
+
+def config(port=None, root=None, permalink=None):
+    global PORT
+    global ROOT
+    global PERMALINK
+    if port:
+        PORT = int(port)
+
+    if root:
+        ROOT = os.path.abspath(root)
+
+    if permalink:
+        PERMALINK = permalink
 
 
 def app(environ, start_response):
-    path = environ['PATH_INFO']
-    abspath = os.path.join(g.output_directory, path)
+    global ROOT
+    global PERMALINK
+    path = environ['PATH_INFO'].lstrip('/')
+    abspath = os.path.join(ROOT, path)
     headers = []
     mime_type, encoding = mimetypes.guess_type(abspath)
     if mime_type:
@@ -17,8 +35,31 @@ def app(environ, start_response):
     else:
         headers.append(('Content-type', 'text/html'))
 
-    start_response('200 OK', headers)
+    filepath = abspath
+    if abspath.endswith('/'):
+        #: this is index
+        filepath = os.path.join(abspath, 'index.html')
+        if not os.path.exists(filepath) and PERMALINK == 'slash':
+            filepath = abspath.rstrip('/') + '.html'
+
+    elif not os.path.exists(abspath) and PERMALINK == 'clean':
+        filepath = abspath + '.html'
+
+    if not os.path.exists(filepath):
+        start_response('404 Not Found', headers)
+    else:
+        start_response('200 OK', headers)
+
+        f = open(filepath)
+        for line in f:
+            yield line
+        f.close()
 
 
-def detect(path):
-    load_settings(path)
+def start_server():
+    global PORT
+    make_server('', PORT, app).serve_forever()
+
+
+if __name__ == '__main__':
+    start_server()
