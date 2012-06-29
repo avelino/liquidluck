@@ -3,6 +3,14 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+
+Version 1.7
+------------
+
++ webhook supports submodule
++ webhook supports hg
+
+
 Version 1.6
 ------------
 

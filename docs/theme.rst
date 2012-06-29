@@ -10,6 +10,12 @@ you should know them.
 .. _`Jinja Template`: http://jinja.pocoo.org/
 
 
+You can learn how to design your own theme by demo, have a look at the
+`moment theme <https://github.com/lepture/liquidluck-theme-moment>`_ and
+fork it!
+
+Remember to submit your theme at `Theme Gallery`_.
+
 
 Structure
 ----------
