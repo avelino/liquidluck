@@ -16,6 +16,8 @@ def app(environ, start_response):
     start_response('200 OK', [('Content-type', 'text/plain')])
     if path == '/webhook':
         subprocess.call(['git', 'pull'], cwd=g.cwd_path)
+        subprocess.call(['git', 'submodule', 'init'], cwd=g.cwd_path)
+        subprocess.call(['git', 'submodule', 'update'], cwd=g.cwd_path)
         subprocess.call(['liquidluck', 'build'], cwd=g.cwd_path)
     yield 'Ok'
 
