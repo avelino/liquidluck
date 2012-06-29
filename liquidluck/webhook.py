@@ -11,14 +11,29 @@ from liquidluck.options import g
 g.cwd_path = os.path.abspath('.')
 
 
+def _call(cmd):
+    subprocess.call(cmd.split(), cwd=g.cwd_path)
+
+
+def _update():
+    if os.path.isdir(os.path.join(g.cwd_path, '.git')):
+        _call('git pull')
+        if os.path.exists(os.path.join(g.cwd_path, '.gitmodules')):
+            _call('git submodule init')
+            _call('git submodule update')
+        return
+
+    if os.path.isdir(os.path.join(g.cwd_path, '.hg')):
+        _call('hg pull')
+        return
+
+
 def app(environ, start_response):
     path = environ['PATH_INFO']
     start_response('200 OK', [('Content-type', 'text/plain')])
     if path == '/webhook':
-        subprocess.call(['git', 'pull'], cwd=g.cwd_path)
-        subprocess.call(['git', 'submodule', 'init'], cwd=g.cwd_path)
-        subprocess.call(['git', 'submodule', 'update'], cwd=g.cwd_path)
-        subprocess.call(['liquidluck', 'build'], cwd=g.cwd_path)
+        _update()
+        _call('liquidluck build')
     yield 'Ok'
 
 
