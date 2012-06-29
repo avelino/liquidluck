@@ -6,9 +6,10 @@ import argparse
 from liquidluck.tools import theme
 from liquidluck.tools import creator
 from liquidluck.tools import webhook
+from liquidluck.tools import server
 from liquidluck import generator
 from liquidluck.options import enable_pretty_logging
-from liquidluck.options import g
+from liquidluck.options import g, settings
 
 
 def main():
@@ -24,9 +25,10 @@ def create_parser():
         title='available commands', dest='subparser'
     )
 
-    subparser.add_parser(
+    parser_create = subparser.add_parser(
         'create', help='create a blog repo',
-    ).add_argument(
+    )
+    parser_create.add_argument(
         '-s', '--settings', default='settings.py', help='setting file'
     )
 
@@ -42,13 +44,15 @@ def create_parser():
     )
 
     #: theme support
-    subparser.add_parser(
+    parser_search = subparser.add_parser(
         'search', help='search theme'
-    ).add_argument('theme', nargs='?', help='theme name')
+    )
+    parser_search.add_argument('theme', nargs='?', help='theme name')
 
-    subparser.add_parser(
+    parser_install = subparser.add_parser(
         'install', help='install a theme'
-    ).add_argument('theme', nargs='?', help='theme name')
+    )
+    parser_install.add_argument('theme', nargs='?', help='theme name')
 
     #: utils
     subparser.add_parser(
@@ -71,6 +75,18 @@ def create_parser():
         help='server port'
     )
     parser_webhook.add_argument(
+        '-s', '--settings', default='settings.py', help='setting file'
+    )
+
+    #: preview server
+    parser_server = subparser.add_parser(
+        'server', help='start a preview server',
+    )
+    parser_server.add_argument(
+        '-p', '--port', nargs='?', default=8000,
+        help='server port'
+    )
+    parser_server.add_argument(
         '-s', '--settings', default='settings.py', help='setting file'
     )
 
@@ -98,6 +114,18 @@ def run_parser(args):
 
     if args.subparser == 'webhook':
         webhook.webhook(args.port, args.daemon, args.settings)
+        return
+
+    if args.subparser == 'server':
+        generator.load_settings(args.settings)
+        if settings.permalink.endswith('.html'):
+            permalink = 'html'
+        elif settings.permalink.endswith('/'):
+            permalink = 'slash'
+        else:
+            permalink = 'clean'
+        server.config(args.port, g.output_directory, permalink)
+        server.start_server()
         return
 
     if args.subparser == 'create':
