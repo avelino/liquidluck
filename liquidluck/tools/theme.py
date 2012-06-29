@@ -1,4 +1,5 @@
 import os
+from liquidluck.utils import to_unicode
 
 
 def __load_themes():
@@ -11,12 +12,12 @@ def __load_themes():
         content = urllib.urlopen(
             'http://project.lepture.com/liquidluck/themes.json'
         ).read()
-        open(f, 'w').write(content)
+        open(f, 'w').write(to_unicode(content))
 
     if not os.path.exists(f) or os.stat(f).st_mtime + 600 < time.time():
         fetch()
 
-    content = open(f).read()
+    content = to_unicode(open(f).read())
 
     try:
         import json
