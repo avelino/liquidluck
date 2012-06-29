@@ -5,19 +5,29 @@ from liquidluck.utils import to_unicode
 def __load_themes():
     import time
     import tempfile
-    f = os.path.join(tempfile.gettempdir(), 'liquidluck.json')
+    path = os.path.join(tempfile.gettempdir(), 'liquidluck.json')
 
     def fetch():
         import urllib
-        content = urllib.urlopen(
+        if hasattr(urllib, 'urlopen'):
+            urlopen = urllib.urlopen
+        else:
+            import urllib.request
+            urlopen = urllib.request.urlopen
+
+        content = urlopen(
             'http://project.lepture.com/liquidluck/themes.json'
         ).read()
-        open(f, 'w').write(to_unicode(content))
+        content = to_unicode(content)
+        f = open(path, 'w')
+        f.write(content)
+        f.close()
 
-    if not os.path.exists(f) or os.stat(f).st_mtime + 600 < time.time():
+    if not os.path.exists(path) or \
+       os.stat(path).st_mtime + 600 < time.time():
         fetch()
 
-    content = to_unicode(open(f).read())
+    content = to_unicode(open(path).read())
 
     try:
         import json
@@ -68,4 +78,4 @@ def install(keyword):
 
 
 if __name__ == '__main__':
-    search('moment')
+    search()
