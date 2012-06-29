@@ -18,8 +18,8 @@ The main design pattern of Felix Felicis:
 
 `Documentation <http://liquidluck.readthedocs.org>`_ is available on RTD.
 
-Overview
----------
+Post Syntax Overview
+----------------------
 
 A post in markdown::
 
@@ -70,6 +70,16 @@ Both of these two posts are valid in their markup language, even without Felix F
 they should be displayed well.
 
 And in this case, your documents will always be yours, not tied to Felix Felicis.
+
+
+Features
+-----------
+
+- Category, Tag, Post, Page, Feed and everything a blog should have
+- Beautiful and valid syntax supports
+- Full customizable theme supports
+- No extension system (Is this a feature? YES!)
+- GitHub and BitBucket web hook service
 
 
 Compatibility
