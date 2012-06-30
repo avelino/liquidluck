@@ -72,3 +72,20 @@ Write more
 ------------
 
 You can test more posts yourself.
+
+
+Learn Commands
+----------------
+
+Get all commands::
+
+    $ liquidluck -h
+
+
+List all themes::
+
+    $ liquidluck search
+
+Install a theme::
+
+    $ liquidlcuk install {{name}}
