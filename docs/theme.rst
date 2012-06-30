@@ -10,11 +10,17 @@ you should know them.
 .. _`Jinja Template`: http://jinja.pocoo.org/
 
 
-You can learn how to design your own theme by demo, have a look at the
-`moment theme <https://github.com/lepture/liquidluck-theme-moment>`_ and
-fork it!
+You can learn how to design your own theme by demo:
 
+- https://github.com/lepture/liquidluck-theme-moment
+- https://github.com/lepture/liquidluck-theme-octopress
+
+Please create your repo at github with ``liquidluck-theme-`` prefix.
 Remember to submit your theme at `Theme Gallery`_.
+
+Get all themes::
+
+    $ liquidluck search
 
 
 Structure

@@ -23,7 +23,7 @@ def __load_themes():
     path = os.path.join(tempfile.gettempdir(), 'liquidluck.json')
 
     if not os.path.exists(path) or \
-       os.stat(path).st_mtime + 600 < time.time():
+       os.stat(path).st_mtime + 100 < time.time():
         content = __fetch_themes()
         f = open(path, 'w')
         f.write(content)
