@@ -4,6 +4,15 @@ Changelog
 All history since the new Felix Felicis are listed here:
 
 
+Version 1.8
+------------
+
+Released on Jul 1st, 2012
+
++ search theme from github
++ timezone support
+
+
 Version 1.7
 ------------
 
