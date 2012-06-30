@@ -22,6 +22,7 @@ from liquidluck.options import settings
 
 # liquidluck settings
 from liquidluck.options import g
+from liquidluck.filters import xmldatetime
 
 
 class BaseWriter(object):
@@ -204,7 +205,7 @@ def load_jinja():
 
     #: default filters
     jinja.filters.update({
-        'xmldatetime': lambda o: o.strftime('%Y-%m-%dT%H:%M:%SZ'),
+        'xmldatetime': xmldatetime,
         'permalink': permalink,
     })
 
