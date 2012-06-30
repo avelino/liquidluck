@@ -57,7 +57,7 @@ URL: %(url)s
 '''
 
 
-def search(keyword=None):
+def search(keyword=None, clean=False):
     themes = __load_themes()
     available = {}
 
@@ -67,8 +67,11 @@ def search(keyword=None):
                 available[name] = themes[name]
 
     for name in (available or themes):
-        theme = themes[name]
-        print(SEARCH_TEMPLATE % theme)
+        if clean:
+            print(name)
+        else:
+            theme = themes[name]
+            print(SEARCH_TEMPLATE % theme)
     return
 
 
@@ -85,4 +88,4 @@ def install(keyword):
 
 
 if __name__ == '__main__':
-    search('moment')
+    search()

@@ -47,6 +47,10 @@ def create_parser():
     parser_search = subparser.add_parser(
         'search', help='search theme'
     )
+    parser_search.add_argument(
+        '-c', '--clean', action='store_true',
+        help='show name only'
+    )
     parser_search.add_argument('theme', nargs='?', help='theme name')
 
     parser_install = subparser.add_parser(
@@ -105,7 +109,7 @@ def run_parser(args):
         return
 
     if args.subparser == 'search':
-        theme.search(args.theme)
+        theme.search(args.theme, args.clean)
         return
 
     if args.subparser == 'install':
