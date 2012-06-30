@@ -203,7 +203,7 @@ Writers
 There are many writers in Felix Felicis, and you can add more. If you want to add your
 own writer to Felix Felics, head over to :ref:`development`.
 
-Core writers are active by default, and they are::
+Writers that are active by default::
 
     writers = {
         'post': 'liquidluck.writers.core.PostWriter',
@@ -222,6 +222,13 @@ You can deactive a writer as the way you disable a reader, for example category 
 
     writers = {
         'category_feed': None,
+    }
+
+Replace TagWriter with TagCloudWriter::
+
+    writers = {
+        'tag': None,
+        'tagcloud': 'liquidluck.writers.core.TagCloudWriter',
     }
 
 

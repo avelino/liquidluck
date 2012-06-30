@@ -5,10 +5,11 @@ DEFAULT_SETTING = """
 permalink = '{{category}}/{{filename}}.html'
 perpage = 30
 feedcount = 20
+timezone = "+00:00"
 
-author = 'admin'  # choose a nickname
+author = 'nickname'  # choose a nickname
 authors = {
-    'admin': {
+    'nickname': {
         'name': 'Full Name',
         'email': 'admin@example.com',
         'website': 'http://example.com',
@@ -20,8 +21,11 @@ theme = 'default'
 # theme variables are defined by theme creator
 theme_variables = {}
 
+# http://liquidluck.readthedocs.org/en/latest/config.html#readers
 # readers = {}
 # readers_variables = {}
+
+# http://liquidluck.readthedocs.org/en/latest/config.html#writers
 # writers = {}
 # writers_variables = {}
 
