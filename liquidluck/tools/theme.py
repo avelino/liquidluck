@@ -2,30 +2,32 @@ import os
 from liquidluck.utils import to_unicode
 
 
+def __fetch_themes():
+    import urllib
+    if hasattr(urllib, 'urlopen'):
+        urlopen = urllib.urlopen
+    else:
+        import urllib.request
+        urlopen = urllib.request.urlopen
+
+    content = urlopen(
+        'https://api.github.com/legacy/repos/search/liquidluck-theme'
+    ).read()
+    content = to_unicode(content)
+    return content
+
+
 def __load_themes():
     import time
     import tempfile
     path = os.path.join(tempfile.gettempdir(), 'liquidluck.json')
 
-    def fetch():
-        import urllib
-        if hasattr(urllib, 'urlopen'):
-            urlopen = urllib.urlopen
-        else:
-            import urllib.request
-            urlopen = urllib.request.urlopen
-
-        content = urlopen(
-            'http://project.lepture.com/liquidluck/themes.json'
-        ).read()
-        content = to_unicode(content)
+    if not os.path.exists(path) or \
+       os.stat(path).st_mtime + 600 < time.time():
+        content = __fetch_themes()
         f = open(path, 'w')
         f.write(content)
         f.close()
-
-    if not os.path.exists(path) or \
-       os.stat(path).st_mtime + 600 < time.time():
-        fetch()
 
     content = to_unicode(open(path).read())
 
@@ -36,31 +38,36 @@ def __load_themes():
         import simplejson
         json_decode = simplejson.loads
 
-    themes = json_decode(content)
+    repos = json_decode(content)
+    themes = {}
+    for theme in repos['repositories']:
+        name = theme['name'].replace('liquidluck-theme', '')
+        name = name.strip().strip('-')
+        theme['name'] = name
+        themes[name] = theme
     return themes
 
 
 SEARCH_TEMPLATE = '''
 Theme: %(name)s
-Author: %(author)s
-Homepage: %(homepage)s
-
+Author: %(username)s
+Description: %(description)s
+Updated: %(pushed)s
+URL: %(url)s
 '''
 
 
 def search(keyword=None):
     themes = __load_themes()
-
-    if keyword and keyword not in themes:
-        print("Can't find theme: %s" % keyword)
-        return None
+    available = {}
 
     if keyword:
-        themes = {keyword: themes[keyword]}
+        for name in themes:
+            if keyword in name:
+                available[name] = themes[name]
 
-    for name in themes:
+    for name in (available or themes):
         theme = themes[name]
-        theme.update({'name': name})
         print(SEARCH_TEMPLATE % theme)
     return
 
@@ -71,11 +78,11 @@ def install(keyword):
         print("can't find theme %s" % keyword)
         return
     theme = themes[keyword]
-    repo = theme['repo']
+    repo = theme['url']
     output = '_themes/%s' % keyword
     import subprocess
     subprocess.call(['git', 'clone', repo, output])
 
 
 if __name__ == '__main__':
-    search()
+    search('moment')
