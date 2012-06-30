@@ -10,6 +10,9 @@ _webhook_subcommand() {
         'restart'
     )
 }
+_all_themes() {
+    all_themes=(`liquidluck search -c`)
+}
 
 local -a _1st_arguments
 _1st_arguments=(
@@ -24,10 +27,11 @@ _1st_arguments=(
 )
 
 local expl
-local -a webhook_subcommand
+local -a webhook_subcommand all_themes
 
 _arguments \
   '(-s --settings)'{-s,--settings}'[specify a setting file]' \
+  '(-c --clean)'{-c,--clean}'[show name only]' \
   '(-h --help)'{-h,--help}'[show help]' \
   '(-v --verbose)'{-v,--verbose}'[give more output]' \
   '(-p --port)'{-p,--port}'[webhook server port]' \
@@ -59,4 +63,10 @@ case "$words[1]" in
     _arguments \
       '(-p --port)'{-p,--port}'[webhook server port]' \
       '(-s --settings)'{-s,--settings}'[specify a setting file]' ;;
+  search)
+    _arguments \
+      '(-c --clean)'{-c,--clean}'[show name only]' ;;
+  install)
+      _all_themes
+      _wanted all_themes expl 'themes' compadd -a all_themes ;;
 esac
