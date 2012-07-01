@@ -175,12 +175,13 @@ def load_jinja():
     jinja.globals.update({'theme': config})
 
     #: default variables
+    now = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
     jinja.globals.update({
         'system': {
             'name': 'Felix Felicis',
             'version': liquidluck.__version__,
             'homepage': liquidluck.__homepage__,
-            'time': datetime.datetime.utcnow(),
+            'time': now,
         }
     })
 

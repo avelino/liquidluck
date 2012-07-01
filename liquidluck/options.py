@@ -114,7 +114,7 @@ settings.theme = 'default'
 settings.permalink = '{{category}}/{{filename}}.html'
 settings.perpage = 30
 settings.feedcount = 20
-settings.timezone = 0
+settings.timezone = '+00:00'
 
 settings.site = {
     'name': 'Felix Felicis',

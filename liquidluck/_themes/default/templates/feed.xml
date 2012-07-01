@@ -3,7 +3,7 @@
     <title>{{ site.name }}</title>
     <link href="{{content_url(site.url, feed.feedurl)}}" rel="self" />
     <link href="{{content_url(site.url, feed.url)}}" />
-    <updated>{{system.time|xmldatetime}}</updated>
+    <updated>{{system.time}}</updated>
     <id>{{ content_url(site.url, feed.url) }}</id>
     {% for post in feed.posts -%}
     <entry>
