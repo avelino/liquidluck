@@ -121,7 +121,10 @@ def run_parser(args):
         return
 
     if args.subparser == 'server':
-        generator.load_settings(args.settings)
+        if not os.path.exists(args.settings):
+            print('setting file not found')
+        else:
+            generator.load_settings(args.settings)
         if settings.permalink.endswith('.html'):
             permalink = 'html'
         elif settings.permalink.endswith('/'):
