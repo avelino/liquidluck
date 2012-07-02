@@ -123,6 +123,7 @@ def run_parser(args):
     if args.subparser == 'server':
         if not os.path.exists(args.settings):
             print('setting file not found')
+            g.output_directory = os.path.abspath('.')
         else:
             generator.load_settings(args.settings)
         if settings.permalink.endswith('.html'):

@@ -23,6 +23,45 @@ def config(port=None, root=None, permalink=None):
         PERMALINK = permalink
 
 
+def _autoindex(abspath):
+    html = '<ul>'
+    files = os.listdir(abspath)
+    for f in files:
+        path = os.path.join(abspath, f)
+        html += '<li>'
+        if os.path.isdir(path):
+            html += '<a href="%s/">%s</a>' % (f, f)
+        else:
+            html += '<a href="%s">%s</a>' % (f, f)
+
+        html += '</li>'
+
+    html += '</ul>'
+    return html
+
+
+def _read(abspath):
+    filepath = abspath
+    if abspath.endswith('/'):
+        #: this is index
+        filepath = os.path.join(abspath, 'index.html')
+        if not os.path.exists(filepath) and PERMALINK == 'slash':
+            filepath = abspath.rstrip('/') + '.html'
+        elif not os.path.exists(filepath):
+            return _autoindex(abspath)
+
+    elif not os.path.exists(abspath):
+        filepath = abspath + '.html'
+
+    if not os.path.exists(filepath):
+        return None
+
+    f = open(filepath)
+    content = f.read()
+    f.close()
+    return content
+
+
 def app(environ, start_response):
     global ROOT
     global PERMALINK
@@ -35,25 +74,14 @@ def app(environ, start_response):
     else:
         headers.append(('Content-type', 'text/html'))
 
-    filepath = abspath
-    if abspath.endswith('/'):
-        #: this is index
-        filepath = os.path.join(abspath, 'index.html')
-        if not os.path.exists(filepath) and PERMALINK == 'slash':
-            filepath = abspath.rstrip('/') + '.html'
+    body = _read(abspath)
 
-    elif not os.path.exists(abspath) and PERMALINK == 'clean':
-        filepath = abspath + '.html'
-
-    if not os.path.exists(filepath):
+    if body is None:
         start_response('404 Not Found', headers)
     else:
         start_response('200 OK', headers)
 
-        f = open(filepath)
-        for line in f:
-            yield line
-        f.close()
+    yield body
 
 
 def start_server():
