@@ -111,7 +111,7 @@ settings.static_output = '%s/static' % settings.output
 settings.static_prefix = '/static/'
 settings.theme = 'default'
 
-settings.permalink = '{{category}}/{{filename}}.html'
+settings.permalink = '{{date.year}}/{{filename}}'
 settings.perpage = 30
 settings.feedcount = 20
 settings.timezone = '+00:00'

@@ -2,7 +2,7 @@ import os
 
 
 DEFAULT_SETTING = """
-permalink = '{{category}}/{{filename}}.html'
+permalink = '{{date.year}}/{{filename}}'
 perpage = 30
 feedcount = 20
 timezone = "+00:00"
