@@ -4,6 +4,14 @@ Changelog
 All history since the new Felix Felicis are listed here:
 
 
+Version 1.9
+------------
+
++ improve server, can be used as a standalone app with autoindex support
++ default permalink changed to {{date.year}}/{{filename}}
++ timezone fix
+
+
 Version 1.8
 ------------
 
