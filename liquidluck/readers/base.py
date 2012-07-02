@@ -117,10 +117,7 @@ class Post(object):
 
     @property
     def date(self):
-        date = self.meta.get('date', None)
-        if date:
-            return to_datetime(date)
-        return None
+        return to_datetime(self.meta.get('date'))
 
     @property
     def updated(self):

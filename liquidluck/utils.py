@@ -93,6 +93,8 @@ def cjk_nowrap(text):
 
 
 def to_datetime(value):
+    if not value:
+        return None
     if isinstance(value, datetime.datetime):
         return value
     supported_formats = [
