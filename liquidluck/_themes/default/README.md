@@ -8,7 +8,7 @@ This is the latest version of the default theme for Felix Felicis.
 ### Install with liquidluck
 
 ```
-$ liquidluck install -t moment
+$ liquidluck install moment
 ```
 
 ### Install by yourself
@@ -72,14 +72,6 @@ theme_variables = {
 }
 ```
 
-+ Show author information, default is False
-
-```python
-theme_variables = {
-    'show_author': True,
-}
-```
-
 + Tagcloud support, active tagcloud:
 
 ```python
@@ -116,3 +108,32 @@ error_page 404 /404.html;
 ```
 
 You can google for more information.
+
+## Allow comment
+
+If you post is not public, this post will not be allowed to comment.
+If you want to allow people to comment on your secret post, set
+
+```python
+allow_comment_on_secret_post = True
+```
+
+## Write a Review
+
+This theme supports [review microdata](http://support.google.com/webmasters/bin/answer.py?hl=en&answer=146645#Individual_reviews).
+
+Write your post:
+
+```
+# title
+
+- date: 2012-12-12
+- review: movie or book title
+- rating: 4
+
+------------
+
+content
+```
+
+Rating is optional, the max rating is 5.

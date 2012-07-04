@@ -1,3 +1,154 @@
+@import url(//fonts.googleapis.com/css?family=Signika);
+@import url(//fonts.googleapis.com/css?family=PT%20Sans);
+html, body {
+    background: #f4f4f4;
+    color: #444;
+    padding: 0;
+    margin: 0;
+    font: 16px/1.62 "Signika", "Xin Gothic", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", Arial, sans-serif;
+}
+h1, h2, h3, h4, h5, strong {
+    font-family: "PT Sans", "Xin Gothic", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", Arial, sans-serif;
+}
+h1 {
+    margin-top: 0;
+    font-size: 28px;
+}
+h2 {
+    font-size: 22px;
+    margin: 25px 0 5px;
+}
+h3 {
+    font-size: 18px;
+    margin: 20px 0 5px;
+}
+
+/* block level */
+blockquote {
+    border-left: 0.4em solid #ddd;
+    margin: 15px 0;
+    padding: 0 15px;
+    color: #777;
+}
+blockquote blockquote {
+    padding: 0 0 0 1em;
+    margin-left: 2em;
+    border-left: 0.4em solid #ddd;
+}
+p {
+    font-weight: normal;
+    line-height: 160%;
+    margin-bottom: 0.8em;
+}
+figure {margin:0; padding:0;}
+
+hr {
+    border-top: 1px solid #dadada;
+    border-bottom: 1px solid #dadada;
+}
+
+ul, ol {
+    margin: 14px 0;
+    padding-left: 30px;
+}
+ul {
+    list-style: square;
+}
+li ul {
+    list-style: disc;
+    margin: 8px 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-color: #bbb;
+}
+table tr:nth-child(2n) {
+    background: #eee;
+}
+table th, table td {
+    text-align: left;
+    padding: 4px 6px;
+}
+/* span level */
+img {
+    max-width: 100%;
+}
+a {
+    color: #000;
+    text-decoration: none;
+    overflow: hidden;
+    word-wrap: break-word;
+    border-bottom: 1px dotted #ddd;
+    border-bottom: 1px dotted rgba(0,0,0,0.2);
+}
+a:hover {
+    color: #d14;
+    cursor: pointer;
+    -webkit-transition: color .5s ease;
+    -moz-transition: color .5s ease;
+    transition: color .5s ease;
+}
+a img {
+    vertical-align: middle;
+}
+strong {
+    color: #424242;
+}
+
+/* code */
+pre, code, tt {
+    font: 14px "Menlo", monospace;
+}
+pre {
+    margin: 1em 0;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    padding: 8px;
+    line-height: 1.5em;
+    color: #444;
+    overflow: auto;
+    box-shadow: rgba(0,0,0,0.07) 0 1px 2px inset;
+    border-radius: 3px;
+}
+code, tt {
+    font-size: 14px;
+    background-color:#f8f8ff;
+    color: #d14;
+    padding: 0 .2em;
+    border: 1px solid #dedede;
+}
+pre code {
+    padding: 0;
+    color: #444;
+    border: none;
+    background: inherit;
+}
+
+/* form */
+textarea, input {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 5px 8px;
+}
+textarea:focus, input:focus {
+    border-color: #999;
+    outline: 0 none;
+}
+
+/* extra */
+hr.end {
+    display: block;
+    margin: 30px 0;
+    clear: both;
+    border: 0 none;
+    height: 10px;
+    text-align: center;
+    background: url("end.png") no-repeat 50% 50%;
+}
+
 ::selection {
     background: rgba(240,17,68,0.8);
     color: #fff;
@@ -44,12 +195,12 @@
     position: relative;
     max-width: 560px;
     *width: 560px;
+    height: 46px;
     margin: 0 auto;
     background: #fff;
     z-index: 9;
 }
 #nav a {
-    color: #d14;
     font-weight: bold;
     font-family: "Helvetica Neue", "Helvetica", arial, sans-serif;
     margin-right: 6px;
@@ -61,6 +212,20 @@
     color: #d00;
     border-top: 6px solid #d14;
     margin-top: -6px;
+}
+#nav select {
+    margin-top: 8px;
+    font-size: 16px;
+}
+@media (max-width: 480px) {
+    #brand a {
+        color: rgba(0,0,0,0.8);
+    }
+    #nav {
+        position: absolute;
+        top: 0;
+        right: 10px;
+    }
 }
 #main {
     clear: both;
@@ -102,7 +267,7 @@
 .entry-title, .hentry h2, .hentry h3, .hentry h4 {
     color: #222;
 }
-.entry-meta, .entry-meta a, .updated, .updated a {
+.entry-meta, .entry-meta a, .updated, .updated a , .entry-review {
     color: #999;
     font-size: 14px;
 }

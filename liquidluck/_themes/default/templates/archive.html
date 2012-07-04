@@ -2,6 +2,10 @@
 
 {% block title %}{{pagination.title|title}} - {{site.name}}{% endblock %}
 
+{% block afterstyle %}
+<meta name="description" content="{{pagination.title|description}}" />
+{% endblock %}
+
 {% block main %}
 <ul class="entry-list">
     {% set year = 0 -%}

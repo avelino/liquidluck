@@ -5,7 +5,6 @@
         <title>{% block title %}{{site.name}}{% endblock %}</title>
         <script>if (top !== self) top.location = self.location;</script>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
-        <link rel="stylesheet" href="{{static_url('typo.css')}}" />
         <link rel="stylesheet" href="{{static_url('style.css')}}" />
         <link rel="stylesheet" href="{{static_url('pygments.css')}}" />
         {% if site.feed -%}
@@ -67,7 +66,7 @@
                 Powered by <a href="{{system.homepage}}">{{system.name}}</a> {{system.version}},
             </span>
             <span class="theme">
-                Theme <a href="{{theme.website}}">{{theme.name}}</a> {{theme.version}} by <a href="{{theme.author.website}}">{{theme.author.name}}</a>
+                Theme <a href="{{theme.website}}" rel="nofollow">{{theme.name}}</a> {{theme.version}} by <a href="{{theme.author.website}}">{{theme.author.name}}</a>
             </span>
             </p>
             <p class="system-info">
@@ -77,6 +76,7 @@
         </footer>
 
         {%- block beforejs %}{% endblock %}
+        <script type="text/javascript" src="{{ static_url('mobile.js') }}"></script>
         {% block afterjs %}{% endblock %}
     </body>
 </html>

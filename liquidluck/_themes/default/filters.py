@@ -20,3 +20,13 @@ def tagcloud_url(tag):
     from liquidluck.options import settings
     prefix = settings.site.get('prefix', '')
     return '%s#%s' % (content_url(prefix, 'tag', 'index.html'), tag)
+
+
+def description(key):
+    from liquidluck.options import settings
+    dct = settings.theme_variables.get('descriptions')
+    if not isinstance(dct, dict):
+        return ''
+    if key not in dct:
+        return ''
+    return dct[key]

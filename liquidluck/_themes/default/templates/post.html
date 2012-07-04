@@ -1,25 +1,36 @@
 {% extends "layout.html" %}
 
 {% block title %}{{post.title}} - {{site.name}}{% endblock %}
+{% block afterstyle %}
+<link rel="canonical" href="{{post|permalink}}" />
+{% if post.summary %}<meta name="description" content="{{post.summary}}" />{% endif %}
+{% endblock %}
 
 {% block main -%}
-<div class="hentry">
+<div class="hentry"{%if post.review%} itemscope itemtype="http://data-vocabulary.org/Review"{%endif%}>
     <h1 class="entry-title">{{post.title}}</h1>
     <div class="entry-meta">
-        <time class="updated" datetime="{{post.date|xmldatetime}}">
+        <time class="updated" datetime="{{post.date|xmldatetime}}"{%if post.review%} itemprop="dtreviewed"{%endif%} pubdate>
             <a href="{{ post|year_url }}">{{post.date.strftime('%Y-%m-%d')}}</a>
         </time>
-        {% if theme.show_author -%}
-        {% if post.author.website -%}
-        by <a href="{{post.author.website}}">{{post.author.name}}</a>
-        {% else -%}
-        by {{post.author.name}}
-        {%- endif %}
-        {%- endif %}
+        <span class="author vcard">
+            {% if post.author.website -%}
+            by <a class="url fn" href="{{post.author.website}}">{{post.author.name}}</a>
+            {% else -%}
+            by <span class="fn">{{post.author.name}}</span>
+            {%- endif %}
+        </span>
     </div>
-    <div class="entry-content">
+    <div class="entry-content"{%if post.review%} itemprop="description"{%endif%}>
         {{post.content}}
     </div>
+
+    {% if post.review %}
+    <div class="entry-review">
+        <span itemprop="itemreviewed">{{post.review}}</span> Reviewed by <span itemprop="reviewer">{{post.author.name}}</span> {%if post.rating%}, Rating <span itemprop="rating">{{post.rating}}</span>{%endif%}
+    </div>
+    {% endif %}
+
     <div class="entry-tags">
         {% for tag in post.tags -%}
         {%- if theme.tagcloud -%}
@@ -29,7 +40,9 @@
         {%- endif %}
         {%- endfor %}
     </div>
+
     {% if theme.disqus -%}
+    {%- if theme.allow_comment_on_secret_post or post.public %}
     <div id="disqus_thread"></div>
     <script type="text/javascript">
         var disqus_shortname = '{{theme.disqus}}';
@@ -40,6 +53,7 @@
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
         })();
     </script>
+    {% endif -%}
     {%- endif %}
 </div>
 {%- endblock %}
