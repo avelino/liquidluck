@@ -7,9 +7,12 @@ All history since the new Felix Felicis are listed here:
 Version 1.9
 ------------
 
+Released on Jul 4th, 2012
+
 + improve server, can be used as a standalone app with autoindex support
 + default permalink changed to {{date.year}}/{{filename}}
 + timezone fix
++ update theme
 
 
 Version 1.8
