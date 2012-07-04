@@ -172,6 +172,8 @@ def load_jinja():
 
     #: user can reset theme variables
     config.update(settings.theme_variables)
+    #: keep namespace to the latest variables
+    settings.theme_variables = config
     jinja.globals.update({'theme': config})
 
     #: default variables

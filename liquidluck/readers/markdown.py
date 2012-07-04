@@ -63,6 +63,8 @@ class MarkdownReader(BaseReader):
         f.close()
 
         meta = self._parse_meta(header)
+        #: keep body in meta data as source text
+        meta['source_text'] = body
         content = markdown(body)
         return self.post_class(self.filepath, content, meta=meta)
 
