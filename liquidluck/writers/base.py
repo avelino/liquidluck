@@ -22,7 +22,7 @@ from liquidluck.options import settings
 
 # liquidluck settings
 from liquidluck.options import g
-from liquidluck.filters import xmldatetime
+from liquidluck.filters import xmldatetime, feed_updated
 
 
 class BaseWriter(object):
@@ -209,6 +209,7 @@ def load_jinja():
     #: default filters
     jinja.filters.update({
         'xmldatetime': xmldatetime,
+        'feed_updated': feed_updated,
         'permalink': permalink,
     })
 
