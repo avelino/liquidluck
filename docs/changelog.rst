@@ -4,6 +4,12 @@ Changelog
 All history since the new Felix Felicis are listed here:
 
 
+Version 1.10
+-------------
+
++ improve on feed render #40
+
+
 Version 1.9
 ------------
 
