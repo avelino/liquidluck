@@ -18,6 +18,8 @@ clean-pyc:
 	find . -name '__pycache__' -exec rm -fr {} +
 
 docs:
+	git submodule init
+	git submodule update
 	$(MAKE) -C docs html
 
 
