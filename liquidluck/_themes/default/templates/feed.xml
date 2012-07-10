@@ -17,7 +17,9 @@
         <category scheme="{{ content_url(site.url, site.prefix, 'tag', tag) }}" term="{{tag}}" label="{{ tag|title }}" />
         {% endfor -%}
         <content type="html" xml:base="{{ site.url }}" xml:lang="en">
-            <![CDATA[ {{ post.content }} ]]>
+            <![CDATA[ {{ post.content }}
+            {% if site.copyright %}<hr><p>{{ site.copyright }}</p>{% endif %}
+            ]]>
         </content>
     </entry>
     {%- endfor %}

@@ -8,6 +8,7 @@ Version 1.10
 -------------
 
 + improve on feed render #40
++ config feed copyright
 
 
 Version 1.9

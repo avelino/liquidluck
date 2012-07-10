@@ -22,6 +22,7 @@ A demo setting file (settings.py)::
         'name': 'Just lepture',
         'url': 'http://lepture.com',
         # 'prefix': 'blog',
+        # 'copyright': 'All rights reserved', # append to your feed
     }
 
     #: posts lay here
