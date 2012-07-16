@@ -23,6 +23,7 @@ from liquidluck.options import settings
 # liquidluck settings
 from liquidluck.options import g
 from liquidluck.filters import xmldatetime, feed_updated
+from liquidluck.filters import tag_url, year_url
 
 
 class BaseWriter(object):
@@ -211,6 +212,8 @@ def load_jinja():
         'xmldatetime': xmldatetime,
         'feed_updated': feed_updated,
         'permalink': permalink,
+        'tag_url': tag_url,
+        'year_url': year_url,
     })
 
     #: load resource

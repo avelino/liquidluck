@@ -21,3 +21,25 @@ def feed_updated(feed):
             latest = post.updated
 
     return xmldatetime(latest)
+
+
+def tag_url(tag, prepend_site=False):
+    from liquidluck.writers.base import content_url
+    from liquidluck.options import settings
+    prefix = settings.site.get('prefix', '')
+    url = settings.site.get('url')
+    tagcloud = settings.writers.get('tagcloud', None)
+    if prepend_site and tagcloud:
+        return '%s#%s' % (content_url(url, prefix, 'tag', 'index.html'), tag)
+    if tagcloud:
+        return '%s#%s' % (content_url(prefix, 'tag', 'index.html'), tag)
+    if prepend_site:
+        return content_url(url, prefix, 'tag', tag, 'index.html')
+    return content_url(prefix, 'tag', tag, 'index.html')
+
+
+def year_url(post):
+    from liquidluck.writers.base import content_url
+    from liquidluck.options import settings
+    prefix = settings.site.get('prefix', '')
+    return content_url(prefix, post.date.year, 'index.html')

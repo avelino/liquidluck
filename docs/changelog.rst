@@ -8,7 +8,9 @@ Version 1.10
 -------------
 
 + improve on feed render #40
-+ config feed copyright
++ config feed output tags
++ server bugfix
++ built in filters of tag_url and year_url
 
 
 Version 1.9

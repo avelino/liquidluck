@@ -14,11 +14,15 @@
         <published>{{ post.date|xmldatetime }}</published>
         <id>{{ post|permalink(True) }}</id>
         {% for tag in post.tags -%}
-        <category scheme="{{ content_url(site.url, site.prefix, 'tag', tag) }}" term="{{tag}}" label="{{ tag|title }}" />
+        <category scheme="{{ tag|tag_url(True) }}" term="{{tag}}" label="{{ tag }}" />
         {% endfor -%}
         <content type="html" xml:base="{{ site.url }}" xml:lang="en">
             <![CDATA[ {{ post.content }}
-            {% if site.copyright %}<hr><p>{{ site.copyright }}</p>{% endif %}
+            {%- if site.showtag -%}
+            <hr><p>Tagged in:
+                    {%- for tag in post.tags %}<a href="{{ tag|tag_url(True) }}">{{tag}}</a> {% endfor -%}
+                </p>
+            {%- endif -%}
             ]]>
         </content>
     </entry>
