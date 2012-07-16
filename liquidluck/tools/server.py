@@ -24,6 +24,8 @@ def config(port=None, root=None, permalink=None):
 
 
 def _autoindex(abspath):
+    if not os.path.exists(abspath):
+        return None
     html = '<ul>'
     files = os.listdir(abspath)
     for f in files:
