@@ -82,8 +82,7 @@ def app(environ, start_response):
         start_response('404 Not Found', headers)
     else:
         start_response('200 OK', headers)
-
-    yield body
+        yield body
 
 
 def start_server():
