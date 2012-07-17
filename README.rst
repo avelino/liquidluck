@@ -1,7 +1,7 @@
 Felix Felicis
 ==============
 
-.. image:: https://secure.travis-ci.org/lepture/liquidluck.png
+.. image:: https://secure.travis-ci.org/lepture/liquidluck.png?branch=develop
     :target: https://secure.travis-ci.org/lepture/liquidluck
 
 
