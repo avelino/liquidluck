@@ -7,12 +7,12 @@ Syntax::
     # Title
 
     - date: 2011-09-01
-    - folder: life
+    - category: life
     - tags: tag1, tag2
 
     -----------------
 
-    Your content here. And it support code highlight.
+    Your content here. And it supports code highlight.
 
     ```python
 

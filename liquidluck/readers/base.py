@@ -64,6 +64,8 @@ class BaseReader(object):
         raise NotImplementedError
 
     def run(self):
+        if g.detail_logging:
+            return self.render()
         try:
             return self.render()
         except Exception as e:
