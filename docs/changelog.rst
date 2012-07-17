@@ -7,6 +7,8 @@ All history since the new Felix Felicis are listed here:
 Version 1.10
 -------------
 
+Released on Jul 17th, 2012
+
 + improve on feed render #40
 + config feed output tags
 + server bugfix
