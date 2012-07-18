@@ -5,6 +5,9 @@ This is the latest version of the default theme for Felix Felicis.
 
 ## Installation
 
+Requires Felix Felicis 1.10+
+
+
 ### Install with liquidluck
 
 ```
@@ -79,11 +82,6 @@ writers = {
     'tagcloud': 'liquidluck.writers.core.TagCloudWriter',
     # disable tag writer
     # 'tag': None,
-}
-
-# change post tags link to tagcloud
-theme_variables = {
-    'tagcloud': True,  # default is False
 }
 ```
 

@@ -33,11 +33,7 @@
 
     <div class="entry-tags">
         {% for tag in post.tags -%}
-        {%- if theme.tagcloud -%}
-        <a href="{{ tag|tagcloud_url }}">{{tag}}</a>
-        {%- else %}
         <a href="{{ tag|tag_url }}">{{tag}}</a>
-        {%- endif %}
         {%- endfor %}
     </div>
 
