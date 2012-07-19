@@ -113,6 +113,9 @@ If you don't like ``.html`` as a part of the permalink, you can set your permali
     # or with a slash
     {{category}}/{{filename}}/
 
+    # slash without server helper
+    {{category}}/{{filename}}/index.html
+
 In this case, you need to make some config of your server, so that everything will be ok.
 A good example of nginx conf for slash style permalink: `nginx.conf`_.
 
@@ -123,6 +126,7 @@ Issues about permalink:
 .. _`nginx.conf`: https://github.com/lepture/lepture.com/blob/master/nginx.conf
 
 .. _multi-authors:
+
 
 Multiple Authors
 ------------------
@@ -163,16 +167,6 @@ The default theme doesn't show any information of the author, it is designed for
 personal blogging.
 
 
-Useful Issues
----------------
-
-- https://github.com/lepture/liquidluck/issues/25
-- https://github.com/lepture/liquidluck/issues/26
-- https://github.com/lepture/liquidluck/issues/30
-- https://github.com/lepture/liquidluck/issues/32
-- https://github.com/lepture/liquidluck/issues/34
-
-
 Readers
 ----------
 
@@ -184,14 +178,16 @@ disable reStructuredText::
         'rst': None,
     }
 
+Customize Reader
+``````````````````
+
 Issues that contain information on readers:
 
 - https://github.com/lepture/liquidluck/issues/26
 
 
-Readers Variables
+Reader Variables
 ```````````````````
-
 
 Issues that contain information on readers variables:
 
@@ -255,3 +251,13 @@ Available writers variables (but you won't need to change them):
 - tag_template (archive.html)
 - category_template (archive.html)
 - category_feed_template (feed.xml)
+
+
+Useful Issues
+---------------
+
+- https://github.com/lepture/liquidluck/issues/25
+- https://github.com/lepture/liquidluck/issues/26
+- https://github.com/lepture/liquidluck/issues/30
+- https://github.com/lepture/liquidluck/issues/32
+- https://github.com/lepture/liquidluck/issues/34
