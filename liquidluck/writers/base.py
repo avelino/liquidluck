@@ -270,8 +270,13 @@ def slug_to_destination(slug, use_index=False):
 def permalink(post, prepend_site=False):
     slug = get_post_slug(post, settings.permalink)
     if prepend_site:
-        return '%s/%s' % (settings.site['url'].rstrip('/'), slug)
-    return '/%s' % slug
+        url = '%s/%s' % (settings.site['url'].rstrip('/'), slug)
+    else:
+        url = '/%s' % slug
+
+    if url.endswith('/index.html'):
+        return url[:-10]
+    return url
 
 
 def content_url(base, *args):
