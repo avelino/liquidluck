@@ -4,6 +4,13 @@ Changelog
 All history since the new Felix Felicis are listed here:
 
 
+Version 1.11
+--------------
+
++ fix permalink filter, support {{filename}}/index.html now. #41
++ update default theme
+
+
 Version 1.10
 -------------
 
