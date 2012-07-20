@@ -58,6 +58,7 @@ Options:
 documentation['server'] = """
 Usage:
     liquidluck server [-s <file>|--settings=<file>] [-p <port>|--port=<port>]
+
 Options:
     -h --help               show this screen.
     -s --settings=<file>    specify a setting file.
