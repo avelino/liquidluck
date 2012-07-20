@@ -18,7 +18,7 @@ Usage:
     liquidluck create [-s <file>|--settings=<file>]
     liquidluck build [-s <file>|--settings=<file>] [-v|--verbose]
     liquidluck server [-s <file>|--settings=<file>] [-p <port>|--port=<port>]
-    liquidluck search <theme> [-c|--clean]
+    liquidluck search [<theme>] [-c|--clean]
     liquidluck install <theme>
     liquidluck webhook (start|stop|restart) %(webhook)s
     liquidluck -h | --help
@@ -66,7 +66,7 @@ Options:
 
 documentation['search'] = """
 Usage:
-    liquidluck search <theme> [-c|--clean]
+    liquidluck search [<theme>] [-c|--clean]
 
 Options:
     -h --help               show this screen.
@@ -105,7 +105,6 @@ def main():
             version='Felix Felicis v%s' % liquidluck.__version__
         )
 
-    #print(args)
     if command == 'create':
         creator.create(args['--settings'] or 'settings.py')
     elif command == 'build':

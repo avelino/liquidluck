@@ -75,7 +75,10 @@ def search(keyword=None, clean=False):
     return
 
 
-def install(keyword):
+def install(keyword=None):
+    if not keyword:
+        print("You need specify a theme")
+        return
     themes = __load_themes()
     if keyword not in themes:
         print("can't find theme %s" % keyword)
