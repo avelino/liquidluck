@@ -172,9 +172,6 @@ Global Variables
 
   And it can be access in template by ``{{template.readability}}``, this is very useful.
 
-- resource, this variable is powerful, for example, ``{{resource.posts}}`` contains all
-  your public posts.
-
 
 Templatable Variables
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -183,6 +180,19 @@ Templatable variables are only accessed in specify templates.
 
 - pagination, available in ``archive.html``
 - post, available in ``post.html`` and ``page.html``
+
+
+Resource Variables
+-----------------------
+
+This variable is powerful, for example, ``{{resource.posts}}`` contains all
+your public posts. It is related to a writer.
+
+- {{resource.posts}}
+- {{resource.pages}}
+- {{resource.year}}: if you enabled YearWriter
+- {{resource.category}}: if you enabled CategoryWriter
+- {{resource.tag}}: if you enabled TagWriter
 
 
 Functions
