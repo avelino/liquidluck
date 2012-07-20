@@ -9,6 +9,7 @@ Version 1.11
 
 + fix permalink filter, support {{filename}}/index.html now. #41
 + update default theme
++ improve command line interface. #43
 
 
 Version 1.10

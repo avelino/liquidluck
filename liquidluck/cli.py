@@ -20,7 +20,7 @@ Usage:
     liquidluck server [-s <file>|--settings=<file>] [-p <port>|--port=<port>]
     liquidluck search <theme> [-c|--clean]
     liquidluck install <theme>
-    liquidluck webhook (start|stop) %(webhook)s
+    liquidluck webhook (start|stop|restart) %(webhook)s
     liquidluck -h | --help
     liquidluck --version
 
@@ -83,7 +83,7 @@ Options:
 
 documentation['webhook'] = """
 Usage:
-    liquidluck webhook (start|stop) %s
+    liquidluck webhook (start|stop|restart) %s
 
 Options:
     -h --help               show this screen.
@@ -145,11 +145,11 @@ def main():
     elif command == 'install':
         arg_theme = args['<theme>'] or None
         theme.install(arg_theme)
-        return
     elif command == 'webhook':
         arg_settings = args['--settings'] or 'settings.py'
         arg_port = int(args['--port'] or 9000)
-        action = (args['start'] and 'start') or (args['stop'] and 'stop')
+        action = (args['start'] and 'start') or (args['stop'] and 'stop') \
+                or (args['restart'] and 'restart')
         webhook.webhook(arg_port, action, arg_settings)
 
 
