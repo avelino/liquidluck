@@ -20,8 +20,6 @@ _1st_arguments=(
   'create:Create a settings file'
   'search:Search a theme'
   'install:Install a theme'
-  'document:Open documentation in browser'
-  'version:Show Felix Felicis version'
   'webhook:Start webhook server'
   'server:Start preview server'
 )
