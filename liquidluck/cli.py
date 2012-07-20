@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import os
-import argparse
+import sys
+import liquidluck
 from liquidluck.tools import theme
 from liquidluck.tools import creator
 from liquidluck.tools import webhook
@@ -10,149 +9,148 @@ from liquidluck.tools import server
 from liquidluck import generator
 from liquidluck.options import enable_pretty_logging
 from liquidluck.options import g, settings
+from docopt import docopt
+
+documentation = {}
+documentation['help'] = """Felix Felicis %(version)s
+
+Usage:
+    liquidluck create [-s <file>|--settings=<file>]
+    liquidluck build [-s <file>|--settings=<file>] [-v|--verbose]
+    liquidluck server [-s <file>|--settings=<file>] [-p <port>|--port=<port>]
+    liquidluck search <theme> [-c|--clean]
+    liquidluck install <theme>
+    liquidluck webhook (start|stop) %(webhook)s
+    liquidluck -h | --help
+    liquidluck --version
+
+Options:
+    -h --help               show this screen.
+    -v --verbose            show more log.
+    -s --settings=<file>    specify a setting file.
+    -p --port=<port>        specify the server port.
+    -c --clean              show theme name only.
+    --version               show version.
+""" % {
+    'version': liquidluck.__version__,
+    'webhook': '[-s <file>|--settings=<file>] [-p <port>|--port=<port>]'
+}
+
+documentation['create'] = """
+Usage:
+    liquidluck create [-s <file>|--settings=<file>]
+
+Options:
+    -h --help               show this screen.
+    -s --settings=<file>    specify a setting file.
+"""
+
+documentation['build'] = """
+Usage:
+    liquidluck build [-s <file>|--settings=<file>] [-v|--verbose]
+
+Options:
+    -h --help               show this screen.
+    -v --verbose            show more log.
+    -s --settings=<file>    specify a setting file.
+"""
+
+documentation['server'] = """
+Usage:
+    liquidluck server [-s <file>|--settings=<file>] [-p <port>|--port=<port>]
+Options:
+    -h --help               show this screen.
+    -s --settings=<file>    specify a setting file.
+    -p --port=<port>        specify the server port.
+"""
+
+documentation['search'] = """
+Usage:
+    liquidluck search <theme> [-c|--clean]
+
+Options:
+    -h --help               show this screen.
+    -c --clean              show theme name only.
+"""
+
+documentation['install'] = """
+Usage:
+    liquidluck install <theme>
+
+Options:
+    -h --help               show this screen.
+"""
+
+documentation['webhook'] = """
+Usage:
+    liquidluck webhook (start|stop) %s
+
+Options:
+    -h --help               show this screen.
+    -s --settings=<file>    specify a setting file.
+    -p --port=<port>        specify the server port.
+""" % '[-s <file>|--settings=<file>] [-p <port>|--port=<port>]'
 
 
 def main():
-    parser = create_parser()
-    args = parser.parse_args()
-    run_parser(args)
+    command = 'help'
+    if len(sys.argv) > 1:
+        command = sys.argv[1]
 
+    if command in documentation:
+        args = docopt(documentation[command])
+    else:
+        args = docopt(
+            documentation['help'],
+            version='Felix Felicis v%s' % liquidluck.__version__
+        )
 
-def create_parser():
-    parser = argparse.ArgumentParser(prog='liquidluck')
-
-    subparser = parser.add_subparsers(
-        title='available commands', dest='subparser'
-    )
-
-    parser_create = subparser.add_parser(
-        'create', help='create a blog repo',
-    )
-    parser_create.add_argument(
-        '-s', '--settings', default='settings.py', help='setting file'
-    )
-
-    parser_gen = subparser.add_parser(
-        'build', help='build the site'
-    )
-    parser_gen.add_argument(
-        '-v', '--verbose', action='store_true',
-        help='show more logging'
-    )
-    parser_gen.add_argument(
-        '-s', '--settings', default='settings.py', help='setting file'
-    )
-
-    #: theme support
-    parser_search = subparser.add_parser(
-        'search', help='search theme'
-    )
-    parser_search.add_argument(
-        '-c', '--clean', action='store_true',
-        help='show name only'
-    )
-    parser_search.add_argument('theme', nargs='?', help='theme name')
-
-    parser_install = subparser.add_parser(
-        'install', help='install a theme'
-    )
-    parser_install.add_argument('theme', nargs='?', help='theme name')
-
-    #: utils
-    subparser.add_parser(
-        'document', help='launch documentation in browser'
-    )
-
-    subparser.add_parser(
-        'version', help='show Felix Felicis version'
-    )
-
-    #: webhook command
-    parser_webhook = subparser.add_parser(
-        'webhook', help='start a webhook server',
-    )
-    parser_webhook.add_argument(
-        'daemon', nargs='?', default='start',
-    )
-    parser_webhook.add_argument(
-        '-p', '--port', nargs='?', default=8000,
-        help='server port'
-    )
-    parser_webhook.add_argument(
-        '-s', '--settings', default='settings.py', help='setting file'
-    )
-
-    #: preview server
-    parser_server = subparser.add_parser(
-        'server', help='start a preview server',
-    )
-    parser_server.add_argument(
-        '-p', '--port', nargs='?', default=8000,
-        help='server port'
-    )
-    parser_server.add_argument(
-        '-s', '--settings', default='settings.py', help='setting file'
-    )
-
-    return parser
-
-
-def run_parser(args):
-    if args.subparser == 'version':
-        import liquidluck
-        print("Felix Felicis Version: %s" % liquidluck.__version__)
-        return
-
-    if args.subparser == 'document':
-        import webbrowser
-        webbrowser.open('http://liquidluck.readthedocs.org')
-        return
-
-    if args.subparser == 'search':
-        theme.search(args.theme, args.clean)
-        return
-
-    if args.subparser == 'install':
-        theme.install(args.theme)
-        return
-
-    if args.subparser == 'webhook':
-        webhook.webhook(args.port, args.daemon, args.settings)
-        return
-
-    if args.subparser == 'server':
-        if not os.path.exists(args.settings):
+    #print(args)
+    if command == 'create':
+        creator.create(args['--settings'] or 'settings.py')
+    elif command == 'build':
+        arg_settings = args['--settings'] or 'settings.py'
+        if not os.path.exists(arg_settings):
+            answer = raw_input(
+                "Can't find your setting files, "
+                "would you like to create one?(Y/n) "
+            )
+            if answer.lower() == 'n':
+                return
+            creator.create(arg_settings)
+        else:
+            g.detail_logging = args['--verbose']
+            enable_pretty_logging()
+            generator.build(arg_settings)
+    elif command == 'server':
+        arg_settings = args['--settings'] or 'settings.py'
+        arg_port = int(args['--port'] or 8000)
+        if not os.path.exists(arg_settings):
             print('setting file not found')
             g.output_directory = os.path.abspath('.')
         else:
-            generator.load_settings(args.settings)
+            generator.load_settings(arg_settings)
         if settings.permalink.endswith('.html'):
             permalink = 'html'
         elif settings.permalink.endswith('/'):
             permalink = 'slash'
         else:
             permalink = 'clean'
-        server.config(args.port, g.output_directory, permalink)
+        server.config(arg_port, g.output_directory, permalink)
         server.start_server()
+    elif command == 'search':
+        arg_theme = args['<theme>'] or None
+        arg_clean = args['--clean']
+        theme.search(arg_theme, arg_clean)
+    elif command == 'install':
+        arg_theme = args['<theme>'] or None
+        theme.install(arg_theme)
         return
-
-    if args.subparser == 'create':
-        creator.create(args.settings)
-        return
-
-    if not os.path.exists(args.settings):
-        answer = raw_input(
-            "Can't find your setting files, "
-            "would you like to create one?(Y/n) "
-        )
-        if answer.lower() == 'n':
-            return
-        creator.create(args.settings)
-        return
-
-    g.detail_logging = args.verbose
-    enable_pretty_logging()
-    generator.build(args.settings)
+    elif command == 'webhook':
+        arg_settings = args['--settings'] or 'settings.py'
+        arg_port = int(args['--port'] or 9000)
+        action = (args['start'] and 'start') or (args['stop'] and 'stop')
+        webhook.webhook(arg_port, action, arg_settings)
 
 
 if __name__ == '__main__':

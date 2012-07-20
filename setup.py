@@ -8,11 +8,7 @@ if major >= 3:
     kwargs['use_2to3'] = True
 
 from setuptools import setup
-install_requires = ['docutils', 'Jinja2', 'Pygments', 'misaka']
-try:
-    import argparse  # python 2.7+ support argparse
-except ImportError:
-    install_requires.append('argparse')
+install_requires = ['docutils', 'Jinja2', 'Pygments', 'misaka', 'docopt']
 
 
 import liquidluck
