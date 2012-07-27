@@ -11,7 +11,7 @@ def __fetch_themes():
         urlopen = urllib.request.urlopen
 
     content = urlopen(
-        'https://api.github.com/legacy/repos/search/liquidluck-theme'
+        "https://api.github.com/legacy/repos/search/%22liquidluck-theme-%22"
     ).read()
     content = to_unicode(content)
     return content
@@ -41,7 +41,7 @@ def __load_themes():
     repos = json_decode(content)
     themes = {}
     for theme in repos['repositories']:
-        name = theme['name'].replace('liquidluck-theme', '')
+        name = theme['name'].replace('liquidluck-theme-', '')
         name = name.strip().strip('-')
         theme['name'] = name
         themes[name] = theme
