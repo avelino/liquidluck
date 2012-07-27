@@ -3,6 +3,12 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+Version 2.0
+-------------
+
++ LiveReload Server
++ GitHub Search API fix
+
 
 Version 1.11
 --------------
