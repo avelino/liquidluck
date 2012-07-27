@@ -94,6 +94,7 @@ Options:
 
 
 def main():
+    enable_pretty_logging()
     command = 'help'
     if len(sys.argv) > 1:
         command = sys.argv[1]
@@ -120,7 +121,6 @@ def main():
             creator.create(arg_settings)
         else:
             g.detail_logging = args['--verbose']
-            enable_pretty_logging()
             generator.build(arg_settings)
     elif command == 'server':
         arg_settings = args['--settings'] or 'settings.py'

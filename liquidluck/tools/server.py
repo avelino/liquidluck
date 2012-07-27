@@ -2,11 +2,29 @@
 
 import os
 import mimetypes
+import logging
 from wsgiref.simple_server import make_server
+from liquidluck.options import g, settings
+from liquidluck.utils import to_unicode, UnicodeDict
+try:
+    import tornado.web
+    import tornado.escape
+    import tornado.websocket
+    RequestHandler = tornado.web.RequestHandler
+    WebSocketHandler = tornado.websocket.WebSocketHandler
+    escape = tornado.escape
+except ImportError:
+    escape = None
+    RequestHandler = object
+    WebSocketHandler = object
+
 
 PORT = 8000
 ROOT = os.path.abspath('.')
 PERMALINK = 'html'
+LIVERELOAD = os.path.join(
+    os.path.abspath(os.path.dirname(__file__)), 'livereload.js'
+)
 
 
 def config(port=None, root=None, permalink=None):
@@ -64,9 +82,7 @@ def _read(abspath):
     return content
 
 
-def app(environ, start_response):
-    global ROOT
-    global PERMALINK
+def wsgi_app(environ, start_response):
     path = environ['PATH_INFO'].lstrip('/')
     abspath = os.path.join(ROOT, path)
     headers = []
@@ -85,10 +101,168 @@ def app(environ, start_response):
         yield body
 
 
+class LiveReloadJSHandler(RequestHandler):
+    def get(self):
+        f = open(LIVERELOAD)
+        content = to_unicode(f.read())
+        content = content.replace('{{port}}', str(PORT))
+        f.close()
+
+        self.set_header('Content-Type', 'application/javascript')
+        self.write(content)
+
+
+class LiveReloadHandler(WebSocketHandler):
+    waiters = set()
+    _modified_times = {}
+    _watch_running = False
+
+    def allow_draft76(self):
+        return True
+
+    def on_close(self):
+        if self in LiveReloadHandler.waiters:
+            LiveReloadHandler.waiters.remove(self)
+
+    def send_message(self, message):
+        if isinstance(message, dict):
+            message = escape.json_encode(message)
+
+        try:
+            self.write_message(message)
+        except:
+            logging.error('Error sending message', exc_info=True)
+
+    def on_message(self, message):
+        """Handshake with livereload.js
+
+        1. client send 'hello'
+        2. server reply 'hello'
+        3. client send 'info'
+
+        http://help.livereload.com/kb/ecosystem/livereload-protocol
+        """
+        message = UnicodeDict(escape.json_decode(message))
+        if message.command == 'hello':
+            handshake = {}
+            handshake['command'] = 'hello'
+            protocols = message.protocols
+            protocols.append(
+                'http://livereload.com/protocols/2.x-remote-control'
+            )
+            handshake['protocols'] = protocols
+            handshake['serverName'] = 'livereload-tornado'
+            self.send_message(handshake)
+
+        if message.command == 'info' and 'url' in message:
+            logging.info('Browser Connected: %s' % message.url)
+            LiveReloadHandler.waiters.add(self)
+            if not LiveReloadHandler._watch_running:
+                LiveReloadHandler._watch_running = True
+                logging.info('Start watching changes')
+                tornado.ioloop.PeriodicCallback(self.watch_tasks, 500).start()
+
+    def watch_tasks(self):
+        if g.output_directory == ROOT:
+            # liquidluck project
+            if self._is_changed(g.source_directory) or \
+               self._is_changed(g.theme_directory):
+                from liquidluck.generator import load_posts, write_posts
+                load_posts(settings.source)
+                write_posts()
+                self.reload_browser()
+
+        else:
+            if self._is_changed(ROOT):
+                self.reload_browser()
+
+    def reload_browser(self):
+        logging.info('Reload')
+        msg = {
+            'command': 'reload',
+            'path': '*',
+            'liveCSS': True
+        }
+        for waiter in LiveReloadHandler.waiters:
+            try:
+                waiter.write_message(msg)
+            except:
+                logging.error('Error sending message', exc_info=True)
+                LiveReloadHandler.waiters.remove(waiter)
+
+    def _is_changed(self, path):
+        def is_file_changed(path):
+            if not os.path.isfile(path):
+                return False
+
+            _, ext = os.path.splitext(path)
+            if ext in ['.pyc', '.pyo', '.swp']:
+                return False
+
+            modified = int(os.stat(path).st_mtime)
+
+            if path not in self._modified_times:
+                self._modified_times[path] = modified
+                return False
+
+            if path in self._modified_times and \
+               self._modified_times[path] == modified:
+                return False
+
+            self._modified_times[path] = modified
+            logging.info('file changed: %s' % path)
+            return True
+
+        for root, dirs, files in os.walk(path):
+            if '.git' in dirs:
+                dirs.remove('.git')
+            if '.hg' in dirs:
+                dirs.remove('.hg')
+            if '.svn' in dirs:
+                dirs.remove('.svn')
+
+            for f in files:
+                path = os.path.join(root, f)
+                if is_file_changed(path):
+                    return True
+
+            return False
+
+
+class IndexHandler(RequestHandler):
+    def get(self, path='/'):
+        abspath = os.path.join(os.path.abspath(ROOT), path.lstrip('/'))
+        mime_type, encoding = mimetypes.guess_type(abspath)
+        if not mime_type:
+            mime_type = 'text/html'
+
+        self.set_header('Content-Type', mime_type)
+
+        body = _read(abspath)
+
+        if body is None:
+            self.send_error(404)
+            return
+        body = body.replace(
+            '</head>', '<script src="/livereload.js"></script></head>'
+        )
+        self.write(body)
+
+
 def start_server():
-    global PORT
-    print('Start server at 0.0.0.0:%s' % PORT)
-    make_server('', PORT, app).serve_forever()
+    logging.info('Start server at 0.0.0.0:%s' % PORT)
+    if RequestHandler is object:
+        make_server('', PORT, wsgi_app).serve_forever()
+    else:
+        import tornado.web
+        handlers = [
+            (r'/livereload', LiveReloadHandler),
+            (r'/livereload.js', LiveReloadJSHandler),
+            (r'(.*)', IndexHandler),
+        ]
+        app = tornado.web.Application(handlers=handlers)
+        app.listen(PORT)
+        tornado.ioloop.IOLoop.instance().start()
 
 
 if __name__ == '__main__':
