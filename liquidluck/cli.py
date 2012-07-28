@@ -127,7 +127,8 @@ def main():
         arg_port = int(args['--port'] or 8000)
         if not os.path.exists(arg_settings):
             print('setting file not found')
-            g.output_directory = os.path.abspath('.')
+            server.config(arg_port)
+            server.start_server()
         else:
             generator.load_settings(arg_settings)
         if settings.permalink.endswith('.html'):
