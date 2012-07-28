@@ -171,6 +171,12 @@ class LiveReloadHandler(WebSocketHandler):
             return
 
         if self._is_changed(g.source_directory):
+            # clean posts
+            g.public_posts = []
+            g.secure_posts = []
+            g.pure_files = []
+            g.pure_pages = []
+
             load_posts(settings.source)
             write_posts()
             self.reload_browser()
