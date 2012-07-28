@@ -20,7 +20,7 @@
             <![CDATA[ {{ post.content }}
             {%- if site.showtag -%}
             <hr><p>Tagged in:
-                    {%- for tag in post.tags %}<a href="{{ tag|tag_url(True) }}">{{tag}}</a> {% endfor -%}
+                    {%- for tag in post.tags %} <a href="{{ tag|tag_url(True) }}">{{tag}}</a>{% endfor -%}
                 </p>
             {%- endif -%}
             ]]>
