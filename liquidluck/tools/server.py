@@ -6,6 +6,7 @@ import logging
 from wsgiref.simple_server import make_server
 from liquidluck.options import g, settings
 from liquidluck.utils import to_unicode, UnicodeDict
+from liquidluck.generator import load_posts, write_posts
 try:
     import tornado.web
     import tornado.escape
@@ -163,18 +164,27 @@ class LiveReloadHandler(WebSocketHandler):
                 tornado.ioloop.PeriodicCallback(self.watch_tasks, 500).start()
 
     def watch_tasks(self):
-        if g.output_directory == ROOT:
-            # liquidluck project
-            if self._is_changed(g.source_directory) or \
-               self._is_changed(g.theme_directory):
-                from liquidluck.generator import load_posts, write_posts
-                load_posts(settings.source)
-                write_posts()
-                self.reload_browser()
+        if g.output_directory != ROOT and self._is_changed(ROOT):
+            self.reload_browser()
+            return
 
-        else:
-            if self._is_changed(ROOT):
-                self.reload_browser()
+        if g.output_directory != ROOT:
+            return
+
+        # liquidluck project
+        if self._is_changed(g.source_directory):
+            load_posts(settings.source)
+            write_posts()
+            self.reload_browser()
+            return
+
+        if self._is_changed(g.theme_directory):
+            #: load 1 time
+            if not g.posts:
+                load_posts(settings.source)
+            write_posts()
+            self.reload_browser()
+            return
 
     def reload_browser(self):
         logging.info('Reload')
@@ -196,6 +206,7 @@ class LiveReloadHandler(WebSocketHandler):
                 return False
 
             _, ext = os.path.splitext(path)
+            #TODO more ext
             if ext in ['.pyc', '.pyo', '.swp']:
                 return False
 
