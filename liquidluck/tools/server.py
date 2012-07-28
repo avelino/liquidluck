@@ -164,27 +164,21 @@ class LiveReloadHandler(WebSocketHandler):
                 tornado.ioloop.PeriodicCallback(self.watch_tasks, 500).start()
 
     def watch_tasks(self):
-        if g.output_directory != ROOT and self._is_changed(ROOT):
-            self.reload_browser()
-            return
-
         if g.output_directory != ROOT:
+            # not a liquidluck project
+            if self._is_changed(ROOT):
+                self.reload_browser()
             return
 
-        # liquidluck project
         if self._is_changed(g.source_directory):
             load_posts(settings.source)
             write_posts()
             self.reload_browser()
-            return
 
-        if self._is_changed(g.theme_directory):
-            #: load 1 time
-            if not g.posts:
-                load_posts(settings.source)
+        elif self._is_changed(g.theme_directory):
+            #: theme changed don't need to reload posts
             write_posts()
             self.reload_browser()
-            return
 
     def reload_browser(self):
         logging.info('Reload')
@@ -261,15 +255,16 @@ class IndexHandler(RequestHandler):
 
 
 def start_server():
-    logging.info('Start server at 0.0.0.0:%s' % PORT)
     if RequestHandler is object:
+        logging.info('Start server at 0.0.0.0:%s' % PORT)
         make_server('', PORT, wsgi_app).serve_forever()
     else:
         import tornado.web
-        if g.output_directory == ROOT and not os.path.exists(ROOT):
-            #: build the site
+        if g.output_directory == ROOT:
+            #: if this is a liquidluck project, build the site
             load_posts(settings.source)
             write_posts()
+            logging.info('Theme directory: %s' % g.theme_directory)
         handlers = [
             (r'/livereload', LiveReloadHandler),
             (r'/livereload.js', LiveReloadJSHandler),
@@ -277,6 +272,7 @@ def start_server():
         ]
         app = tornado.web.Application(handlers=handlers)
         app.listen(PORT)
+        logging.info('Start server at 0.0.0.0:%s' % PORT)
         tornado.ioloop.IOLoop.instance().start()
 
 
