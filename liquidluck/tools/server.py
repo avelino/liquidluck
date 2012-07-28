@@ -266,6 +266,10 @@ def start_server():
         make_server('', PORT, wsgi_app).serve_forever()
     else:
         import tornado.web
+        if g.output_directory == ROOT and not os.path.exists(ROOT):
+            #: build the site
+            load_posts(settings.source)
+            write_posts()
         handlers = [
             (r'/livereload', LiveReloadHandler),
             (r'/livereload.js', LiveReloadJSHandler),
