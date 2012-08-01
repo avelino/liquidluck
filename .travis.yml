@@ -6,6 +6,7 @@ python:
     - 3.2
 
 install:
+    - pip install docutils
     - python setup.py install
 
 script:

@@ -8,6 +8,7 @@ Version 2.0
 
 + LiveReload Server
 + GitHub Search API fix
++ docutils is optional
 
 
 Version 1.11
