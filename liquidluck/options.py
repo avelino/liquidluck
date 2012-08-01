@@ -127,7 +127,7 @@ settings.authors = {}
 
 settings.readers = {
     'markdown': 'liquidluck.readers.markdown.MarkdownReader',
-    'rst': 'liquidluck.readers.restructuredtext.RestructuredTextReader',
+    #'rst': 'liquidluck.readers.restructuredtext.RestructuredTextReader',
 }
 settings.readers_variables = {}
 

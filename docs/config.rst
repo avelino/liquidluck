@@ -171,11 +171,11 @@ Readers
 ----------
 
 There are two readers in Felix Felicis, one is Markdown, and the other is reStructuredText.
-They are both active by default, but you can disable it. For example, you want to
-disable reStructuredText::
+
+Only Markdown is active by default, but you can enable rst::
 
     readers = {
-        'rst': None,
+        'rst': 'liquidluck.readers.restructuredtext.RestructuredTextReader'
     }
 
 Customize Reader
