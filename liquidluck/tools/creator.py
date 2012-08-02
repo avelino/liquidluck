@@ -22,7 +22,10 @@ theme = 'default'
 theme_variables = {}
 
 # http://liquidluck.readthedocs.org/en/latest/config.html#readers
-# readers = {}
+# readers = {
+    # if you want to enable reStructuredText, uncomment this line
+    # 'rst': 'liquidluck.readers.restructuredtext.RestructuredTextReader',
+}
 # readers_variables = {}
 
 # http://liquidluck.readthedocs.org/en/latest/config.html#writers
