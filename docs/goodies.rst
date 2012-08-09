@@ -16,6 +16,9 @@ Preview your blog with::
     $ liquidluck server -p 8888
     $ liquidluck server -p 8888 -s settings.py
 
+Preview server now support livereload, when you are editing a post, it will
+auto compile and auto refresh the browser for you. **Added in version 1.12**
+
 
 Oh My Zsh Plugin
 ------------------

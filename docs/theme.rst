@@ -212,6 +212,9 @@ Default Filters
 
 - xmldatetime
 - permalink, ``{{post|permalink}}`` to create the permalink of a post
+- tag_url
+- year_url
+- feed_updated
 
 
 Theme Filters
