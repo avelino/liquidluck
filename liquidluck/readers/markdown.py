@@ -69,7 +69,7 @@ class MarkdownReader(BaseReader):
         return self.post_class(self.filepath, content, meta=meta)
 
     def _parse_meta(self, header):
-        header = markdown(header)
+        header = m.html(to_unicode(header))
         title = re.findall(r'<h1>(.*)</h1>', header)[0]
 
         meta = {'title': title}
