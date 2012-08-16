@@ -3,6 +3,15 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+Version 1.13
+-------------
+
+Released on Jul 16th, 2012
+
++ fix markdown meta parser
++ webhook deamon enhancement
+
+
 Version 1.12
 -------------
 
