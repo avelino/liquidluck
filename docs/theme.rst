@@ -172,6 +172,13 @@ Global Variables
 
   And it can be access in template by ``{{template.readability}}``, this is very useful.
 
+- writer, this variable tells you which writer is rendering this page now::
+
+    {
+        'class': 'ArchiveWriter',
+        'name': 'archive',
+    }
+
 
 Templatable Variables
 ~~~~~~~~~~~~~~~~~~~~~~~
