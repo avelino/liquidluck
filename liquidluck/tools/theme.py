@@ -17,20 +17,7 @@ def __fetch_themes():
     return content
 
 
-def __load_themes():
-    import time
-    import tempfile
-    path = os.path.join(tempfile.gettempdir(), 'liquidluck.json')
-
-    if not os.path.exists(path) or \
-       os.stat(path).st_mtime + 100 < time.time():
-        content = __fetch_themes()
-        f = open(path, 'w')
-        f.write(content)
-        f.close()
-
-    content = to_unicode(open(path).read())
-
+def __filter_themes(content):
     try:
         import json
         json_decode = json.loads
@@ -41,11 +28,29 @@ def __load_themes():
     repos = json_decode(content)
     themes = {}
     for theme in repos['repositories']:
-        name = theme['name'].replace('liquidluck-theme-', '')
-        name = name.strip().strip('-')
-        theme['name'] = name
-        themes[name] = theme
+        fork = theme['fork']
+        if not fork:
+            name = theme['name'].replace('liquidluck-theme-', '')
+            name = name.strip().strip('-')
+            theme['name'] = name
+            themes[name] = theme
     return themes
+
+
+def __load_themes():
+    import time
+    import tempfile
+    path = os.path.join(tempfile.gettempdir(), 'liquidluck.json')
+
+    if not os.path.exists(path) or \
+       os.stat(path).st_mtime + 600 < time.time():
+        content = __fetch_themes()
+        f = open(path, 'w')
+        f.write(content)
+        f.close()
+
+    content = to_unicode(open(path).read())
+    return __filter_themes(content)
 
 
 SEARCH_TEMPLATE = '''
@@ -53,12 +58,16 @@ Theme: %(name)s
 Author: %(username)s
 Description: %(description)s
 Updated: %(pushed)s
+Status: %(forks)s forks | %(stargazers)s stars | %(open_issues)s issues
 URL: %(url)s
 '''
 
 
-def search(keyword=None, clean=False):
-    themes = __load_themes()
+def search(keyword=None, clean=False, force=False):
+    if force:
+        themes = __filter_themes(__fetch_themes())
+    else:
+        themes = __load_themes()
     available = {}
 
     if keyword:

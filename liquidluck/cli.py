@@ -18,7 +18,7 @@ Usage:
     liquidluck create [-s <file>|--settings=<file>]
     liquidluck build [-s <file>|--settings=<file>] [-v|--verbose]
     liquidluck server [-s <file>|--settings=<file>] [-p <port>|--port=<port>]
-    liquidluck search [<theme>] [-c|--clean]
+    liquidluck search [<theme>] [-c|--clean] [-f|--force]
     liquidluck install <theme>
     liquidluck webhook (start|stop|restart) %(webhook)s
     liquidluck -h | --help
@@ -29,6 +29,7 @@ Options:
     -v --verbose            show more log.
     -s --settings=<file>    specify a setting file.
     -p --port=<port>        specify the server port.
+    -f --force              search a theme without cache
     -c --clean              show theme name only.
     --version               show version.
 """ % {
@@ -67,11 +68,12 @@ Options:
 
 documentation['search'] = """
 Usage:
-    liquidluck search [<theme>] [-c|--clean]
+    liquidluck search [<theme>] [-c|--clean] [-f|--force]
 
 Options:
     -h --help               show this screen.
     -c --clean              show theme name only.
+    -f --force              search a theme without cache
 """
 
 documentation['install'] = """
@@ -142,7 +144,8 @@ def main():
     elif command == 'search':
         arg_theme = args['<theme>'] or None
         arg_clean = args['--clean']
-        theme.search(arg_theme, arg_clean)
+        arg_force = args['--force']
+        theme.search(arg_theme, arg_clean, arg_force)
     elif command == 'install':
         arg_theme = args['<theme>'] or None
         theme.install(arg_theme)
