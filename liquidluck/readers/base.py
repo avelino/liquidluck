@@ -161,12 +161,11 @@ class Post(object):
         return os.path.splitext(path)[0]
 
     @property
-    def filedir(self):
+    def clean_filepath(self):
         path = self.filepath
         if path.startswith(g.source_directory):
-            path = path[len(g.source_directory) + 1:]
-
-        return os.path.split(path)[0]
+            return path[len(g.source_directory) + 1:]
+        return path
 
     def __getattr__(self, key):
         try:
