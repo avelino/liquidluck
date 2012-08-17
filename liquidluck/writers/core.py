@@ -8,6 +8,8 @@ from liquidluck.writers.base import get_post_slug, slug_to_destination
 
 
 class PostWriter(BaseWriter):
+    writer_name = 'post'
+
     def __init__(self):
         self._template = self.get('post_template', 'post.html')
 
@@ -25,6 +27,8 @@ class PostWriter(BaseWriter):
 
 
 class PageWriter(BaseWriter):
+    writer_name = 'page'
+
     def __init__(self):
         self._template = self.get('page_template', 'page.html')
 
@@ -38,6 +42,8 @@ class PageWriter(BaseWriter):
 
 
 class ArchiveWriter(BaseWriter):
+    writer_name = 'archive'
+
     def __init__(self):
         self._template = self.get('archive_template', 'archive.html')
         self._output = self.get(
@@ -80,6 +86,8 @@ class ArchiveWriter(BaseWriter):
 
 
 class ArchiveFeedWriter(ArchiveWriter):
+    writer_name = 'archive_feed'
+
     def __init__(self):
         self._template = self.get('archive_feed_template', 'feed.xml')
         self._output = self.get(
@@ -97,6 +105,8 @@ class ArchiveFeedWriter(ArchiveWriter):
 
 
 class FileWriter(BaseWriter):
+    writer_name = 'file'
+
     def start(self):
         l = len(g.source_directory) + 1
         for f in g.pure_files:
@@ -116,6 +126,7 @@ class StaticWriter(BaseWriter):
 
 
 class YearWriter(ArchiveWriter):
+    writer_name = 'year'
     _posts = {}
 
     def __init__(self):
@@ -159,6 +170,7 @@ class YearWriter(ArchiveWriter):
 
 
 class TagWriter(ArchiveWriter):
+    writer_name = 'tag'
     _posts = {}
 
     def __init__(self):
@@ -201,6 +213,7 @@ class TagWriter(ArchiveWriter):
 
 
 class TagCloudWriter(ArchiveWriter):
+    writer_name = 'tagcloud'
     _posts = {}
 
     def __init__(self):
@@ -226,6 +239,7 @@ class TagCloudWriter(ArchiveWriter):
 
 
 class CategoryWriter(ArchiveWriter):
+    writer_name = 'category'
     _posts = {}
 
     def __init__(self):
@@ -269,6 +283,7 @@ class CategoryWriter(ArchiveWriter):
 
 
 class CategoryFeedWriter(ArchiveWriter):
+    writer_name = 'category_feed'
     _posts = {}
 
     def __init__(self):

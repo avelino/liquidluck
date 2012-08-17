@@ -22,6 +22,7 @@ class PostWriter(BaseWriter):
         - {{post.relation.older}}
         - {% for item in post.relation.related %}
     """
+    writer_name = 'post'
 
     def __init__(self):
         self._template = self.get('post_template', 'post.html')

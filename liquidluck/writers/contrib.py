@@ -26,6 +26,7 @@ class DataJsonWriter(BaseWriter):
             "pages": []
         }
     """
+    writer_name = 'datajson'
 
     def start(self):
         strftime = lambda o: o.strftime('%Y-%m-%d %H:%M:%S')

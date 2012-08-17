@@ -29,6 +29,8 @@ from liquidluck.filters import tag_url, year_url
 class BaseWriter(object):
     """BaseWriter
     """
+    writer_name = 'base'
+
     def start(self):
         raise NotImplementedError
 
@@ -63,6 +65,12 @@ class BaseWriter(object):
         if g.detail_logging:
             logging.info('write %s' % filepath)
         tpl = g.jinja.get_template(template)
+
+        writer = {
+            'class': self.__class__.__name__,
+            'name': self.writer_name,
+        }
+        params['writer'] = writer
         html = tpl.render(params)
         self.write(html, os.path.join(g.output_directory, filepath))
         return
