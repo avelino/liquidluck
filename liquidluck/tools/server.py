@@ -257,6 +257,8 @@ class IndexHandler(RequestHandler):
         body = body.replace(
             '</head>', '<script src="/livereload.js"></script></head>'
         )
+        # disable google analytics
+        body = body.replace('google-analytics.com/ga.js', '')
         self.write(body)
 
 
