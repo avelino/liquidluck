@@ -24,8 +24,9 @@ theme_variables = {}
 # http://liquidluck.readthedocs.org/en/latest/config.html#readers
 # readers = {
     # if you want to enable reStructuredText, uncomment this line
+    # and you need install doctutils by yourself
     # 'rst': 'liquidluck.readers.restructuredtext.RestructuredTextReader',
-}
+# }
 # readers_variables = {}
 
 # http://liquidluck.readthedocs.org/en/latest/config.html#writers
