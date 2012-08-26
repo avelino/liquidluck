@@ -237,7 +237,7 @@ class LiveReloadHandler(WebSocketHandler):
                 if is_file_changed(path):
                     return True
 
-            return False
+        return False
 
 
 class IndexHandler(RequestHandler):
