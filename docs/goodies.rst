@@ -7,6 +7,8 @@ Goodies
 Gifts that makes Felix Felicis easy to use.
 
 
+.. _preview-server:
+
 Preview Server
 ---------------
 
@@ -18,6 +20,10 @@ Preview your blog with::
 
 Preview server now support livereload, when you are editing a post, it will
 auto compile and auto refresh the browser for you. **Added in version 1.12**
+
+To enable livereload, your should install tornado::
+
+    $ pip install tornado
 
 
 Oh My Zsh Plugin
