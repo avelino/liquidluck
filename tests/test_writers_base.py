@@ -4,7 +4,7 @@ import os
 import datetime
 from liquidluck.writers.base import Pagination
 from liquidluck.writers.base import get_post_slug
-from liquidluck.writers.base import content_url, static_url
+from liquidluck.writers.base import static_url
 from liquidluck.writers.base import load_jinja
 from liquidluck.options import settings
 
@@ -64,6 +64,7 @@ def test_get_post_slug():
     assert get_post_slug(post, slug_format) == 'blog/life/demo.html'
 
 
+"""
 def test_content_url():
     assert content_url('index.html') == '/'
 
@@ -94,6 +95,7 @@ def test_content_url():
     assert content_url('a/index.html') == '/a/'
     assert content_url('a/feed.xml') == '/a/feed/'
     assert content_url(10) == '/10/'
+"""
 
 
 def test_static_url():
