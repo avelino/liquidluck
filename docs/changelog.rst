@@ -4,8 +4,10 @@ Changelog
 All history since the new Felix Felicis are listed here:
 
 
-Version 1.2
+Version 2.0
 ------------
+
+Released on Sep 7th, 2012
 
 + support for relative url
 + support for inject html, css, javascript
