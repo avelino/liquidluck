@@ -4,7 +4,7 @@ import os
 from liquidluck.options import g, settings
 from liquidluck.utils import UnicodeDict, walk_dir, copy_to
 from liquidluck.writers.base import BaseWriter, Pagination
-from liquidluck.writers.base import get_post_slug, slug_to_destination
+from liquidluck.writers.base import get_post_destination
 
 
 class PostWriter(BaseWriter):
@@ -22,8 +22,8 @@ class PostWriter(BaseWriter):
             self.render({'post': post}, template, self._dest_of(post))
 
     def _dest_of(self, post):
-        slug = get_post_slug(post, settings.permalink)
-        return os.path.join(g.output_directory, slug_to_destination(slug))
+        dest = get_post_destination(post, settings.permalink)
+        return os.path.join(g.output_directory, dest)
 
 
 class PageWriter(BaseWriter):

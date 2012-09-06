@@ -69,6 +69,7 @@ class BaseWriter(object):
         writer = {
             'class': self.__class__.__name__,
             'name': self.writer_name,
+            'filepath': filepath,
         }
         params['writer'] = writer
         html = tpl.render(params)
@@ -265,12 +266,10 @@ def get_post_slug(post, slug_format):
     return slug
 
 
-def slug_to_destination(slug, use_index=False):
+def get_post_destination(post, slug_format):
+    slug = get_post_slug(post, slug_format)
     if slug.endswith('.html'):
         return slug
-
-    if slug.endswith('/') and use_index:
-        return slug + 'index.html'
 
     return slug.rstrip('/') + '.html'
 
