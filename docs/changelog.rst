@@ -4,11 +4,20 @@ Changelog
 All history since the new Felix Felicis are listed here:
 
 
-Version 2.0
+Version 1.2
 ------------
 
++ support for relative url
++ support for inject html, css, javascript
++ bugfix for server
+
+
+Version 1.14
+------------
+
+Released on Oct 23th, 2012
+
 + add render params: writer
-+ add DataJsonWriter
 + API changed. ``liquidluck.readers.base.Post``, delete ``filedir``, add ``clean_filepath``
 + force search theme from internet
 
