@@ -113,3 +113,10 @@ def to_datetime(value):
         except ValueError:
             pass
     raise ValueError('Unrecognized date/time: %r' % value)
+
+
+def get_relative_base(path):
+    length = len(filter(lambda o: o, os.path.split(path)))
+    if length > 1:
+        return '/'.join(['..' for i in range(length - 1)])
+    return '.'

@@ -13,9 +13,11 @@ import re
 import datetime
 import hashlib
 import logging
-from jinja2 import Environment, FileSystemLoader, contextfilter
+from jinja2 import Environment, FileSystemLoader
+from jinja2 import contextfilter
 import liquidluck
-from liquidluck.utils import import_object, to_unicode, to_bytes, utf8
+from liquidluck.utils import import_object, get_relative_base
+from liquidluck.utils import to_unicode, to_bytes, utf8
 
 # blog settings
 from liquidluck.options import settings
@@ -23,7 +25,7 @@ from liquidluck.options import settings
 # liquidluck settings
 from liquidluck.options import g
 from liquidluck.filters import xmldatetime, feed_updated
-from liquidluck.filters import tag_url, year_url
+from liquidluck.filters import content_url, tag_url, year_url
 
 
 class BaseWriter(object):
@@ -282,64 +284,13 @@ def permalink(ctx, post, prepend_site=False):
     if prepend_site:
         url = '%s/%s' % (settings.site['url'].rstrip('/'), slug)
     elif settings.use_relative_url and writer:
-        length = len(filter(lambda o: o, os.path.split(writer['filepath'])))
-        if length > 1:
-            rel = '/'.join(['..' for i in range(length - 1)])
-            url = '%s/%s' % (rel, slug)
-        else:
-            url = slug
+        base = get_relative_base(writer['filepath'])
+        url = '%s/%s' % (base, slug)
     else:
         url = '/%s' % slug
 
     if url.endswith('/index.html'):
         return url[:-10]
-    return url
-
-
-def content_url(base, *args):
-    def fix_index(url):
-        if url.endswith('/index.html'):
-            return url[:-10]
-        return url
-
-    args = list(args)
-    base = to_unicode(base)
-
-    if base.startswith('http://') or base.startswith('https://'):
-        prefix = '%s/' % base.rstrip('/')
-    else:
-        prefix = '/'
-        args.insert(0, base)
-
-    args = map(lambda o: to_unicode(o).strip('/'), args)
-    url = '/'.join(args).replace('//', '/').replace(' ', '-')
-    url = prefix + url.lstrip('/')
-    url = to_unicode(fix_index(url.lower()))
-
-    if url.endswith('/'):
-        return url
-
-    if settings.permalink.endswith('.html'):
-        if url.endswith('.html'):
-            return url
-        if url.endswith('.xml'):
-            return url
-        return '%s.html' % url
-
-    if settings.permalink.endswith('/'):
-        if url.endswith('.html'):
-            url = fix_index(url)
-            url = url.rstrip('.html')
-        if url.endswith('.xml'):
-            url = url.rstrip('.xml')
-
-        return '%s/' % url
-
-    if url.endswith('.html'):
-        url = fix_index(url)
-        return url.rstrip('.html')
-    if url.endswith('.xml'):
-        return url.rstrip('.xml')
     return url
 
 
