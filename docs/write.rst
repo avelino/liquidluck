@@ -16,6 +16,60 @@ There are three parts in each post:
 + meta -- ``date``, ``category``, ``tags`` in the example
 + content -- everything below the first ``-------``
 
+
+An example in markdown::
+
+    # Felix Felicis                 <-------- this is title
+
+    - date: 2012-12-12 12:12        <-------- this is meta
+    - tags: python, blog, web
+
+    --------------------------      <-------- this seprate meta and content
+
+    Hello World! Welcome to the     <-------- this is content
+    Felix Felicis World.
+
+    ```                             <-------- this is normal code
+    a {
+        color: black;
+    }
+    ```
+
+    ````css                         <-------- if code wrapped with 4 `, the code
+    a {                                       will be injected to this page
+        color: black;
+    }
+    ````
+
+
+An example in reStructuredText (you need to install docutils by yourself)::
+
+    Felix Felicis
+    ================
+
+    :date: 2012-12-12 12:12
+    :tags: python, blog, web
+
+
+    Hello World! Welcome to the Felix Felicis World.
+
+    ::
+    
+        /* normal code */
+        a {
+            color: black;
+        }
+
+
+    .. sourcecode:: css
+
+        /* hightlight code */
+
+        a {
+            color: black;
+        }
+
+
 Metadata that Felix Felicis supports natively:
 
 + date
@@ -31,6 +85,7 @@ which means you can access them in template with a shortcut, for example: ``{{po
 Metadata that Felix Felicis created itself:
 
 + filepath
++ clean_filepath
 + filename
 + clean_title  -- https://github.com/lepture/liquidluck/issues/32
 + updated
@@ -45,6 +100,8 @@ post follows permalink, page doesn't.
 A example of page in Markdown::
 
     # Hello Page
+
+    - tags: python, web         <----------- page has no date
 
     ----------------
 
