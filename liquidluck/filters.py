@@ -87,14 +87,17 @@ def tag_url(ctx, tag, prepend_site=False):
     prefix = settings.site.get('prefix', '')
     url = settings.site.get('url')
     tagcloud = settings.writers.get('tagcloud', None)
+
     if prepend_site and tagcloud:
         return '%s#%s' % (content_url(ctx, url, prefix, 'tag', 'index.html'),
                           tag)
     if tagcloud:
         return '%s#%s' % (content_url(ctx, prefix, 'tag', 'index.html'), tag)
+
     if prepend_site:
         return content_url(ctx, url, prefix, 'tag', tag, 'index.html')
-    return content_url(prefix, 'tag', tag, 'index.html')
+
+    return content_url(ctx, prefix, 'tag', tag, 'index.html')
 
 
 @contextfilter
