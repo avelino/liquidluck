@@ -13,7 +13,7 @@ import re
 import datetime
 import hashlib
 import logging
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, contextfilter
 import liquidluck
 from liquidluck.utils import import_object, to_unicode, to_bytes, utf8
 
@@ -274,10 +274,20 @@ def get_post_destination(post, slug_format):
     return slug.rstrip('/') + '.html'
 
 
-def permalink(post, prepend_site=False):
+@contextfilter
+def permalink(ctx, post, prepend_site=False):
+    writer = ctx.get('writer')
     slug = get_post_slug(post, settings.permalink)
+
     if prepend_site:
         url = '%s/%s' % (settings.site['url'].rstrip('/'), slug)
+    elif settings.use_relative_url and writer:
+        length = len(filter(lambda o: o, os.path.split(writer['filepath'])))
+        if length > 1:
+            rel = '/'.join(['..' for i in range(length - 1)])
+            url = '%s/%s' % (rel, slug)
+        else:
+            url = slug
     else:
         url = '/%s' % slug
 
