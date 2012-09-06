@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+import hashlib
+import logging
 import datetime
 from jinja2 import contextfunction, contextfilter
 from liquidluck.options import settings
-from liquidluck.utils import to_unicode, get_relative_base
+from liquidluck.utils import to_unicode, to_bytes, get_relative_base
 
 
 def xmldatetime(value):
@@ -98,3 +101,31 @@ def tag_url(ctx, tag, prepend_site=False):
 def year_url(ctx, post):
     prefix = settings.site.get('prefix', '')
     return content_url(ctx, prefix, post.date.year, 'index.html')
+
+
+_Cache = {}
+
+
+def static_url(base):
+    global _Cache
+
+    def get_hsh(path):
+        if path in _Cache:
+            return _Cache[path]
+        abspath = os.path.join(base, path)
+        if not os.path.exists(abspath):
+            logging.warn('%s does not exists' % path)
+            return ''
+
+        with open(abspath) as f:
+            content = f.read()
+            hsh = hashlib.md5(to_bytes(content)).hexdigest()
+            _Cache[path] = hsh
+            return hsh
+
+    def create_url(path):
+        hsh = get_hsh(path)[:5]
+        url = '%s/%s?v=%s' % (settings.static_prefix.rstrip('/'), path, hsh)
+        return url
+
+    return create_url

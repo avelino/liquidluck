@@ -112,6 +112,7 @@ settings.static_prefix = '/static/'
 settings.theme = 'default'
 
 settings.permalink = '{{date.year}}/{{filename}}'
+settings.use_relative_url = False
 settings.perpage = 30
 settings.feedcount = 20
 settings.timezone = '+00:00'

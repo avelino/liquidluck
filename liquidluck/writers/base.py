@@ -11,13 +11,12 @@ Writer, write your content to html.
 import os
 import re
 import datetime
-import hashlib
 import logging
 from jinja2 import Environment, FileSystemLoader
 from jinja2 import contextfilter
 import liquidluck
 from liquidluck.utils import import_object, get_relative_base
-from liquidluck.utils import to_unicode, to_bytes, utf8
+from liquidluck.utils import to_unicode, utf8
 
 # blog settings
 from liquidluck.options import settings
@@ -25,7 +24,7 @@ from liquidluck.options import settings
 # liquidluck settings
 from liquidluck.options import g
 from liquidluck.filters import xmldatetime, feed_updated
-from liquidluck.filters import content_url, tag_url, year_url
+from liquidluck.filters import content_url, tag_url, year_url, static_url
 
 
 class BaseWriter(object):
@@ -292,31 +291,3 @@ def permalink(ctx, post, prepend_site=False):
     if url.endswith('/index.html'):
         return url[:-10]
     return url
-
-
-_Cache = {}
-
-
-def static_url(base):
-    global _Cache
-
-    def get_hsh(path):
-        if path in _Cache:
-            return _Cache[path]
-        abspath = os.path.join(base, path)
-        if not os.path.exists(abspath):
-            logging.warn('%s does not exists' % path)
-            return ''
-
-        with open(abspath) as f:
-            content = f.read()
-            hsh = hashlib.md5(to_bytes(content)).hexdigest()
-            _Cache[path] = hsh
-            return hsh
-
-    def create_url(path):
-        hsh = get_hsh(path)[:5]
-        url = '%s/%s?v=%s' % (settings.static_prefix.rstrip('/'), path, hsh)
-        return url
-
-    return create_url
