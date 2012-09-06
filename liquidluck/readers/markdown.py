@@ -89,16 +89,33 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
         return '<p>%s</p>\n' % text
 
     def block_code(self, text, lang):
+        inject = False
+        if lang and lang.endswith('+'):
+            lang = lang[:-1]
+            inject = True
+
         if lang:
             lexer = get_lexer_by_name(lang, stripall=True)
         else:
             return '\n<pre><code>%s</code></pre>\n' % escape(text.strip())
 
+        if inject:
+            tpl = '\n%s\n'
+            if lang == 'javascript' or lang == 'js':
+                tpl = '\n<script>\n%s</script>\n'
+            elif lang == 'css':
+                tpl = '\n<style>\n%s</style>\n'
+
+            html = tpl % text
+        else:
+            html = ''
+
         formatter = HtmlFormatter(
             noclasses=settings.get('highlight_inline', False),
             linenos=settings.get('highlight_linenos', False),
         )
-        return highlight(text, lexer, formatter)
+        html += highlight(text, lexer, formatter)
+        return html
 
     def autolink(self, link, is_email):
         if is_email:
@@ -120,6 +137,8 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
 
 def markdown(text):
     text = to_unicode(text)
+    text = re.sub(r'````(.+)', r'````\1+', text)
+
     render = JuneRender(flags=m.HTML_USE_XHTML)
     md = m.Markdown(
         render,
