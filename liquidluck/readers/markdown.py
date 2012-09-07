@@ -92,7 +92,8 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
         inject = False
         if lang and lang.endswith('+'):
             lang = lang[:-1]
-            inject = True
+            if lang in ('javascript', 'js', 'css', 'html'):
+                inject = True
 
         if lang:
             lexer = get_lexer_by_name(lang, stripall=True)
