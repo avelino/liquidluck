@@ -31,13 +31,13 @@ author = 'nickname'  # choose a nickname
 
 # multi author support
 # http://liquidluck.readthedocs.org/en/latest/config.html#multiple-authors
-authors = {
-    'nickname': {
-        'name': 'Full Name',
-        'email': 'admin@example.com',
-        'website': 'http://example.com',
-    },
-}
+# authors = {
+#     'nickname': {
+#         'name': 'Full Name',
+#         'email': 'admin@example.com',
+#         'website': 'http://example.com',
+#     },
+# }
 
 
 theme = 'default'
@@ -51,12 +51,26 @@ theme_variables = {}
     # and you need install doctutils by yourself
     # 'rst': 'liquidluck.readers.restructuredtext.RestructuredTextReader',
 # }
-# readers_variables = {}
+readers_variables = {}
 
 # http://liquidluck.readthedocs.org/en/latest/config.html#writers
 # writers = {
+#     # the writers enabled by default
+#     # 'post': 'liquidluck.writers.core.PostWriter',
+#     # 'page': 'liquidluck.writers.core.PageWriter',
+#     # 'archive': 'liquidluck.writers.core.ArchiveWriter',
+#     # 'archive_feed': 'liquidluck.writers.core.ArchiveFeedWriter',
+#     # 'file': 'liquidluck.writers.core.FileWriter',
+#     # 'static': 'liquidluck.writers.core.StaticWriter',
+#     # 'year': 'liquidluck.writers.core.YearWriter',
+#     # 'tag': 'liquidluck.writers.core.TagWriter',
+#     # 'category': 'liquidluck.writers.core.CategoryWriter',
+#     # 'category_feed': 'liquidluck.writers.core.CategoryFeedWriter',
+#
+#     # you can disable a writer with:
+#     # 'year': None,
 # }
-# writers_variables = {}
+writers_variables = {}
 
 # template_variables = {}
 # template_filters = {}

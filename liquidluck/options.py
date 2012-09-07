@@ -123,7 +123,7 @@ settings.site = {
     'prefix': '',
 }
 
-settings.author = 'admin'
+settings.author = 'nickname'
 settings.authors = {}
 
 settings.readers = {
