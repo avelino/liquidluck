@@ -13,6 +13,7 @@ Released on Sep 7th, 2012
 + support for inject html, css, javascript
 + bugfix for server
 + code structure changed
++ github search api changed
 
 
 Version 1.14

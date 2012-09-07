@@ -58,8 +58,8 @@ Theme: %(name)s
 Author: %(username)s
 Description: %(description)s
 Updated: %(pushed)s
-Status: %(forks)s forks | %(stargazers)s stars | %(open_issues)s issues
-URL: %(url)s
+Status: %(forks)s forks | %(followers)s followers
+URL: https://github.com/%(username)s/liquidluck-theme-%(name)s
 '''
 
 
@@ -93,7 +93,7 @@ def install(keyword=None):
         print("can't find theme %s" % keyword)
         return
     theme = themes[keyword]
-    repo = theme['url']
+    repo = 'https://github.com/%(username)s/liquidluck-theme-%(name)s' % theme
     output = '_themes/%s' % keyword
     import subprocess
     subprocess.call(['git', 'clone', repo, output])
