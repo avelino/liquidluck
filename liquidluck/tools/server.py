@@ -181,8 +181,7 @@ class LiveReloadHandler(WebSocketHandler):
             write_posts()
             self.reload_browser()
 
-        elif self._is_changed(g.theme_directory):
-            #: theme changed don't need to reload posts
+        if self._is_changed(g.theme_directory):
             write_posts()
             self.reload_browser()
 

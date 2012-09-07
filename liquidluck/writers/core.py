@@ -127,9 +127,9 @@ class StaticWriter(BaseWriter):
 
 class YearWriter(ArchiveWriter):
     writer_name = 'year'
-    _posts = {}
 
     def __init__(self):
+        self._posts = {}
         self._template = self.get('year_template', 'archive.html')
 
         for post in g.public_posts:
@@ -171,9 +171,9 @@ class YearWriter(ArchiveWriter):
 
 class TagWriter(ArchiveWriter):
     writer_name = 'tag'
-    _posts = {}
 
     def __init__(self):
+        self._posts = {}
         self._template = self.get('tag_template', 'archive.html')
 
         for post in g.public_posts:
@@ -214,9 +214,9 @@ class TagWriter(ArchiveWriter):
 
 class TagCloudWriter(ArchiveWriter):
     writer_name = 'tagcloud'
-    _posts = {}
 
     def __init__(self):
+        self._posts = {}
         self._template = self.get('tagcloud_template', 'tagcloud.html')
         if 'tag' in g.resource:
             self._posts = g.resource['tag']
@@ -240,9 +240,9 @@ class TagCloudWriter(ArchiveWriter):
 
 class CategoryWriter(ArchiveWriter):
     writer_name = 'category'
-    _posts = {}
 
     def __init__(self):
+        self._posts = {}
         self._template = self.get('category_template', 'archive.html')
         self._title = self.get('category_title', {})
 
@@ -284,9 +284,9 @@ class CategoryWriter(ArchiveWriter):
 
 class CategoryFeedWriter(ArchiveWriter):
     writer_name = 'category_feed'
-    _posts = {}
 
     def __init__(self):
+        self._posts = {}
         self._template = self.get('category_feed_template', 'feed.xml')
         self._output = self.get('category_feed_output', 'feed.xml')
 
