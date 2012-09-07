@@ -9,7 +9,11 @@ DEFAULT_SETTING = """
 # {{filename}}.html
 # {{date.year}}/{{filename}}.html
 # {{date.year}}/{{date.month}}/{{filename}}.html
+# {{category}}/{{filename}}.html
 permalink = '{{date.year}}/{{filename}}'
+
+# if you want to use relative url, set it to True
+use_relative_url = False
 
 # how many posts can be in one page
 perpage = 30

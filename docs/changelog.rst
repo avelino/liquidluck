@@ -12,6 +12,7 @@ Released on Sep 7th, 2012
 + support for relative url
 + support for inject html, css, javascript
 + bugfix for server
++ code structure changed
 
 
 Version 1.14
