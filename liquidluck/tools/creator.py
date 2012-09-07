@@ -2,12 +2,31 @@ import os
 
 
 DEFAULT_SETTING = """
+# permalink settings
+# http://liquidluck.readthedocs.org/en/latest/config.html#permalink
+#
+# Examples:
+# {{filename}}.html
+# {{date.year}}/{{filename}}.html
+# {{date.year}}/{{date.month}}/{{filename}}.html
 permalink = '{{date.year}}/{{filename}}'
+
+# how many posts can be in one page
 perpage = 30
+
+# how many posts can be in a feed
 feedcount = 20
 timezone = "+00:00"
 
+# default author
+# you can set the author in your post::
+#
+# - author: yourname
+#
 author = 'nickname'  # choose a nickname
+
+# multi author support
+# http://liquidluck.readthedocs.org/en/latest/config.html#multiple-authors
 authors = {
     'nickname': {
         'name': 'Full Name',
@@ -19,6 +38,7 @@ authors = {
 
 theme = 'default'
 # theme variables are defined by theme creator
+# find all the theme variables in the theme settings.py file
 theme_variables = {}
 
 # http://liquidluck.readthedocs.org/en/latest/config.html#readers
@@ -30,7 +50,8 @@ theme_variables = {}
 # readers_variables = {}
 
 # http://liquidluck.readthedocs.org/en/latest/config.html#writers
-# writers = {}
+# writers = {
+# }
 # writers_variables = {}
 
 # template_variables = {}

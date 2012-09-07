@@ -89,7 +89,6 @@ Default permalink style is::
 There are other permalink styles you may like:
 
 + ``{{filename}}.html``
-+ ``{{filedir}}/{{filename}}.html``
 + ``{{date.year}}/{{filename}}.html``
 + ``{{date.year}}/{{date.month}}/{{filename}}.html``
 
