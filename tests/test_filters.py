@@ -48,8 +48,9 @@ def test_content_url():
 
 def test_static_url():
     path = os.path.join(ROOT, 'source')
+    ctx = {'writer': {'filepath': 'a/b'}}
     func = static_url(path)
-    func('settings.py')
+    func(ctx, 'settings.py')
     path = os.path.join(ROOT, 'source', 'post')
     func = static_url(path)
-    func('demo-rst-1.rst')
+    func(ctx, 'demo-rst-1.rst')

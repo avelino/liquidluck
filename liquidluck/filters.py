@@ -126,9 +126,16 @@ def static_url(base):
             _Cache[path] = hsh
             return hsh
 
-    def create_url(path):
+    @contextfunction
+    def create_url(ctx, path):
         hsh = get_hsh(path)[:5]
-        url = '%s/%s?v=%s' % (settings.static_prefix.rstrip('/'), path, hsh)
+        prefix = settings.static_prefix.rstrip('/')
+
+        if settings.use_relative_url and not prefix.startswith('http'):
+            base = get_relative_base(ctx.get('writer')['filepath'])
+            prefix = '%s/%s' % (base, prefix.lstrip('/'))
+
+        url = '%s/%s?v=%s' % (prefix, path, hsh)
         return url
 
     return create_url
