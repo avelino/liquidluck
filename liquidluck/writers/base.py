@@ -78,11 +78,14 @@ class BaseWriter(object):
         return
 
     def get(self, key, value=None):
-        return settings.writers_variables.get(key, value)
+        variables = settings.writer.get('variables')
+        if isinstance(variables, dict):
+            return variables.get(key, value)
+        return value
 
     @property
     def perpage(self):
-        return settings.perpage
+        return settings.config['perpage']
 
 
 class Pagination(object):
@@ -140,11 +143,12 @@ def load_jinja():
     if os.path.exists(tpl):
         loaders.append(tpl)
 
-    theme = os.path.join(os.path.abspath('_themes'), settings.theme)
+    theme_name = settings.theme.get('name', 'default')
+    theme = os.path.join(os.path.abspath('_themes'), theme_name)
     if not os.path.exists(theme):
-        theme = os.path.join(g.liquid_directory, '_themes', settings.theme)
+        theme = os.path.join(g.liquid_directory, '_themes', theme_name)
     if not os.path.exists(theme):
-        logging.error("Can't find theme: %s" % settings.theme)
+        logging.error("Can't find theme: %s" % theme_name)
 
     #: global variable
     g.theme_directory = theme
@@ -164,7 +168,7 @@ def load_jinja():
     jinja = Environment(
         loader=FileSystemLoader(loaders),
         autoescape=False,  # blog don't need autoescape
-        extensions=settings.template_extensions or [],
+        extensions=settings.writer.get('extensions') or [],
     )
     #: initialize globals
     jinja.globals = {}
@@ -172,7 +176,7 @@ def load_jinja():
     #: load template variables
     jinja.globals.update({
         'site': settings.site,
-        'template': settings.template_variables,
+        'template': settings.template.get("vars"),
     })
 
     #: load theme variables
@@ -182,9 +186,9 @@ def load_jinja():
         execfile(theme_config, {}, config)
 
     #: user can reset theme variables
-    config.update(settings.theme_variables)
+    config.update(settings.theme.get('vars', {}))
     #: keep namespace to the latest variables
-    settings.theme_variables = config
+    settings.theme['vars'] = config
     jinja.globals.update({'theme': config})
 
     #: default variables
@@ -213,7 +217,7 @@ def load_jinja():
     jinja.filters.update(config)
 
     #: load filters from settings
-    filters = settings.template_filters or {}
+    filters = settings.template.get("filters")
     for k, v in filters.items():
         jinja.filters.update({k: import_object(v)})
 
@@ -278,11 +282,11 @@ def get_post_destination(post, slug_format):
 @contextfilter
 def permalink(ctx, post, prepend_site=False):
     writer = ctx.get('writer')
-    slug = get_post_slug(post, settings.permalink)
+    slug = get_post_slug(post, settings.config["permalink"])
 
     if prepend_site:
         url = '%s/%s' % (settings.site['url'].rstrip('/'), slug)
-    elif settings.use_relative_url and writer:
+    elif settings.config['relative_url'] and writer:
         base = get_relative_base(writer['filepath'])
         url = '%s/%s' % (base, slug)
     else:

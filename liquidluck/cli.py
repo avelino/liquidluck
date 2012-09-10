@@ -133,13 +133,15 @@ def main():
             server.start_server()
         else:
             generator.load_settings(arg_settings)
-        if settings.permalink.endswith('.html'):
-            permalink = 'html'
-        elif settings.permalink.endswith('/'):
-            permalink = 'slash'
+
+        permalink = settings.config.get('permalink')
+        if permalink.endswith('.html'):
+            _type = 'html'
+        elif permalink.endswith('/'):
+            _type = 'slash'
         else:
-            permalink = 'clean'
-        server.config(arg_port, g.output_directory, permalink)
+            _type = 'clean'
+        server.config(arg_port, g.output_directory, _type)
         server.start_server()
     elif command == 'search':
         arg_theme = args['<theme>'] or None

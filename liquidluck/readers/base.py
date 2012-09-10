@@ -51,7 +51,7 @@ class BaseReader(object):
         return False
 
     def get(self, key, value=None):
-        return settings.readers_variables.get(key, value)
+        return settings.reader['vars'].get(key, value)
 
     @property
     def post_class(self):
@@ -96,7 +96,7 @@ class Post(object):
 
     @property
     def author(self):
-        return Author(self.meta.get('author', settings.author))
+        return Author(self.meta.get('author', settings.author['default']))
 
     @property
     def embed_author(self):
@@ -180,7 +180,7 @@ class Author(object):
     def __init__(self, author):
         self.author = author
 
-        __ = settings.authors or {}
+        __ = settings.author.get('vars') or {}
         self._d = __.get(author, {})
 
     def __str__(self):

@@ -105,58 +105,56 @@ class _LogFormatter(logging.Formatter):
 
 #: settings for blog user
 settings = _Options()
-settings.source = 'content'
-settings.output = 'deploy'
-settings.static_output = '%s/static' % settings.output
-settings.static_prefix = '/static/'
-settings.theme = 'default'
-
-settings.permalink = '{{date.year}}/{{filename}}'
-settings.use_relative_url = False
-settings.perpage = 30
-settings.feedcount = 20
-settings.timezone = '+00:00'
 
 settings.site = {
     'name': 'Felix Felicis',
     'url': 'http://github.com',
     'prefix': '',
 }
-
-settings.author = 'nickname'
-settings.authors = {}
-
-settings.readers = {
-    'markdown': 'liquidluck.readers.markdown.MarkdownReader',
+settings.config = {
+    "source": "content",
+    "output": "deploy",
+    "static": 'deploy/static',
+    "static_prefix": "/static/",
+    "permalink": "{{date.year}}/{{filename}}.html",
+    "relative_url": False,
+    "perpage": 30,
+    "feedcount": 20,
+    "timezone": "+08:00",
 }
-settings.readers_variables = {}
-
-settings.writers = {
-    'post': 'liquidluck.writers.core.PostWriter',
-    'page': 'liquidluck.writers.core.PageWriter',
-    'archive': 'liquidluck.writers.core.ArchiveWriter',
-    'archive_feed': 'liquidluck.writers.core.ArchiveFeedWriter',
-    'file': 'liquidluck.writers.core.FileWriter',
-    'static': 'liquidluck.writers.core.StaticWriter',
-    'year': 'liquidluck.writers.core.YearWriter',
-    'tag': 'liquidluck.writers.core.TagWriter',
-    'category': 'liquidluck.writers.core.CategoryWriter',
-    'category_feed': 'liquidluck.writers.core.CategoryFeedWriter',
+settings.author = {
+    "default": "nickname",
+    "vars": {},
 }
-settings.writers_variables = {}
-settings.template_variables = {}
-settings.template_filters = {}
-settings.theme_variables = {}
+settings.theme = {
+    "name": "default",
+    "vars": {},
+}
+settings.writer = {
+    "active": [],
+    "extensions": [],
+    "vars": {},
+}
+settings.reader = {
+    "active": [],
+    "vars": {},
+}
+settings.template = {
+    "vars": {},
+    "filters": {},
+}
 
 
 #: settings for liquidluck
 g = _Options()
 g.detail_logging = False
 g.liquid_directory = os.path.abspath(os.path.dirname(__file__))
-g.source_directory = settings.source
-g.output_directory = settings.output
-g.static_directory = settings.static_output
-g.theme_directory = os.path.join(g.liquid_directory, '_themes', settings.theme)
+g.source_directory = settings.config['source']
+g.output_directory = settings.config['output']
+g.static_directory = settings.config['static']
+g.theme_directory = os.path.join(
+    g.liquid_directory, '_themes', settings.theme['name']
+)
 g.resource = {}
 g.public_posts = []
 g.secure_posts = []

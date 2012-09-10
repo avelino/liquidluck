@@ -40,7 +40,7 @@ class PostWriter(BaseWriter):
             self.render({'post': post}, template, self._dest_of(post))
 
     def _dest_of(self, post):
-        dest = get_post_destination(post, settings.permalink)
+        dest = get_post_destination(post, settings.config['permalink'])
         return os.path.join(g.output_directory, dest)
 
     def _get_relations(self, post, index):

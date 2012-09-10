@@ -112,8 +112,8 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
             html = ''
 
         formatter = HtmlFormatter(
-            noclasses=settings.get('highlight_inline', False),
-            linenos=settings.get('highlight_linenos', False),
+            noclasses=settings.reader['vars'].get('highlight_inline', False),
+            linenos=settings.reader['vars'].get('highlight_linenos', False),
         )
         html += highlight(text, lexer, formatter)
         return html
@@ -122,7 +122,7 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
         if is_email:
             return '<a href="mailto:%(link)s">%(link)s</a>' % {'link': link}
 
-        for func in settings.readers_variables.get(
+        for func in settings.reader['vars'].get(
             'markdown_transform', [
                 'liquidluck.readers.markdown.transform_youtube',
                 'liquidluck.readers.markdown.transform_gist',

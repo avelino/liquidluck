@@ -22,7 +22,7 @@ class PostWriter(BaseWriter):
             self.render({'post': post}, template, self._dest_of(post))
 
     def _dest_of(self, post):
-        dest = get_post_destination(post, settings.permalink)
+        dest = get_post_destination(post, settings.config['permalink'])
         return os.path.join(g.output_directory, dest)
 
 
@@ -98,7 +98,7 @@ class ArchiveFeedWriter(ArchiveWriter):
         feed = UnicodeDict()
         feed.url = self.prefix_dest('index.html')
         feed.feedurl = self._output
-        feed.posts = g.public_posts[:settings.feedcount]
+        feed.posts = g.public_posts[:settings.config['feedcount']]
 
         dest = os.path.join(g.output_directory, self._output)
         self.render({'feed': feed}, self._template, dest)
@@ -306,6 +306,6 @@ class CategoryFeedWriter(ArchiveWriter):
             feed = UnicodeDict()
             feed.url = self.prefix_dest('%s/index.html' % category)
             feed.feedurl = self.prefix_dest('%s/%s' % (category, self._output))
-            feed.posts = self._posts[category][:settings.feedcount]
+            feed.posts = self._posts[category][:settings.config['feedcount']]
             dest = os.path.join(g.output_directory, feed.feedurl)
             self.render({'feed': feed}, self._template, dest)

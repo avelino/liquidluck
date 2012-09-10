@@ -20,18 +20,16 @@ def load_settings(path):
         else:
             settings[key] = setting
 
-    g.output_directory = os.path.abspath(settings.output)
-    g.static_directory = os.path.abspath(settings.static_output)
+    g.output_directory = os.path.abspath(settings.config.get('output'))
+    g.static_directory = os.path.abspath(settings.config.get('static'))
     logging.info('Load Settings Finished')
 
 
 def load_posts(path):
     g.source_directory = path
     readers = []
-    for name in settings.readers:
-        reader = settings.readers[name]
-        if reader:
-            readers.append(import_object(reader))
+    for name in settings.reader.get('active'):
+        readers.append(import_object(name))
 
     def detect_reader(filepath):
         for Reader in readers:
@@ -59,10 +57,8 @@ def load_posts(path):
 
 def write_posts():
     writers = []
-    for name in settings.writers:
-        writer = settings.writers[name]
-        if writer:
-            writers.append(import_object(writer)())
+    for name in settings.writer.get('active'):
+        writers.append(import_object(name)())
 
     load_jinja()
 
@@ -72,5 +68,5 @@ def write_posts():
 
 def build(config='settings.py'):
     load_settings(config)
-    load_posts(settings.source)
+    load_posts(settings.config.get('source'))
     write_posts()

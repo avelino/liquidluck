@@ -15,7 +15,7 @@ def xmldatetime(value):
     if not isinstance(value, datetime.datetime):
         return value
     value = value.strftime('%Y-%m-%dT%H:%M:%S')
-    return '%s%s' % (value, settings.timezone)
+    return '%s%s' % (value, settings.config['timezone'])
 
 
 def feed_updated(feed):
@@ -43,7 +43,7 @@ def content_url(ctx, base, *args):
 
     if base.startswith('http://') or base.startswith('https://'):
         prefix = '%s/' % base.rstrip('/')
-    elif settings.use_relative_url and writer:
+    elif settings.config['relative_url'] and writer:
         prefix = '%s/' % get_relative_base(writer['filepath'])
         args.insert(0, base)
     else:
@@ -58,14 +58,15 @@ def content_url(ctx, base, *args):
     if url.endswith('/'):
         return url
 
-    if settings.permalink.endswith('.html'):
+    permalink = settings.config['permalink']
+    if permalink.endswith('.html'):
         if url.endswith('.html'):
             return url
         if url.endswith('.xml'):
             return url
         return '%s.html' % url
 
-    if settings.permalink.endswith('/'):
+    if permalink.endswith('/'):
         if url.endswith('.html'):
             url = fix_index(url)
             url = url.rstrip('.html')
@@ -86,7 +87,8 @@ def content_url(ctx, base, *args):
 def tag_url(ctx, tag, prepend_site=False):
     prefix = settings.site.get('prefix', '')
     url = settings.site.get('url')
-    tagcloud = settings.writers.get('tagcloud', None)
+    writers = settings.writer['active']
+    tagcloud = any((True for o in writers if 'TagCloud' in o))
 
     if prepend_site and tagcloud:
         return '%s#%s' % (content_url(ctx, url, prefix, 'tag', 'index.html'),
@@ -129,9 +131,9 @@ def static_url(base):
     @contextfunction
     def create_url(ctx, path):
         hsh = get_hsh(path)[:5]
-        prefix = settings.static_prefix.rstrip('/')
+        prefix = settings.config['static_prefix'].rstrip('/')
 
-        if settings.use_relative_url and not prefix.startswith('http'):
+        if settings.config['relative_url'] and not prefix.startswith('http'):
             base = get_relative_base(ctx.get('writer')['filepath'])
             prefix = '%s/%s' % (base, prefix.lstrip('/'))
 
