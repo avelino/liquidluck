@@ -3,7 +3,7 @@
 
 def description(key):
     from liquidluck.options import settings
-    dct = settings.theme_variables.get('descriptions')
+    dct = settings.theme['vars'].get('descriptions')
     if not isinstance(dct, dict):
         return ''
     if key not in dct:
