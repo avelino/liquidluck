@@ -78,7 +78,7 @@ class BaseWriter(object):
         return
 
     def get(self, key, value=None):
-        variables = settings.writer.get('variables')
+        variables = settings.writer.get('vars')
         if isinstance(variables, dict):
             return variables.get(key, value)
         return value
