@@ -20,7 +20,7 @@ config:
     relative_url: false
     perpage: 30
     feedcount: 20
-    timezone: +08:00
+    timezone: "+08:00"
 
 
 author:

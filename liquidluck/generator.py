@@ -6,7 +6,7 @@ PROJDIR = os.path.abspath(os.path.dirname(__file__))
 import sys
 import logging
 from liquidluck.options import g, settings
-from liquidluck.utils import import_object, walk_dir, copy_to
+from liquidluck.utils import import_object, walk_dir
 
 from liquidluck.writers.base import load_jinja
 
@@ -15,9 +15,7 @@ def create_settings(filepath):
     if not filepath:
         filetype = raw_input(
             'Select a config format ([yaml], python, json):  '
-        )
-        if not filetype:
-            filetype = 'yaml'
+        ) or 'yaml'
 
         if filetype not in ['yaml', 'python', 'json']:
             print('format not supported')
@@ -26,12 +24,28 @@ def create_settings(filepath):
         suffix = {'yaml': '.yml', 'python': '.py', 'json': '.json'}
         filepath = 'settings%s' % suffix[filetype]
 
+    content = raw_input('posts folder (content): ') or 'content'
+    output = raw_input('output folder (deploy): ') or 'deploy'
     if filepath.endswith('.py'):
-        copy_to(os.path.join(PROJDIR, 'tools', '_settings.py'), filepath)
+        f = open(os.path.join(PROJDIR, 'tools', '_settings.py'))
+        text = f.read()
+        f.close()
     elif filepath.endswith('.json'):
-        copy_to(os.path.join(PROJDIR, 'tools', '_settings.json'), filepath)
+        f = open(os.path.join(PROJDIR, 'tools', '_settings.json'))
+        text = f.read()
+        f.close()
     else:
-        copy_to(os.path.join(PROJDIR, 'tools', '_settings.yml'), filepath)
+        f = open(os.path.join(PROJDIR, 'tools', '_settings.yml'))
+        text = f.read()
+        f.close()
+
+    text = text.replace('content', content)
+    if content and not content.startswith('.'):
+        os.makedirs(content)
+    text = text.replace('deploy', output)
+    f = open(filepath, 'w')
+    f.write(text)
+    f.close()
 
 
 def find_settings():
