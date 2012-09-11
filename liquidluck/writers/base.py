@@ -176,7 +176,7 @@ def load_jinja():
     #: load template variables
     jinja.globals.update({
         'site': settings.site,
-        'template': settings.template.get("vars"),
+        'template': settings.template.get("vars") or {},
     })
 
     #: load theme variables
@@ -186,7 +186,7 @@ def load_jinja():
         execfile(theme_config, {}, config)
 
     #: user can reset theme variables
-    config.update(settings.theme.get('vars', {}))
+    config.update(settings.theme.get('vars') or {})
     #: keep namespace to the latest variables
     settings.theme['vars'] = config
     jinja.globals.update({'theme': config})
@@ -217,7 +217,7 @@ def load_jinja():
     jinja.filters.update(config)
 
     #: load filters from settings
-    filters = settings.template.get("filters")
+    filters = settings.template.get("filters") or {}
     for k, v in filters.items():
         jinja.filters.update({k: import_object(v)})
 

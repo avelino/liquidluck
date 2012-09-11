@@ -109,10 +109,11 @@ def main():
             version='Felix Felicis v%s' % liquidluck.__version__
         )
 
+    arg_settings = args['--settings'] or 'settings.py'
+
     if command == 'create':
         creator.create(args['--settings'] or 'settings.py')
     elif command == 'build':
-        arg_settings = args['--settings'] or 'settings.py'
         if not os.path.exists(arg_settings):
             answer = raw_input(
                 "Can't find your setting files, "
@@ -125,7 +126,6 @@ def main():
             g.detail_logging = args['--verbose']
             generator.build(arg_settings)
     elif command == 'server':
-        arg_settings = args['--settings'] or 'settings.py'
         arg_port = int(args['--port'] or 8000)
         if not os.path.exists(arg_settings):
             print('setting file not found')
@@ -152,7 +152,6 @@ def main():
         arg_theme = args['<theme>'] or None
         theme.install(arg_theme)
     elif command == 'webhook':
-        arg_settings = args['--settings'] or 'settings.py'
         arg_port = int(args['--port'] or 9000)
         action = (args['start'] and 'start') or (args['stop'] and 'stop') \
                 or (args['restart'] and 'restart')

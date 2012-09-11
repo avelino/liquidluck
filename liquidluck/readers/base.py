@@ -51,7 +51,8 @@ class BaseReader(object):
         return False
 
     def get(self, key, value=None):
-        return settings.reader['vars'].get(key, value)
+        variables = settings.reader.get('vars') or {}
+        return variables.get(key, value)
 
     @property
     def post_class(self):

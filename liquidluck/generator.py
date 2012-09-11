@@ -15,10 +15,7 @@ def load_settings(path):
     cwd = os.path.split(os.path.abspath(path))[0]
     sys.path.insert(0, cwd)
 
-    def load_py_settings(path):
-        config = {}
-        execfile(path, {}, config)
-
+    def update_settings(config):
         for key in config:
             setting = config[key]
             if isinstance(setting, dict) and key in settings:
@@ -26,8 +23,22 @@ def load_settings(path):
             else:
                 settings[key] = setting
 
+    def load_py_settings(path):
+        config = {}
+        execfile(path, {}, config)
+        update_settings(config)
+
     def load_yaml_settings(path):
-        pass
+        from yaml import load
+        try:
+            from yaml import CLoader
+            MyLoader = CLoader
+        except ImportError:
+            from yaml import Loader
+            MyLoader = Loader
+
+        config = load(open(path), MyLoader)
+        update_settings(config)
 
     def load_json_settings(path):
         try:
@@ -40,17 +51,10 @@ def load_settings(path):
         content = f.read()
         f.close()
         config = json.loads(content)
-
-        for key in config:
-            setting = config[key]
-            if isinstance(setting, dict) and key in settings:
-                settings[key].update(setting)
-            else:
-                settings[key] = setting
+        update_settings(config)
 
     #: preload default config
-    #load_py_settings(os.path.join(PROJDIR, 'tools', '_settings.py'))
-    load_json_settings(os.path.join(PROJDIR, 'tools', '_settings.json'))
+    load_py_settings(os.path.join(PROJDIR, 'tools', '_settings.py'))
 
     if path.endswith('.py'):
         load_py_settings(path)
