@@ -6,9 +6,32 @@ PROJDIR = os.path.abspath(os.path.dirname(__file__))
 import sys
 import logging
 from liquidluck.options import g, settings
-from liquidluck.utils import import_object, walk_dir
+from liquidluck.utils import import_object, walk_dir, copy_to
 
 from liquidluck.writers.base import load_jinja
+
+
+def create_settings(filepath):
+    if not filepath:
+        filetype = raw_input(
+            'Select a config format ([yaml], python, json):  '
+        )
+        if not filetype:
+            filetype = 'yaml'
+
+        if filetype not in ['yaml', 'python', 'json']:
+            print('format not supported')
+            return
+
+        suffix = {'yaml': '.yml', 'python': '.py', 'json': '.json'}
+        filepath = 'settings%s' % suffix[filetype]
+
+    if filepath.endswith('.py'):
+        copy_to(os.path.join(PROJDIR, 'tools', '_settings.py'), filepath)
+    elif filepath.endswith('.json'):
+        copy_to(os.path.join(PROJDIR, 'tools', '_settings.json'), filepath)
+    else:
+        copy_to(os.path.join(PROJDIR, 'tools', '_settings.yml'), filepath)
 
 
 def find_settings():

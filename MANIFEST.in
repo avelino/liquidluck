@@ -1,3 +1,6 @@
 recursive-include liquidluck/_themes *.*
 include liquidluck/tools/livereload.js
+include liquidluck/tools/_settings.json
+include liquidluck/tools/_settings.yml
+include liquidluck/tools/_settings.py
 include README.rst

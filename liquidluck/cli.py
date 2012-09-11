@@ -3,7 +3,6 @@ import os
 import sys
 import liquidluck
 from liquidluck.tools import theme
-from liquidluck.tools import creator
 from liquidluck.tools import webhook
 from liquidluck.tools import server
 from liquidluck import generator
@@ -112,16 +111,16 @@ def main():
     arg_settings = args['--settings'] or generator.find_settings()
 
     if command == 'create':
-        creator.create(arg_settings)
+        generator.create_settings(arg_settings)
     elif command == 'build':
-        if not os.path.exists(arg_settings):
+        if not arg_settings:
             answer = raw_input(
                 "Can't find your setting files, "
                 "would you like to create one?(Y/n) "
             )
             if answer.lower() == 'n':
                 return
-            creator.create(arg_settings)
+            generator.create_settings(arg_settings)
         else:
             g.detail_logging = args['--verbose']
             generator.build(arg_settings)

@@ -59,7 +59,7 @@ def copy_to(source, dest):
     folder = os.path.split(dest)[0]
     # on Mac OSX, `folder` == `FOLDER`
     # then make sure destination is lowercase
-    if not os.path.isdir(folder):
+    if folder and not os.path.isdir(folder):
         os.makedirs(folder)
 
     shutil.copy(source, dest)
