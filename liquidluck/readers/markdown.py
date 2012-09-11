@@ -62,9 +62,12 @@ class MarkdownReader(BaseReader):
 
         f.close()
 
+        body = to_unicode(body)
         meta = self._parse_meta(header)
         #: keep body in meta data as source text
         meta['source_text'] = body
+        _toc = m.Markdown(m.HtmlTocRenderer(), 0)
+        meta['toc'] = _toc.render(body)
         content = markdown(body)
         return self.post_class(self.filepath, content, meta=meta)
 
@@ -84,14 +87,6 @@ class MarkdownReader(BaseReader):
 
 
 class JuneRender(m.HtmlRenderer, m.SmartyPants):
-    def header(self, text, level):
-        ident = re.sub(
-            r'[<>,~!#&\{\}\(\)\[\]\.\*\^\$\?]', ' ', text
-        )
-        ident = '-'.join(ident.split())
-        t = '<h%(level)d id="post-%(ident)s">%(text)s</h%(level)d>'
-        return t % {'text': text, 'level': level, 'ident': ident}
-
     def paragraph(self, text):
         text = cjk_nowrap(text)
         return '<p>%s</p>\n' % text
@@ -150,7 +145,7 @@ def markdown(text):
     text = to_unicode(text)
     text = re.sub(r'````(.+)', r'````\1+', text)
 
-    render = JuneRender(flags=m.HTML_USE_XHTML)
+    render = JuneRender(flags=m.HTML_USE_XHTML | m.HTML_TOC)
     md = m.Markdown(
         render,
         extensions=(
