@@ -169,6 +169,10 @@ class Post(object):
             return path[len(g.source_directory) + 1:]
         return path
 
+    @property
+    def clean_folder(self):
+        return os.path.split(self.clean_filepath)[0]
+
     def __getattr__(self, key):
         try:
             return super(Post, self).__getattr__(key)
