@@ -1,0 +1,61 @@
+{
+  "site": {
+    "name": "Felix Felicis",
+    "url": "http://lab.lepture.com/liquidluck/"
+  },
+
+  "config": {
+    "source": "content",
+    "output": "deploy",
+    "static": "deploy/static",
+    "static_prefix": "/static/",
+    "permalink": "{{date.year}}/{{filename}}.html",
+    "relative_url": false,
+    "perpage": 30,
+    "feedcount": 20,
+    "timezone": "+08:00"
+  },
+
+
+  "author": {
+    "default": "nickname",
+    "vars": {}
+  },
+
+  "reader": {
+    "active": [
+      "liquidluck.readers.markdown.MarkdownReader"
+    ],
+    "vars": {}
+  },
+
+  "writer": {
+    "active": [
+      "liquidluck.writers.core.PostWriter",
+      "liquidluck.writers.core.PageWriter",
+      "liquidluck.writers.core.ArchiveWriter",
+      "liquidluck.writers.core.ArchiveFeedWriter",
+      "liquidluck.writers.core.FileWriter",
+      "liquidluck.writers.core.StaticWriter",
+      "liquidluck.writers.core.YearWriter",
+      "liquidluck.writers.core.CategoryWriter",
+      "liquidluck.writers.core.CategoryFeedWriter",
+      "liquidluck.writers.core.TagWriter",
+      "liquidluck.writers.core.TagCloudWriter"
+    ],
+    "vars": {
+    }
+  },
+
+  "theme": {
+    "name": "default",
+
+    "vars": {
+    }
+  },
+
+  "template": {
+    "vars": {},
+    "filters": {}
+  }
+}

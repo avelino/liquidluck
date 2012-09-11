@@ -30,10 +30,27 @@ def load_settings(path):
         pass
 
     def load_json_settings(path):
-        pass
+        try:
+            import json
+        except ImportError:
+            import simplejson
+            json = simplejson
+
+        f = open(path)
+        content = f.read()
+        f.close()
+        config = json.loads(content)
+
+        for key in config:
+            setting = config[key]
+            if isinstance(setting, dict) and key in settings:
+                settings[key].update(setting)
+            else:
+                settings[key] = setting
 
     #: preload default config
-    load_py_settings(os.path.join(PROJDIR, 'tools', '_settings.py'))
+    #load_py_settings(os.path.join(PROJDIR, 'tools', '_settings.py'))
+    load_json_settings(os.path.join(PROJDIR, 'tools', '_settings.json'))
 
     if path.endswith('.py'):
         load_py_settings(path)
