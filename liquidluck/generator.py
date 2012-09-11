@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+PROJDIR = os.path.abspath(os.path.dirname(__file__))
+import sys
 import logging
 from liquidluck.options import g, settings
 from liquidluck.utils import import_object, walk_dir
@@ -10,7 +12,9 @@ from liquidluck.writers.base import load_jinja
 
 
 def load_settings(path):
-    #TODO add cwd to python path
+    cwd = os.path.split(os.path.abspath(path))[0]
+    sys.path.insert(0, cwd)
+
     def load_py_settings(path):
         config = {}
         execfile(path, {}, config)
@@ -27,6 +31,9 @@ def load_settings(path):
 
     def load_json_settings(path):
         pass
+
+    #: preload default config
+    load_py_settings(os.path.join(PROJDIR, 'tools', '_settings.py'))
 
     if path.endswith('.py'):
         load_py_settings(path)

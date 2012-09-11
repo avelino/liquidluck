@@ -105,55 +105,23 @@ class _LogFormatter(logging.Formatter):
 
 #: settings for blog user
 settings = _Options()
-
-settings.site = {
-    'name': 'Felix Felicis',
-    'url': 'http://github.com',
-    'prefix': '',
-}
-settings.config = {
-    "source": "content",
-    "output": "deploy",
-    "static": 'deploy/static',
-    "static_prefix": "/static/",
-    "permalink": "{{date.year}}/{{filename}}.html",
-    "relative_url": False,
-    "perpage": 30,
-    "feedcount": 20,
-    "timezone": "+08:00",
-}
-settings.author = {
-    "default": "nickname",
-    "vars": {},
-}
-settings.theme = {
-    "name": "default",
-    "vars": {},
-}
-settings.writer = {
-    "active": [],
-    "extensions": [],
-    "vars": {},
-}
-settings.reader = {
-    "active": [],
-    "vars": {},
-}
-settings.template = {
-    "vars": {},
-    "filters": {},
-}
+settings.site = {}
+settings.config = {}
+settings.author = {}
+settings.reader = {}
+settings.writer = {}
+settings.theme = {}
 
 
 #: settings for liquidluck
 g = _Options()
 g.detail_logging = False
 g.liquid_directory = os.path.abspath(os.path.dirname(__file__))
-g.source_directory = settings.config['source']
-g.output_directory = settings.config['output']
-g.static_directory = settings.config['static']
+g.source_directory = 'source'
+g.output_directory = 'deploy'
+g.static_directory = 'static'
 g.theme_directory = os.path.join(
-    g.liquid_directory, '_themes', settings.theme['name']
+    g.liquid_directory, '_themes', 'default'
 )
 g.resource = {}
 g.public_posts = []

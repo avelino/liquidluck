@@ -40,10 +40,11 @@ def content_url(ctx, base, *args):
 
     args = list(args)
     base = to_unicode(base)
-
+    use_relative_url = settings.config.get('relative_url', False)
     if base.startswith('http://') or base.startswith('https://'):
         prefix = '%s/' % base.rstrip('/')
-    elif settings.config['relative_url'] and writer:
+
+    elif use_relative_url and writer:
         prefix = '%s/' % get_relative_base(writer['filepath'])
         args.insert(0, base)
     else:
@@ -131,9 +132,10 @@ def static_url(base):
     @contextfunction
     def create_url(ctx, path):
         hsh = get_hsh(path)[:5]
-        prefix = settings.config['static_prefix'].rstrip('/')
+        prefix = settings.config.get('static_prefix', '/static/').rstrip('/')
+        use_relative_url = settings.config.get('relative_url', False)
 
-        if settings.config['relative_url'] and not prefix.startswith('http'):
+        if use_relative_url and not prefix.startswith('http'):
             base = get_relative_base(ctx.get('writer')['filepath'])
             prefix = '%s/%s' % (base, prefix.lstrip('/'))
 
