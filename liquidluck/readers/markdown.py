@@ -84,6 +84,14 @@ class MarkdownReader(BaseReader):
 
 
 class JuneRender(m.HtmlRenderer, m.SmartyPants):
+    def header(self, text, level):
+        ident = re.sub(
+            r'[<>,~!#&\{\}\(\)\[\]\.\*\^\$\?]', ' ', text
+        )
+        ident = '-'.join(ident.split())
+        t = '<h%(level)d id="post-%(ident)s">%(text)s</h%(level)d>'
+        return t % {'text': text, 'level': level, 'ident': ident}
+
     def paragraph(self, text):
         text = cjk_nowrap(text)
         return '<p>%s</p>\n' % text
