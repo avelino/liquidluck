@@ -177,7 +177,7 @@ class LiveReloadHandler(WebSocketHandler):
             g.pure_files = []
             g.pure_pages = []
 
-            load_posts(settings.source)
+            load_posts(settings.config['source'])
             write_posts()
             self.reload_browser()
 
@@ -269,7 +269,7 @@ def start_server():
         import tornado.web
         if g.output_directory == ROOT:
             #: if this is a liquidluck project, build the site
-            load_posts(settings.source)
+            load_posts(settings.config['source'])
             write_posts()
             logging.info('Theme directory: %s' % g.theme_directory)
         handlers = [

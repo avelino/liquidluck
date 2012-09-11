@@ -75,7 +75,7 @@ class ArchiveWriter(BaseWriter):
             self.render({'pagination': pagination}, self._template, dest)
 
     def prefix_dest(self, dest):
-        prefix = settings.site.get('prefix').rstrip('/')
+        prefix = settings.site.get('prefix', '').rstrip('/')
         if not dest:
             return prefix
         if prefix:

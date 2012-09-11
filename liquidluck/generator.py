@@ -11,7 +11,23 @@ from liquidluck.utils import import_object, walk_dir
 from liquidluck.writers.base import load_jinja
 
 
+def find_settings():
+    config = [
+        'settings.yml', 'settings.json', 'settings.yaml', 'settings.py',
+    ]
+
+    for f in config:
+        path = os.path.join(os.getcwd(), f)
+        if os.path.exists(path):
+            return path
+
+    return None
+
+
 def load_settings(path):
+    if not path:
+        path = find_settings()
+
     cwd = os.path.split(os.path.abspath(path))[0]
     sys.path.insert(0, cwd)
 
@@ -36,6 +52,13 @@ def load_settings(path):
         except ImportError:
             from yaml import Loader
             MyLoader = Loader
+        except ImportError:
+            raise ImportError(
+                'You should install yaml parser first\n'
+                'You can install yaml parser by:\n'
+                '\n'
+                'pip install PyYAML or easy_install PyYAML'
+            )
 
         config = load(open(path), MyLoader)
         update_settings(config)

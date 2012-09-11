@@ -109,10 +109,10 @@ def main():
             version='Felix Felicis v%s' % liquidluck.__version__
         )
 
-    arg_settings = args['--settings'] or 'settings.py'
+    arg_settings = args['--settings'] or generator.find_settings()
 
     if command == 'create':
-        creator.create(args['--settings'] or 'settings.py')
+        creator.create(arg_settings)
     elif command == 'build':
         if not os.path.exists(arg_settings):
             answer = raw_input(
