@@ -14,13 +14,13 @@ ROOT = os.path.abspath(os.path.dirname(__file__))
 class TestPostWriter(object):
     def test_start(self):
         writer = PostWriter()
-        settings.permalink = '{{category}}/{{filename}}.html'
+        settings.config['permalink'] = '{{category}}/{{filename}}.html'
         settings.site['prefix'] = ''
         writer.start()
         f = os.path.join(g.output_directory, 'work/demo-markdown-1.html')
         assert os.path.exists(f)
 
-        settings.permalink = '{{date.year}}/{{filename}}.html'
+        settings.config['permalink'] = '{{date.year}}/{{filename}}.html'
         writer.start()
         f = os.path.join(g.output_directory, '2012/demo-markdown-1.html')
         assert os.path.exists(f)

@@ -9,7 +9,7 @@ def test_content_url():
 
     assert content_url(ctx, 'index.html') == '/'
 
-    settings.permalink = '{{category}}/{{filename}}.html'
+    settings.config['permalink'] = '{{category}}/{{filename}}.html'
     assert content_url(ctx, 10) == '/10.html'
     assert content_url(ctx, 'a') == '/a.html'
     assert content_url(ctx, 'a.html') == '/a.html'
@@ -19,7 +19,7 @@ def test_content_url():
     assert content_url(ctx, 'a/feed.xml') == '/a/feed.xml'
     assert content_url(ctx, 10) == '/10.html'
 
-    settings.permalink = '{{category}}/{{filename}}'
+    settings.config['permalink'] = '{{category}}/{{filename}}'
     assert content_url(ctx, 'a') == '/a'
     assert content_url(ctx, 'a.html') == '/a'
     assert content_url(ctx, 'a/') == '/a'
@@ -28,7 +28,7 @@ def test_content_url():
     assert content_url(ctx, 'a/feed.xml') == '/a/feed'
     assert content_url(ctx, 10) == '/10'
 
-    settings.permalink = '{{category}}/{{filename}}/'
+    settings.config['permalink'] = '{{category}}/{{filename}}/'
     assert content_url(ctx, 'a') == '/a/'
     assert content_url(ctx, 'a.html') == '/a/'
     assert content_url(ctx, 'a/') == '/a/'
@@ -37,13 +37,13 @@ def test_content_url():
     assert content_url(ctx, 'a/feed.xml') == '/a/feed/'
     assert content_url(ctx, 10) == '/10/'
 
-    settings.permalink = '{{category}}/{{filename}}'
-    settings.use_relative_url = True
+    settings.config['permalink'] = '{{category}}/{{filename}}'
+    settings.config['relative_url'] = True
     assert content_url(ctx, 'a') == '../a'
     assert content_url(ctx, 'a/b') == '../a/b'
     assert content_url(ctx, '/a/b') == '../a/b'
 
-    settings.use_relative_url = False
+    settings.config['relative_url'] = False
 
 
 def test_static_url():

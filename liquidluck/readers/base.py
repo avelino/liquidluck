@@ -96,7 +96,8 @@ class Post(object):
 
     @property
     def author(self):
-        return Author(self.meta.get('author', settings.author['default']))
+        author = settings.author.get('default', 'admin')
+        return Author(self.meta.get('author', author))
 
     @property
     def embed_author(self):

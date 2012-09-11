@@ -11,8 +11,7 @@ def test_load_settings():
     load_settings(path)
 
     from liquidluck.options import settings
-    assert settings.author == 'lepture'
-    assert settings.perpage == 30
+    assert settings.author['default'] == 'lepture'
 
 
 def test_load_posts():

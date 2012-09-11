@@ -10,15 +10,30 @@ from liquidluck.writers.base import load_jinja
 
 
 def load_settings(path):
-    config = {}
-    execfile(path, {}, config)
+    #TODO add cwd to python path
+    def load_py_settings(path):
+        config = {}
+        execfile(path, {}, config)
 
-    for key in config:
-        setting = config[key]
-        if isinstance(setting, dict):
-            settings[key].update(setting)
-        else:
-            settings[key] = setting
+        for key in config:
+            setting = config[key]
+            if isinstance(setting, dict) and key in settings:
+                settings[key].update(setting)
+            else:
+                settings[key] = setting
+
+    def load_yaml_settings(path):
+        pass
+
+    def load_json_settings(path):
+        pass
+
+    if path.endswith('.py'):
+        load_py_settings(path)
+    elif path.endswith('.json'):
+        load_json_settings(path)
+    else:
+        load_yaml_settings(path)
 
     g.output_directory = os.path.abspath(settings.config.get('output'))
     g.static_directory = os.path.abspath(settings.config.get('static'))

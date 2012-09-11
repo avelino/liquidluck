@@ -26,26 +26,33 @@ class TestPost(object):
         post = Post('filepath', 'content', title='title', meta=self.meta)
         assert post.embed_author == 'lepture'
 
-        settings.authors = {
-            'lepture': {
-                'name': 'Hsiaoming Yang',
+        settings.author = {
+            'default': 'lepture',
+            'vars': {
+                'lepture': {
+                    'name': 'Hsiaoming Yang',
+                }
             }
         }
         post = Post('filepath', 'content', title='title', meta=self.meta)
         assert post.embed_author == 'Hsiaoming Yang'
 
-        settings.authors = {
-            'lepture': {
-                'email': 'lepture@me.com',
+        settings.author = {
+            'vars': {
+                'lepture': {
+                    'email': 'lepture@me.com',
+                }
             }
         }
         post = Post('filepath', 'content', title='title', meta=self.meta)
         assert post.embed_author == (
             '<a href="mailto:lepture@me.com">lepture</a>')
 
-        settings.authors = {
-            'lepture': {
-                'website': 'http://lepture.com',
+        settings.author = {
+            'vars': {
+                'lepture': {
+                    'website': 'http://lepture.com',
+                }
             }
         }
         post = Post('filepath', 'content', title='title', meta=self.meta)
