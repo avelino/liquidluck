@@ -18,7 +18,7 @@ Usage:
     liquidluck build [-s <file>|--settings=<file>] [-v|--verbose]
     liquidluck server [-s <file>|--settings=<file>] [-p <port>|--port=<port>]
     liquidluck search [<theme>] [-c|--clean] [-f|--force]
-    liquidluck install <theme>
+    liquidluck install <theme> [-g|--global]
     liquidluck webhook (start|stop|restart) %(webhook)s
     liquidluck -h | --help
     liquidluck --version
@@ -30,6 +30,7 @@ Options:
     -p --port=<port>        specify the server port.
     -f --force              search a theme without cache
     -c --clean              show theme name only.
+    -g --global             install theme to global theme folder.
     --version               show version.
 """ % {
     'version': liquidluck.__version__,
@@ -77,9 +78,10 @@ Options:
 
 documentation['install'] = """
 Usage:
-    liquidluck install <theme>
+    liquidluck install <theme> [-g|--global]
 
 Options:
+    -g --global             install theme to global theme folder.
     -h --help               show this screen.
 """
 
@@ -108,7 +110,14 @@ def main():
             version='Felix Felicis v%s' % liquidluck.__version__
         )
 
-    arg_settings = args['--settings'] or generator.find_settings()
+    arg_settings = args.get('--settings') or generator.find_settings()
+    arg_verbose = args.get('--verbose')
+    arg_port = int(args.get('--port') or 8000)
+
+    arg_theme = args.get('<theme>') or None
+    arg_clean = args.get('--clean')
+    arg_force = args.get('--force')
+    arg_global = args.get('--global')
 
     if command == 'create':
         generator.create_settings(arg_settings)
@@ -122,10 +131,9 @@ def main():
                 return
             generator.create_settings(arg_settings)
         else:
-            g.detail_logging = args['--verbose']
+            g.detail_logging = arg_verbose
             generator.build(arg_settings)
     elif command == 'server':
-        arg_port = int(args['--port'] or 8000)
         if not os.path.exists(arg_settings):
             print('setting file not found')
             server.config(arg_port)
@@ -143,15 +151,10 @@ def main():
         server.config(arg_port, g.output_directory, _type)
         server.start_server()
     elif command == 'search':
-        arg_theme = args['<theme>'] or None
-        arg_clean = args['--clean']
-        arg_force = args['--force']
         theme.search(arg_theme, arg_clean, arg_force)
     elif command == 'install':
-        arg_theme = args['<theme>'] or None
-        theme.install(arg_theme)
+        theme.install(arg_theme, arg_global)
     elif command == 'webhook':
-        arg_port = int(args['--port'] or 9000)
         action = (args['start'] and 'start') or (args['stop'] and 'stop') \
                 or (args['restart'] and 'restart')
         webhook.webhook(arg_port, action, arg_settings)

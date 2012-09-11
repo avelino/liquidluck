@@ -84,7 +84,7 @@ def search(keyword=None, clean=False, force=False):
     return
 
 
-def install(keyword=None):
+def install(keyword=None, widely=False):
     if not keyword:
         print("You need specify a theme")
         return
@@ -94,7 +94,10 @@ def install(keyword=None):
         return
     theme = themes[keyword]
     repo = 'https://github.com/%(username)s/liquidluck-theme-%(name)s' % theme
-    output = '_themes/%s' % keyword
+    if widely:
+        output = os.path.expanduser('~/.liquidluck-themes/%s' % keyword)
+    else:
+        output = '_themes/%s' % keyword
     import subprocess
     subprocess.call(['git', 'clone', repo, output])
 

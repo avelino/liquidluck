@@ -143,11 +143,19 @@ def load_jinja():
     if os.path.exists(tpl):
         loaders.append(tpl)
 
+    theme = None
     theme_name = settings.theme.get('name', 'default')
-    theme = os.path.join(os.path.abspath('_themes'), theme_name)
-    if not os.path.exists(theme):
-        theme = os.path.join(g.liquid_directory, '_themes', theme_name)
-    if not os.path.exists(theme):
+    theme_gallary = [
+        os.path.join(os.path.abspath('_themes'), theme_name),
+        os.path.expanduser('~/.liquidluck-themes/%s' % theme_name),
+        os.path.join(g.liquid_directory, '_themes', theme_name),
+    ]
+    for path in theme_gallary:
+        if os.path.exists(path):
+            theme = path
+            break
+
+    if not theme:
         logging.error("Can't find theme: %s" % theme_name)
 
     #: global variable
