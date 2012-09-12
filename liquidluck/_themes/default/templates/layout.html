@@ -36,8 +36,8 @@
             <h1 id="brand"><a href="/">{{site.name}}</a></h1>
             {%- block nav %}
             <nav id="nav" role="navigation">
-                {% for name, link in theme.navigation %}
-                <a href="{{link}}">{{name}}</a>
+                {% for item in theme.navigation %}
+                <a href="{{item.link}}">{{item.name}}</a>
                 {%- endfor %}
             </nav>
             {%- endblock %}

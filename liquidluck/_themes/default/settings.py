@@ -12,8 +12,8 @@ author = {
 lang = 'en'
 
 navigation = [
-    ('Home', '/'),
-    ('About', '/about.html'),
+    {'title': 'Home', 'link': '/'},
+    {'title': 'About', 'link': '/about.html'},
 ]
 
 twitter = 'lepture'
