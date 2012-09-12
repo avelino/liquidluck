@@ -12,7 +12,6 @@ import os
 import re
 import datetime
 import logging
-import sys
 from jinja2 import Environment, FileSystemLoader
 from jinja2 import contextfilter
 import liquidluck
@@ -136,15 +135,7 @@ class Pagination(object):
         return self.total_items[start:end]
 
 
-def load_jinja():
-    #: prepare loaders
-    #: loaders = ['_templates', theme]
-    loaders = []
-    tpl = os.path.abspath('_templates')
-    if os.path.exists(tpl):
-        loaders.append(tpl)
-
-    theme = None
+def find_theme():
     theme_name = settings.theme.get('name', 'default')
     theme_gallary = [
         os.path.join(os.path.abspath('_themes'), theme_name),
@@ -153,13 +144,20 @@ def load_jinja():
     ]
     for path in theme_gallary:
         if os.path.exists(path):
-            theme = path
-            break
+            return path
 
-    if not theme:
-        logging.error("Can't find theme: %s" % theme_name)
-    else:
-        sys.path.insert(1, theme)
+    raise Exception("Can't find theme: %s" % theme_name)
+
+
+def load_jinja():
+    #: prepare loaders
+    #: loaders = ['_templates', theme]
+    loaders = []
+    tpl = os.path.abspath('_templates')
+    if os.path.exists(tpl):
+        loaders.append(tpl)
+
+    theme = find_theme()
 
     #: global variable
     g.theme_directory = theme

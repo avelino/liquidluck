@@ -8,7 +8,7 @@ import logging
 from liquidluck.options import g, settings
 from liquidluck.utils import import_object, walk_dir
 
-from liquidluck.writers.base import load_jinja
+from liquidluck.writers.base import load_jinja, find_theme
 
 
 def create_settings(filepath):
@@ -65,9 +65,6 @@ def load_settings(path):
     if not path:
         path = find_settings()
 
-    cwd = os.path.split(os.path.abspath(path))[0]
-    sys.path.insert(0, cwd)
-
     def update_settings(config):
         for key in config:
             setting = config[key]
@@ -119,6 +116,10 @@ def load_settings(path):
     g.output_directory = os.path.abspath(settings.config.get('output'))
     g.static_directory = os.path.abspath(settings.config.get('static'))
     logging.info('Load Settings Finished')
+
+    sys.path.insert(0, find_theme())
+    cwd = os.path.split(os.path.abspath(path))[0]
+    sys.path.insert(0, cwd)
 
 
 def load_posts(path):
