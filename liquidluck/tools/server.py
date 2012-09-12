@@ -15,6 +15,7 @@ try:
     WebSocketHandler = tornado.websocket.WebSocketHandler
     escape = tornado.escape
 except ImportError:
+    print('Enable Livereload Server by installing tornado')
     escape = None
     RequestHandler = object
     WebSocketHandler = object
@@ -205,8 +206,15 @@ class LiveReloadHandler(WebSocketHandler):
                 return False
 
             _, ext = os.path.splitext(path)
-            #TODO more ext
-            if ext in ['.pyc', '.pyo', '.swp']:
+            ignores = settings.theme.get('reload_ignore') or []
+            ignores.extend(settings.template.get('reload_ignore') or [])
+            ignores.extend(['.pyc', '.pyo', '.swp'])
+            if ext in ignores:
+                return False
+
+            matches = settings.theme.get('reload_match') or []
+            matches.extend(settings.template.get('reload_match') or [])
+            if matches and ext not in matches:
                 return False
 
             modified = int(os.stat(path).st_mtime)
