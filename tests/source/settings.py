@@ -33,6 +33,5 @@ writer = {
         'liquidluck.writers.core.TagCloudWriter',
     ],
     'vars': {
-        'archive_output': 'archive.html',
     }
 }
