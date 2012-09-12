@@ -88,12 +88,23 @@ def install(keyword=None, widely=False):
     if not keyword:
         print("You need specify a theme")
         return
-    themes = __load_themes()
-    if keyword not in themes:
-        print("can't find theme %s" % keyword)
-        return
-    theme = themes[keyword]
-    repo = 'https://github.com/%(username)s/liquidluck-theme-%(name)s' % theme
+    if '/' in keyword:
+        user, name = keyword.split('/')
+        if name.startswith('liquidluck-theme-'):
+            keyword = name.replace('liquidluck-theme-', '', 1)
+        else:
+            keyword = name
+            name = 'liquidluck-theme-%s' % name
+
+        repo = 'https://github.com/%s/%s' % (user, name)
+    else:
+        themes = __load_themes()
+        if keyword not in themes:
+            print("can't find theme %s" % keyword)
+            return
+        theme = themes[keyword]
+        repo = 'https://github.com/%(username)s/liquidluck-theme-%(name)s' \
+                % theme
     if widely:
         output = os.path.expanduser('~/.liquidluck-themes/%s' % keyword)
     else:
