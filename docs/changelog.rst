@@ -4,6 +4,24 @@ Changelog
 All history since the new Felix Felicis are listed here:
 
 
+Version 3.1
+-------------
+
+Released on Sep 12nd, 2012
+
++ bugfix
++ change server host to 127.0.0.1
+
+
+Version 3.0
+-------------
+
+Released on Sep 12nd, 2012
+
++ new config format: yaml, python, json
++ redesigned
+
+
 Version 2.0
 ------------
 
