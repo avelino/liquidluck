@@ -73,7 +73,12 @@ class MarkdownReader(BaseReader):
 
     def _parse_meta(self, header):
         header = m.html(to_unicode(header))
-        title = re.findall(r'<h1>(.*)</h1>', header)[0]
+        titles = re.findall(r'<h1>(.*)</h1>', header)
+        if not titles:
+            logging.error('There is no title')
+            title = None
+        else:
+            title = titles[0]
 
         meta = {'title': title}
         items = re.findall(r'<li>(.*?)</li>', header, re.S)
