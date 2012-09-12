@@ -20,6 +20,9 @@ class TestPostWriter(object):
         f = os.path.join(g.output_directory, 'work/demo-markdown-1.html')
         assert os.path.exists(f)
 
+        f = os.path.join(g.output_directory, 'work/reset/filename.html')
+        assert os.path.exists(f)
+
         settings.config['permalink'] = '{{date.year}}/{{filename}}.html'
         writer.start()
         f = os.path.join(g.output_directory, '2012/demo-markdown-1.html')

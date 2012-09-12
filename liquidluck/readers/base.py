@@ -159,6 +159,8 @@ class Post(object):
 
     @property
     def filename(self):
+        if self.meta.get('filename'):
+            return self.meta.get('filename')
         path = os.path.split(self.filepath)[1]
         return os.path.splitext(path)[0]
 
