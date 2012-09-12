@@ -24,7 +24,7 @@ we don't change it, just hit Enter.
 See what happens::
 
     $ ls
-    content     settings.py
+    content     settings.yml
 
 Create a Post
 ---------------
@@ -62,8 +62,7 @@ Now that you have written a post, let's create the website::
 
 The website is created, you can test your website::
 
-    $ cd deploy
-    $ python -m SimpleHTTPServer
+    $ liquidluck server
 
 Open your browser: ``http://127.0.0.1:8000``
 

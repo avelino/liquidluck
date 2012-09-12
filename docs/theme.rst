@@ -22,6 +22,14 @@ Get all themes::
 
     $ liquidluck search
 
+Install a theme::
+
+    $ liquidluck install moment
+
+Install a theme to the global theme gallery::
+
+    $ liquidluck install moment -g
+
 
 Structure
 ----------
@@ -30,6 +38,7 @@ A glance of a theme::
 
     your_theme/
         settings.py                <---- theme variables
+        filters.py                 <---- filters defined by theme
         static/                    <---- static files
             style.css
             ...
@@ -52,7 +61,10 @@ some changes.
 
 For example, you are using the default theme, which means in your settings::
 
-    theme = 'default'
+    theme = {
+        'name': 'default'
+    }
+
 
 You want to make some changes on the post page (like adding readability),
 in your blog directory, create a post.html template::
@@ -107,8 +119,10 @@ And edit this post.html:
 
 And edit your settings, enable readability::
 
-    template_variables = {
-        'readability': True,
+    template = {
+        'vars': {
+            'readability': True,
+        }
     }
 
 
@@ -118,6 +132,7 @@ Variables
 There are two levels of variables, global and templatable. Global means that this
 variable can be accessed in every template, and templatable means that this variable
 can be accessed in specify template.
+
 
 Global Variables
 ~~~~~~~~~~~~~~~~~~
@@ -150,24 +165,28 @@ Global Variables
   For example, in the default theme's settings, we have::
 
     navigation = [
-        ('Home', '/'),
-        ('About', '/about.html'),
+        {'title': 'Home', 'link': '/'},
+        {'title': 'About', 'link': '/about.html'},
     ]
 
   Users can rewrite it in blog settings::
 
-    theme_variables = {
-        'navigation': [
-            ('Home', '/'),
-            ('Life', '/life/'),
-            ('Work', '/work/'),
-        ]
+    theme = {
+        'vars': {
+            'navigation': [
+                {'title': 'Home', 'link': '/'},
+                {'title': 'Life', 'link': '/life/'},
+                {'title': 'Work', 'link': '/work/'},
+            ]
+        }
     }
 
 - template, template variable is defined by users in settings with::
 
-    template_variables = {
-        'readability': True,
+    template = {
+        'vars': {
+            'readability': True,
+        }
     }
 
   And it can be access in template by ``{{template.readability}}``, this is very useful.
@@ -177,6 +196,7 @@ Global Variables
     {
         'class': 'ArchiveWriter',
         'name': 'archive',
+        'filepath': 'path/to/file.html',
     }
 
 

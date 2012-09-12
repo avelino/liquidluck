@@ -70,6 +70,11 @@ An example in reStructuredText (you need to install docutils by yourself)::
         }
 
 
+.. _meta:
+
+Meta
+-------
+
 Metadata that Felix Felicis supports natively:
 
 + date

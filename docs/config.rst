@@ -4,75 +4,98 @@
 Configuration
 ==============
 
-Default setting file is ``settings.py`` in your current working directory,
-but you can specify another file with::
+Felix Felicis support **yaml** **python** and **json** format config file.
+You can create the config file with::
 
-    $ liquidluck -s another-settings.py
+    $ liquidluck create
 
 
 Overview
 ----------
 
-A demo setting file (settings.py)::
+The default **python** format config file::
 
     # -*- coding: utf-8 -*-
+    #: settings for liquidluck
 
     #: site information
+    #: all variables can be accessed in template with ``site`` namespace.
+    #: for instance: {{site.name}}
     site = {
-        'name': 'Just lepture',
-        'url': 'http://lepture.com',
-        # 'prefix': 'blog',
-        # 'copyright': 'All rights reserved', # append to your feed
+        "name": "Felix Felicis",  # your site name
+        "url": "http://lab.lepture.com/liquidluck/",  # your site url
+        # "prefix": "blog",
     }
 
-    #: posts lay here
-    source = 'content'
+    #: this config defined information of your site
+    #: 1. where the resources  2. how should the site be generated
+    config = {
+        "source": "content",
+        "output": "deploy",
+        "static": "deploy/static",
+        "static_prefix": "/static/",
+        "permalink": "{{date.year}}/{{filename}}.html",
+        "relative_url": False,
+        "perpage": 30,
+        "feedcount": 20,
+        "timezone": "+08:00",
+    }
 
-    #: generate html to ouput
-    output = '_site'
-    # static_output = '_site/static'
 
-    #: theme, load theme from _themes
-    theme = 'default'
-
-    permalink = '{{date.year}}/{{filename}}.html'
-
-    author = 'lepture'
-    authors = {
-        'lepture': {
-            'name': 'Hsiaoming Yang',
-            'website': 'http://lepture.com',
-            'email': 'lepture@me.com',
-        }
+    author = {
+        "default": "nickname",
+        "vars": {}
     }
 
     #: active readers
-    # readers = {}
-
-    #: active writers
-    # writers = {}
-    writers_variables = {
-        'archive_output': 'archive.html',
+    reader = {
+        "active": [
+            "liquidluck.readers.markdown.MarkdownReader",
+            # uncomment to active rst reader.
+            # but you need to install docutils by yourself
+            # "liquidluck.readers.restructuredtext.RestructuredTextReader",
+        ],
+        "vars": {}
     }
 
-    # template_variables = {}
-
-    # template_filters = {}
-
-    theme_variables = {
-        'disqus': 'your_disqus_shortname',
-        'analytics': 'your_google_analytics_id',
-
-        'navigation': [
-            ('Blog', '/archive/'),
-            ('Life', '/life/'),
-            ('Work', '/work/'),
-            ('About', '/about/'),
+    #: active writers
+    writer = {
+        "active": [
+            "liquidluck.writers.core.PostWriter",
+            "liquidluck.writers.core.PageWriter",
+            "liquidluck.writers.core.ArchiveWriter",
+            "liquidluck.writers.core.ArchiveFeedWriter",
+            "liquidluck.writers.core.FileWriter",
+            "liquidluck.writers.core.StaticWriter",
+            "liquidluck.writers.core.YearWriter",
+            "liquidluck.writers.core.CategoryWriter",
+            # "liquidluck.writers.core.CategoryFeedWriter",
+            # "liquidluck.writers.core.TagWriter",
+            # "liquidluck.writers.core.TagCloudWriter",
         ],
-        'elsewhere': [
-            ('GitHub', 'https://github.com/lepture'),
-            ('Twitter', 'https://twitter.com/lepture'),
-        ],
+        "vars": {
+            # uncomment if you want to reset archive page
+            # "archive_output": "archive.html",
+        }
+    }
+
+    #: theme variables
+    theme = {
+        "name": "default",
+
+        # theme variables are defined by theme creator
+        # you can access theme in template with ``theme`` namespace
+        # for instance: {{theme.disqus}}
+        "vars": {
+            #"disqus": "your_short_name",
+            #"analytics": "UA-21475122-1",
+        }
+    }
+
+    #: template variables
+    template = {
+        "vars": {},
+        "filters": {},
     }
 
 
@@ -81,7 +104,7 @@ Permalink
 
 Default permalink style is::
 
-    {{category}}/{{filename}}.html
+    {{date.year}}/{{filename}}.html
 
     # output example
     tech/intro-of-liquidluck.html
@@ -89,6 +112,7 @@ Default permalink style is::
 There are other permalink styles you may like:
 
 + ``{{filename}}.html``
++ ``{{category}}/{{filename}}.html``
 + ``{{date.year}}/{{filename}}.html``
 + ``{{date.year}}/{{date.month}}/{{filename}}.html``
 
@@ -103,7 +127,8 @@ You can define other keywords in your post, and take them as a part of the perma
 
     content here
 
-And then you can set your permalink as: ``{{topic}}/{{filename}}.html``.
+And then you can set your permalink as: ``{{topic}}/{{filename}}.html``. Learn
+more about :ref:`meta`.
 
 If you don't like ``.html`` as a part of the permalink, you can set your permalink as::
 
@@ -132,16 +157,19 @@ Multiple Authors
 
 If your site has multiple authors, you can add them to your settings::
 
-    author = 'lepture'
-    authors = {
-        'lepture': {
-            'name': 'Hsiaoming Yang',
-            'website': 'http://lepture.com',
-            'email': 'lepture@me.com',
-        },
-        'kitty': {
-            'name': 'Hello Kitty',
-            'website': 'http://hellokitty.com',
+    author = {
+        'default': 'lepture',
+
+        'vars': {
+            'lepture': {
+                'name': 'Hsiaoming Yang',
+                'website': 'http://lepture.com',
+                'email': 'lepture@me.com',
+            },
+            'kitty': {
+                'name': 'Hello Kitty',
+                'website': 'http://hellokitty.com',
+            }
         }
     }
 
@@ -171,11 +199,6 @@ Readers
 
 There are two readers in Felix Felicis, one is Markdown, and the other is reStructuredText.
 
-Only Markdown is active by default, but you can enable rst::
-
-    readers = {
-        'rst': 'liquidluck.readers.restructuredtext.RestructuredTextReader'
-    }
 
 Customize Reader
 ``````````````````
@@ -199,42 +222,16 @@ Writers
 There are many writers in Felix Felicis, and you can add more. If you want to add your
 own writer to Felix Felics, head over to :ref:`development`.
 
-Writers that are active by default::
-
-    writers = {
-        'post': 'liquidluck.writers.core.PostWriter',
-        'page': 'liquidluck.writers.core.PageWriter',
-        'archive': 'liquidluck.writers.core.ArchiveWriter',
-        'archive_feed': 'liquidluck.writers.core.ArchiveFeedWriter',
-        'file': 'liquidluck.writers.core.FileWriter',
-        'static': 'liquidluck.writers.core.StaticWriter',
-        'year': 'liquidluck.writers.core.YearWriter',
-        'tag': 'liquidluck.writers.core.TagWriter',
-        'category': 'liquidluck.writers.core.CategoryWriter',
-        'category_feed': 'liquidluck.writers.core.CategoryFeedWriter',
-    }
-
-You can deactive a writer as the way you disable a reader, for example category feed::
-
-    writers = {
-        'category_feed': None,
-    }
-
-Replace TagWriter with TagCloudWriter::
-
-    writers = {
-        'tag': None,
-        'tagcloud': 'liquidluck.writers.core.TagCloudWriter',
-    }
-
 
 Writers Variables
 ````````````````````
 
-Every writer can has its own variable, for example the archive write, if you set::
+Every writer can define its own variable, for example the archive write, if you set::
 
-    writers_variables = {
-        'archive_output': 'archive.html',
+    writer = {
+        'vars': {
+            'archive_output': 'archive.html',
+        }
     }
 
 The archive page will be write to **archive.html** instead of **index.html**.
