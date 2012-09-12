@@ -89,13 +89,6 @@ def load_settings(path):
         except ImportError:
             from yaml import Loader
             MyLoader = Loader
-        except ImportError:
-            raise ImportError(
-                'You should install yaml parser first\n'
-                'You can install yaml parser by:\n'
-                '\n'
-                'pip install PyYAML or easy_install PyYAML'
-            )
 
         config = load(open(path), MyLoader)
         update_settings(config)
