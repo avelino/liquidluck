@@ -4,6 +4,15 @@ Changelog
 All history since the new Felix Felicis are listed here:
 
 
+Version 3.2
+--------------
+
+Released on Sep 13rd, 2012
+
++ bugfix for relative url
++ support for `````
+
+
 Version 3.1
 -------------
 
