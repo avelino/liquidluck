@@ -97,16 +97,21 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
         return '<p>%s</p>\n' % text
 
     def block_code(self, text, lang):
+        if not lang or lang == '+' or lang == '-':
+            return '\n<pre><code>%s</code></pre>\n' % escape(text.strip())
+
         inject = False
-        if lang and lang.endswith('+'):
+        if lang.endswith('-'):
+            show = False
+        else:
+            show = True
+
+        if lang.endswith('+') or not show:
             lang = lang[:-1]
             if lang in ('javascript', 'js', 'css', 'html'):
                 inject = True
 
-        if lang:
-            lexer = get_lexer_by_name(lang, stripall=True)
-        else:
-            return '\n<pre><code>%s</code></pre>\n' % escape(text.strip())
+        lexer = get_lexer_by_name(lang, stripall=True)
 
         if inject:
             tpl = '\n%s\n'
@@ -118,6 +123,9 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
             html = tpl % text
         else:
             html = ''
+
+        if not show:
+            return html
 
         variables = settings.reader.get('vars') or {}
         formatter = HtmlFormatter(
@@ -148,7 +156,8 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
 
 def markdown(text):
     text = to_unicode(text)
-    text = re.sub(r'````(.+)', r'````\1+', text)
+    text = re.sub(r'^````(\w+)', r'````\1+', text, flags=re.M)
+    text = re.sub(r'^`````(\w+)', r'`````\1-', text, flags=re.M)
 
     render = JuneRender(flags=m.HTML_USE_XHTML | m.HTML_TOC)
     md = m.Markdown(
