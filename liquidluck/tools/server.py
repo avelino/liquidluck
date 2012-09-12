@@ -34,7 +34,7 @@ def config(port=None, root=None, permalink=None):
     global ROOT
     global PERMALINK
     if port:
-        PORT = int(port)
+        PORT = port
 
     if root:
         ROOT = os.path.abspath(root)
@@ -270,9 +270,16 @@ class IndexHandler(RequestHandler):
 
 
 def start_server():
+    if not isinstance(PORT, int) and ':' in PORT:
+        host, port = PORT.split(':')
+        port = int(port)
+    else:
+        host = '127.0.0.1'
+        port = int(PORT)
+
     if RequestHandler is object:
-        logging.info('Start server at 0.0.0.0:%s' % PORT)
-        make_server('', PORT, wsgi_app).serve_forever()
+        logging.info('Start server at %s:%s' % (host, port))
+        make_server(host, port, wsgi_app).serve_forever()
     else:
         import tornado.web
         if g.output_directory == ROOT:
@@ -285,9 +292,9 @@ def start_server():
             (r'/livereload.js', LiveReloadJSHandler),
             (r'(.*)', IndexHandler),
         ]
-        app = tornado.web.Application(handlers=handlers)
-        app.listen(PORT)
-        logging.info('Start server at 0.0.0.0:%s' % PORT)
+        app = tornado.web.Application(handlers=handlers, default_host=host)
+        app.listen(port)
+        logging.info('Start server at %s:%s' % (host, port))
         tornado.ioloop.IOLoop.instance().start()
 
 

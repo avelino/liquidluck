@@ -112,7 +112,7 @@ def main():
 
     arg_settings = args.get('--settings') or generator.find_settings()
     arg_verbose = args.get('--verbose')
-    arg_port = int(args.get('--port') or 8000)
+    arg_port = args.get('--port') or '8000'
 
     arg_theme = args.get('<theme>') or None
     arg_clean = args.get('--clean')
@@ -134,12 +134,12 @@ def main():
             g.detail_logging = arg_verbose
             generator.build(arg_settings)
     elif command == 'server':
-        if not os.path.exists(arg_settings):
+        if arg_settings and os.path.exists(arg_settings):
+            generator.load_settings(arg_settings)
+        else:
             print('setting file not found')
             server.config(arg_port)
             server.start_server()
-        else:
-            generator.load_settings(arg_settings)
 
         permalink = settings.config.get('permalink')
         if permalink.endswith('.html'):
