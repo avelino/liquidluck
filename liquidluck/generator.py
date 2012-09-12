@@ -40,7 +40,7 @@ def create_settings(filepath):
         f.close()
 
     text = text.replace('content', content)
-    if content and not content.startswith('.'):
+    if content and not content.startswith('.') and not os.path.exists(content):
         os.makedirs(content)
     text = text.replace('deploy', output)
     f = open(filepath, 'w')
