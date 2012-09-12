@@ -12,6 +12,7 @@ import os
 import re
 import datetime
 import logging
+import sys
 from jinja2 import Environment, FileSystemLoader
 from jinja2 import contextfilter
 import liquidluck
@@ -157,6 +158,8 @@ def load_jinja():
 
     if not theme:
         logging.error("Can't find theme: %s" % theme_name)
+    else:
+        sys.path.insert(1, theme)
 
     #: global variable
     g.theme_directory = theme
