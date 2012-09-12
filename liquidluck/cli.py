@@ -14,7 +14,7 @@ documentation = {}
 documentation['help'] = """Felix Felicis %(version)s
 
 Usage:
-    liquidluck create [-s <file>|--settings=<file>]
+    liquidluck init [-s <file>|--settings=<file>]
     liquidluck build [-s <file>|--settings=<file>] [-v|--verbose]
     liquidluck server [-s <file>|--settings=<file>] [-p <port>|--port=<port>]
     liquidluck search [<theme>] [-c|--clean] [-f|--force]
@@ -37,9 +37,9 @@ Options:
     'webhook': '[-s <file>|--settings=<file>] [-p <port>|--port=<port>]'
 }
 
-documentation['create'] = """
+documentation['init'] = """
 Usage:
-    liquidluck create [-s <file>|--settings=<file>]
+    liquidluck init [-s <file>|--settings=<file>]
 
 Options:
     -h --help               show this screen.
@@ -119,7 +119,7 @@ def main():
     arg_force = args.get('--force')
     arg_global = args.get('--global')
 
-    if command == 'create':
+    if command == 'init':
         generator.create_settings(arg_settings)
     elif command == 'build':
         if not arg_settings:

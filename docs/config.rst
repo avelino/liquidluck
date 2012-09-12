@@ -7,7 +7,7 @@ Configuration
 Felix Felicis support **yaml** **python** and **json** format config file.
 You can create the config file with::
 
-    $ liquidluck create
+    $ liquidluck init
 
 
 Overview

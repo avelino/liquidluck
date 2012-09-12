@@ -17,7 +17,7 @@ _all_themes() {
 local -a _1st_arguments
 _1st_arguments=(
   'build:Build the website'
-  'create:Create a settings file'
+  'init:Create a settings file'
   'search:Search a theme'
   'install:Install a theme'
   'webhook:Start webhook server'
@@ -45,7 +45,7 @@ case "$words[1]" in
     _arguments \
       '(-s --settings)'{-s,--settings}'[specify a setting file]' \
       '(-v --verbose)'{-v,--verbose}'[give more output]' ;;
-  create)
+  init)
     _arguments \
       '(-s --settings)'{-s,--settings}'[specify a setting file]' ;;
   webhook)

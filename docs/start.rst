@@ -15,7 +15,7 @@ Now, you have Felix Felicis installed. Let's create a website::
     $ cd ~
     $ mkdir website
     $ cd website
-    $ liquidluck create
+    $ liquidluck init
 
 
 You will be asked some questions. If the question has a default value,
