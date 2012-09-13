@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 import hashlib
 import logging
 import datetime
 from jinja2 import contextfunction, contextfilter
-from liquidluck.options import settings
+from liquidluck.options import g, settings
 from liquidluck.utils import to_unicode, to_bytes, get_relative_base
 
 
@@ -107,6 +108,31 @@ def tag_url(ctx, tag, prepend_site=False):
 def year_url(ctx, post):
     prefix = settings.site.get('prefix', '')
     return content_url(ctx, prefix, post.date.year, 'index.html')
+
+
+_Post = {}
+
+
+@contextfilter
+def wiki_link(ctx, content):
+    global _Post
+    from liquidluck.writers.base import permalink
+
+    def link_post(m):
+        title = m.group(1)
+        if not _Post:
+            for item in g.public_posts:
+                _Post[item.title] = item
+
+        if title in _Post:
+            item = _Post[title]
+            link = permalink(ctx, item)
+            return '<a href="%s">%s</a>' % (link, title)
+        return '<span class="no-reference">%s</span>' % title
+
+    pattern = re.compile(r'\[\[([^\]]+)\]\]', re.M)
+    content = pattern.sub(link_post, content)
+    return content
 
 
 _Cache = {}

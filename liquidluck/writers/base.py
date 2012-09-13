@@ -23,7 +23,7 @@ from liquidluck.options import settings
 
 # liquidluck settings
 from liquidluck.options import g
-from liquidluck.filters import xmldatetime, feed_updated
+from liquidluck.filters import xmldatetime, feed_updated, wiki_link
 from liquidluck.filters import content_url, tag_url, year_url, static_url
 
 
@@ -237,6 +237,7 @@ def load_jinja():
         'permalink': permalink,
         'tag_url': tag_url,
         'year_url': year_url,
+        'wiki_link': wiki_link,
     })
 
     #: load resource
