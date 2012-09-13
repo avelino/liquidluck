@@ -265,9 +265,11 @@ class IndexHandler(RequestHandler):
         if body is None:
             self.send_error(404)
             return
-        body = body.replace(
-            '</head>', '<script src="/livereload.js"></script></head>'
-        )
+        ua = self.request.headers.get("User-Agent", 'bot').lower()
+        if 'msie' not in ua:
+            body = body.replace(
+                '</head>', '<script src="/livereload.js"></script></head>'
+            )
         # disable google analytics
         body = body.replace('google-analytics.com/ga.js', '')
         self.write(body)
