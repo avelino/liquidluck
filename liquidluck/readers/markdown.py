@@ -156,8 +156,10 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
 
 def markdown(text):
     text = to_unicode(text)
-    text = re.sub(r'^````(\w+)', r'````\1+', text, flags=re.M)
-    text = re.sub(r'^`````(\w+)', r'`````\1-', text, flags=re.M)
+    regex = re.compile(r'^````(\w+)', re.M)
+    text = regex.sub(r'````\1+', text)
+    regex = re.compile(r'^`````(\w+)', re.M)
+    text = regex.sub(r'`````\1-', text)
 
     render = JuneRender(flags=m.HTML_USE_XHTML | m.HTML_TOC)
     md = m.Markdown(
