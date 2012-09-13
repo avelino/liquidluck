@@ -21,6 +21,7 @@ except ImportError:
     WebSocketHandler = object
 
 
+HOST = '127.0.0.1'
 PORT = 8000
 ROOT = os.path.abspath('.')
 PERMALINK = 'html'
@@ -33,7 +34,10 @@ def config(port=None, root=None, permalink=None):
     global PORT
     global ROOT
     global PERMALINK
-    if port:
+
+    if port and ':' in port:
+        HOST, PORT = port.split(':')
+    elif port:
         PORT = port
 
     if root:
@@ -270,16 +274,9 @@ class IndexHandler(RequestHandler):
 
 
 def start_server():
-    if not isinstance(PORT, int) and ':' in PORT:
-        host, port = PORT.split(':')
-        port = int(port)
-    else:
-        host = '127.0.0.1'
-        port = int(PORT)
-
     if RequestHandler is object:
-        logging.info('Start server at %s:%s' % (host, port))
-        make_server(host, port, wsgi_app).serve_forever()
+        logging.info('Start server at %s:%s' % (HOST, PORT))
+        make_server(HOST, int(PORT), wsgi_app).serve_forever()
     else:
         import tornado.web
         if g.output_directory == ROOT:
@@ -292,9 +289,9 @@ def start_server():
             (r'/livereload.js', LiveReloadJSHandler),
             (r'(.*)', IndexHandler),
         ]
-        app = tornado.web.Application(handlers=handlers, default_host=host)
-        app.listen(port)
-        logging.info('Start server at %s:%s' % (host, port))
+        app = tornado.web.Application(handlers=handlers, default_host=HOST)
+        app.listen(int(PORT))
+        logging.info('Start server at %s:%s' % (HOST, PORT))
         tornado.ioloop.IOLoop.instance().start()
 
 
