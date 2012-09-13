@@ -14,11 +14,11 @@ Distribute and Pip
 
 If you are on Linux or Mac OS X, you are the lucky one::
 
-    $ sudo pip install liquidluck
+    $ sudo pip -U install liquidluck
 
 If no pip available, try easy_install::
 
-    $ sudo easy_install liquidluck
+    $ sudo easy_install -U liquidluck
 
 
 Sorry, I have no knowledge about Windows, but it really works on Windows.
