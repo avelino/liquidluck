@@ -114,11 +114,12 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
         lexer = get_lexer_by_name(lang, stripall=True)
 
         if inject:
-            tpl = '\n%s\n'
             if lang == 'javascript' or lang == 'js':
                 tpl = '\n<script>\n%s</script>\n'
             elif lang == 'css':
                 tpl = '\n<style>\n%s</style>\n'
+            else:
+                tpl = '\n<div class="insert-code">%s</div>\n'
 
             html = tpl % text
         else:
