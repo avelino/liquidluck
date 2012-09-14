@@ -275,6 +275,24 @@ class IndexHandler(RequestHandler):
         self.write(body)
 
 
+class ThemeStaticHandler(RequestHandler):
+    def get(self, filepath):
+        abspath = os.path.join(g.theme_directory, 'static', filepath)
+        mime_type, encoding = mimetypes.guess_type(abspath)
+        if not mime_type:
+            mime_type = 'text/html'
+
+        self.set_header('Content-Type', mime_type)
+        if not os.path.exists(abspath):
+            self.send_error(404)
+            return
+
+        f = open(abspath)
+        for line in f:
+            self.write(line)
+        f.close()
+
+
 def start_server():
     if RequestHandler is object:
         logging.info('Start server at %s:%s' % (HOST, PORT))
@@ -289,6 +307,7 @@ def start_server():
         handlers = [
             (r'/livereload', LiveReloadHandler),
             (r'/livereload.js', LiveReloadJSHandler),
+            (r'/theme/(.*)', ThemeStaticHandler),
             (r'(.*)', IndexHandler),
         ]
         app = tornado.web.Application(handlers=handlers, default_host=HOST)
