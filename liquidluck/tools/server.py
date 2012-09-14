@@ -175,7 +175,7 @@ class LiveReloadHandler(WebSocketHandler):
                 self.reload_browser()
             return
 
-        if self._is_changed(g.source_directory):
+        if self._is_changed(g.source_directory, 4):
             # clean posts
             g.public_posts = []
             g.secure_posts = []
@@ -204,7 +204,7 @@ class LiveReloadHandler(WebSocketHandler):
                 logging.error('Error sending message', exc_info=True)
                 LiveReloadHandler.waiters.remove(waiter)
 
-    def _is_changed(self, path):
+    def _is_changed(self, path, flags=0):
         def is_file_changed(path):
             if not os.path.isfile(path):
                 return False
@@ -214,11 +214,11 @@ class LiveReloadHandler(WebSocketHandler):
 
             ignores = theme.get('reload_ignore') or []
             ignores.extend(['.pyc', '.pyo', '.swp'])
-            if ext in ignores:
+            if flags > 0 and ext in ignores:
                 return False
 
             matches = theme.get('reload_match') or []
-            if matches and ext not in matches:
+            if flags > 1 and ext not in matches:
                 return False
 
             modified = int(os.stat(path).st_mtime)
