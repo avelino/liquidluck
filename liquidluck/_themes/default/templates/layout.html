@@ -56,8 +56,8 @@
             <hr class="end" />
             {% if theme.elsewhere -%}
             <nav class="elsewhere">
-                {% for name, link in theme.elsewhere -%}
-                <a href="{{link}}">{{name}}</a>
+                {% for item in theme.elsewhere -%}
+                <a href="{{item.link}}">{{item.name}}</a>
                 {%- endfor %}
             </nav>
             {%- endif %}

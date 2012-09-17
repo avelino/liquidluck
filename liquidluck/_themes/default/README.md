@@ -5,13 +5,14 @@ This is the latest version of the default theme for Felix Felicis.
 
 ## Installation
 
-Requires Felix Felicis 1.10+
+Requires Felix Felicis 3.0+
 
 
 ### Install with liquidluck
 
 ```
-$ liquidluck install moment
+$ liquidluck install lepture/moment
+$ liquidlcuk install lepture/moment -g
 ```
 
 ### Install by yourself
@@ -36,54 +37,47 @@ $ git submodule add git://github.com/lepture/liquidluck-theme-moment.git _themes
 
 ## Configuration
 
-Edit your settings.py, change your theme to:
-
-```python
-theme = 'moment'
-```
-
+Edit your settings, change your theme to ``moment``.
 
 ## Customize
 
-You can customize your theme with ``theme_variables``.
+You can customize your theme with ``theme.vars``.
 
 + Change Navigation (example)
 
 ```python
-theme_variables = {
-    'navigation': [
-        ('Home', '/'),
-        ('Life', '/life/'),
-        ('Work', '/work/'),
-    ],
+theme = {
+    'vars': [
+        'navigation': [
+            {'name': 'Home', 'link': '/'},
+            {'name': 'Life', 'link': '/life/'},
+        ]
+    ]
 }
 ```
 
 + Google Analytics
 
 ```python
-theme_variables = {
-    'analytics': 'UA-xxxx',
+theme = {
+    'vars': {
+        'analytics': 'UA-xxxx',
+    }
 }
 ```
 
 + Disqus Comment Support
 
 ```python
-theme_variables = {
-    'disqus': 'your-disqus-shortname',
+theme = {
+    'vars': {
+        'disqus': 'your-disqus-shortname',
+    }
 }
 ```
 
 + Tagcloud support, active tagcloud:
 
-```python
-writers = {
-    'tagcloud': 'liquidluck.writers.core.TagCloudWriter',
-    # disable tag writer
-    # 'tag': None,
-}
-```
 
 ## 404
 
@@ -113,7 +107,11 @@ If you post is not public, this post will not be allowed to comment.
 If you want to allow people to comment on your secret post, set
 
 ```python
-allow_comment_on_secret_post = True
+theme = {
+    'vars': {
+        'allow_comment_on_secret_post': True
+    }
+}
 ```
 
 ## Write a Review
