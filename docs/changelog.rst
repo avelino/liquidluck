@@ -3,6 +3,14 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+Version 3.3
+-------------
+
+Released on Sep 17th, 2012
+
++ support for [[]]
++ updates on default theme
+
 
 Version 3.2
 --------------
