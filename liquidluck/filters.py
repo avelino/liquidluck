@@ -119,16 +119,20 @@ def wiki_link(ctx, content):
     from liquidluck.writers.base import permalink
 
     def link_post(m):
-        title = m.group(1)
         if not _Post:
             for item in g.public_posts:
                 _Post[item.title] = item
 
+        text = m.group(1)
+        if '|' in text:
+            title, content = text.split('|')
+        else:
+            title = content = text
         if title in _Post:
             item = _Post[title]
             link = permalink(ctx, item)
-            return '<a href="%s">%s</a>' % (link, title)
-        return '<span class="no-reference">%s</span>' % title
+            return '<a href="%s">%s</a>' % (link, content)
+        return '<span class="no-reference">%s</span>' % text
 
     pattern = re.compile(r'\[\[([^\]]+)\]\]', re.M)
     content = pattern.sub(link_post, content)
