@@ -61,24 +61,20 @@ def find_settings():
     return None
 
 
-def load_settings(path):
-    if not path:
-        path = find_settings()
+def parse_settings(path, filetype=None):
+    if path.endswith('.py'):
+        filetype = 'python'
+    elif path.endswith('.json'):
+        filetype = 'json'
+    else:
+        filetype = 'yaml'
 
-    def update_settings(config):
-        for key in config:
-            setting = config[key]
-            if isinstance(setting, dict) and key in settings:
-                settings[key].update(setting)
-            else:
-                settings[key] = setting
-
-    def load_py_settings(path):
+    def parse_py_settings(path):
         config = {}
         execfile(path, {}, config)
-        update_settings(config)
+        return config
 
-    def load_yaml_settings(path):
+    def parse_yaml_settings(path):
         from yaml import load
         try:
             from yaml import CLoader
@@ -88,9 +84,9 @@ def load_settings(path):
             MyLoader = Loader
 
         config = load(open(path), MyLoader)
-        update_settings(config)
+        return config
 
-    def load_json_settings(path):
+    def parse_json_settings(path):
         try:
             import json
         except ImportError:
@@ -101,17 +97,34 @@ def load_settings(path):
         content = f.read()
         f.close()
         config = json.loads(content)
-        update_settings(config)
+        return config
+
+    if filetype == 'python':
+        return parse_py_settings(path)
+    elif filetype == 'json':
+        return parse_json_settings(path)
+    return parse_yaml_settings(path)
+
+
+def load_settings(path=None):
+    if not path:
+        path = find_settings()
+
+    def update_settings(arg):
+        if isinstance(arg, dict):
+            config = arg
+        else:
+            config = parse_settings(arg)
+        for key in config:
+            setting = config[key]
+            if isinstance(setting, dict) and key in settings:
+                settings[key].update(setting)
+            else:
+                settings[key] = setting
 
     #: preload default config
-    load_py_settings(os.path.join(PROJDIR, 'tools', '_settings.py'))
-
-    if path.endswith('.py'):
-        load_py_settings(path)
-    elif path.endswith('.json'):
-        load_json_settings(path)
-    else:
-        load_yaml_settings(path)
+    update_settings(os.path.join(PROJDIR, 'tools', '_settings.py'))
+    update_settings(path)
 
     g.output_directory = os.path.abspath(settings.config.get('output'))
     g.static_directory = os.path.abspath(settings.config.get('static'))
