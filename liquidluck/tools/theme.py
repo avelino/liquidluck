@@ -1,4 +1,5 @@
 import os
+from liquidluck.options import g
 from liquidluck.utils import to_unicode
 
 
@@ -106,7 +107,7 @@ def install(keyword=None, widely=False):
         repo = 'https://github.com/%(username)s/liquidluck-theme-%(name)s' \
                 % theme
     if widely:
-        output = os.path.expanduser('~/.liquidluck-themes/%s' % keyword)
+        output = os.path.join(g.theme_gallery, keyword)
     else:
         output = '_themes/%s' % keyword
     import subprocess

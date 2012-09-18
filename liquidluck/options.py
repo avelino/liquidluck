@@ -120,6 +120,7 @@ g.liquid_directory = os.path.abspath(os.path.dirname(__file__))
 g.source_directory = 'source'
 g.output_directory = 'deploy'
 g.static_directory = 'static'
+g.theme_gallery = os.path.expanduser('~/.liquidluck-themes')
 g.theme_directory = os.path.join(
     g.liquid_directory, '_themes', 'default'
 )

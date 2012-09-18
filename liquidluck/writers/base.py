@@ -137,12 +137,12 @@ class Pagination(object):
 
 def find_theme():
     theme_name = settings.theme.get('name', 'default')
-    theme_gallary = [
+    theme_gallery = [
         os.path.join(os.path.abspath('_themes'), theme_name),
-        os.path.expanduser('~/.liquidluck-themes/%s' % theme_name),
+        os.path.join(g.theme_gallery, theme_name),
         os.path.join(g.liquid_directory, '_themes', theme_name),
     ]
-    for path in theme_gallary:
+    for path in theme_gallery:
         if os.path.exists(path):
             return path
 
