@@ -192,6 +192,10 @@ def load_jinja():
     config = {}
     theme_config = os.path.join(theme, 'settings.py')
     if os.path.exists(theme_config):
+        logging.warn('settings.py in theme is deprecated since 3.4')
+        logging.warn('the name should be changed to theme.py')
+    theme_config = os.path.join(theme, 'theme.py')
+    if os.path.exists(theme_config):
         execfile(theme_config, {}, config)
 
     #: user can reset theme variables
