@@ -120,3 +120,48 @@ def get_relative_base(path):
     if length > 1:
         return '/'.join(['..' for i in range(length - 1)])
     return '.'
+
+
+def parse_settings(path, filetype=None):
+    if path.endswith('.py'):
+        filetype = 'python'
+    elif path.endswith('.json'):
+        filetype = 'json'
+    else:
+        filetype = 'yaml'
+
+    def parse_py_settings(path):
+        config = {}
+        execfile(path, {}, config)
+        return config
+
+    def parse_yaml_settings(path):
+        from yaml import load
+        try:
+            from yaml import CLoader
+            MyLoader = CLoader
+        except ImportError:
+            from yaml import Loader
+            MyLoader = Loader
+
+        config = load(open(path), MyLoader)
+        return config
+
+    def parse_json_settings(path):
+        try:
+            import json
+        except ImportError:
+            import simplejson
+            json = simplejson
+
+        f = open(path)
+        content = f.read()
+        f.close()
+        config = json.loads(content)
+        return config
+
+    if filetype == 'python':
+        return parse_py_settings(path)
+    elif filetype == 'json':
+        return parse_json_settings(path)
+    return parse_yaml_settings(path)

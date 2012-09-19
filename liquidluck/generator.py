@@ -6,8 +6,7 @@ PROJDIR = os.path.abspath(os.path.dirname(__file__))
 import sys
 import logging
 from liquidluck.options import g, settings
-from liquidluck.utils import import_object, walk_dir
-
+from liquidluck.utils import import_object, walk_dir, parse_settings
 from liquidluck.writers.base import load_jinja, find_theme
 
 
@@ -48,62 +47,20 @@ def create_settings(filepath):
     f.close()
 
 
-def find_settings():
+def find_settings(directory=None):
+    if not directory:
+        directory = os.getcwd()
+
     config = [
         'settings.yml', 'settings.json', 'settings.yaml', 'settings.py',
     ]
 
     for f in config:
-        path = os.path.join(os.getcwd(), f)
+        path = os.path.join(directory, f)
         if os.path.exists(path):
             return path
 
     return None
-
-
-def parse_settings(path, filetype=None):
-    if path.endswith('.py'):
-        filetype = 'python'
-    elif path.endswith('.json'):
-        filetype = 'json'
-    else:
-        filetype = 'yaml'
-
-    def parse_py_settings(path):
-        config = {}
-        execfile(path, {}, config)
-        return config
-
-    def parse_yaml_settings(path):
-        from yaml import load
-        try:
-            from yaml import CLoader
-            MyLoader = CLoader
-        except ImportError:
-            from yaml import Loader
-            MyLoader = Loader
-
-        config = load(open(path), MyLoader)
-        return config
-
-    def parse_json_settings(path):
-        try:
-            import json
-        except ImportError:
-            import simplejson
-            json = simplejson
-
-        f = open(path)
-        content = f.read()
-        f.close()
-        config = json.loads(content)
-        return config
-
-    if filetype == 'python':
-        return parse_py_settings(path)
-    elif filetype == 'json':
-        return parse_json_settings(path)
-    return parse_yaml_settings(path)
 
 
 def load_settings(path=None):
