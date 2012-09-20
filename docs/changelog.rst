@@ -3,6 +3,16 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+Version 3.4
+------------
+
+Released on Sep 20th, 2012
+
++ **ATTENTION**: settings.py in themes should be named as theme.py now
++ install and update theme
++ logging improvement
+
+
 Version 3.3
 -------------
 
