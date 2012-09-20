@@ -36,13 +36,12 @@ class BaseWriter(object):
         raise NotImplementedError
 
     def run(self):
-        if g.detail_logging:
+        try:
             self.start()
-        else:
-            try:
-                self.start()
-            except Exception as e:
-                logging.error(e)
+        except Exception as e:
+            logging.error(e)
+            if g.interrupt:
+                raise e
 
         name = self.__class__.__name__
         logging.info('%s Finished' % name)
@@ -63,8 +62,7 @@ class BaseWriter(object):
     def render(self, params, template, destination):
         filepath = destination[len(g.output_directory) + 1:]
         filepath = filepath.lower()
-        if g.detail_logging:
-            logging.info('write %s' % filepath)
+        logging.debug('write %s' % filepath)
         tpl = g.jinja.get_template(template)
 
         writer = {

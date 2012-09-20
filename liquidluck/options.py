@@ -115,7 +115,7 @@ settings.theme = {}
 
 #: settings for liquidluck
 g = _Options()
-g.detail_logging = False
+g.interrupt = False
 g.liquid_directory = os.path.abspath(os.path.dirname(__file__))
 g.source_directory = 'source'
 g.output_directory = 'deploy'

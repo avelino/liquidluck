@@ -65,12 +65,12 @@ class BaseReader(object):
         raise NotImplementedError
 
     def run(self):
-        if g.detail_logging:
-            return self.render()
         try:
             return self.render()
         except Exception as e:
             logging.error(e)
+            if g.interrupt:
+                raise e
 
 
 class Post(object):

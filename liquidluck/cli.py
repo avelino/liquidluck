@@ -97,7 +97,6 @@ Options:
 
 
 def main():
-    enable_pretty_logging()
     command = 'help'
     if len(sys.argv) > 1:
         command = sys.argv[1]
@@ -112,6 +111,11 @@ def main():
 
     arg_settings = args.get('--settings') or generator.find_settings()
     arg_verbose = args.get('--verbose')
+    if arg_verbose:
+        g.interrupt = True
+        enable_pretty_logging('debug')
+    else:
+        enable_pretty_logging('info')
     arg_port = args.get('--port') or '8000'
 
     arg_theme = args.get('<theme>') or None

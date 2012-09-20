@@ -34,7 +34,7 @@ from pygments.formatters import HtmlFormatter
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name, TextLexer
 from liquidluck.readers.base import BaseReader
-from liquidluck.options import settings, g
+from liquidluck.options import settings
 from liquidluck.utils import to_unicode, utf8
 
 
@@ -43,9 +43,7 @@ class RestructuredTextReader(BaseReader):
 
     def render(self):
         f = open(self.filepath)
-
-        if g.detail_logging:
-            logging.info('read ' + self.relative_filepath)
+        logging.debug('read ' + self.relative_filepath)
 
         content = f.read()
         f.close()
