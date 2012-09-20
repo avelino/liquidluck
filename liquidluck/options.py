@@ -36,6 +36,8 @@ def enable_pretty_logging(level='info'):
 
     This is called automatically by `parse_command_line`.
     """
+    if level == 'debug':
+        g.interrupt = True
     root_logger = logging.getLogger()
     root_logger.setLevel(getattr(logging, level.upper()))
 

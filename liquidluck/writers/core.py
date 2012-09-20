@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import logging
 from liquidluck.options import g, settings
 from liquidluck.utils import UnicodeDict, walk_dir, copy_to
 from liquidluck.writers.base import BaseWriter, Pagination
@@ -111,6 +112,7 @@ class FileWriter(BaseWriter):
         l = len(g.source_directory) + 1
         for f in g.pure_files:
             path = f[l:]
+            logging.debug('copy %s' % path)
             dest = os.path.join(g.output_directory, path)
             copy_to(f, dest)
 
@@ -121,6 +123,7 @@ class StaticWriter(BaseWriter):
         l = len(static_path) + 1
         for f in walk_dir(static_path):
             path = f[l:]
+            logging.debug('copy %s' % path)
             dest = os.path.join(g.static_directory, path)
             copy_to(f, dest)
 

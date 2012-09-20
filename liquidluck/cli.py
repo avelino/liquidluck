@@ -112,7 +112,6 @@ def main():
     arg_settings = args.get('--settings') or generator.find_settings()
     arg_verbose = args.get('--verbose')
     if arg_verbose:
-        g.interrupt = True
         enable_pretty_logging('debug')
     else:
         enable_pretty_logging('info')
@@ -135,7 +134,6 @@ def main():
                 return
             generator.create_settings(arg_settings)
         else:
-            g.detail_logging = arg_verbose
             generator.build(arg_settings)
     elif command == 'server':
         if arg_settings and os.path.exists(arg_settings):
