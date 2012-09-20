@@ -111,7 +111,10 @@ def install(keyword=None, widely=False):
     else:
         output = '_themes/%s' % keyword
     import subprocess
-    subprocess.call(['git', 'clone', repo, output])
+    if os.path.exists(output):
+        subprocess.call(['git', 'pull'], cwd=output)
+    else:
+        subprocess.call(['git', 'clone', repo, output])
 
 
 if __name__ == '__main__':
