@@ -1,4 +1,5 @@
 import os
+import codecs
 from liquidluck.options import g
 from liquidluck.utils import to_unicode
 
@@ -46,11 +47,11 @@ def __load_themes():
     if not os.path.exists(path) or \
        os.stat(path).st_mtime + 600 < time.time():
         content = __fetch_themes()
-        f = open(path, 'w')
+        f = codecs.open(path, 'w', 'utf-8')
         f.write(content)
         f.close()
 
-    content = to_unicode(open(path).read())
+    content = to_unicode(codecs.open(path, 'r', 'utf-8').read())
     return __filter_themes(content)
 
 
