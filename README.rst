@@ -18,7 +18,33 @@ The main design pattern of Felix Felicis:
 
 `Documentation <http://liquidluck.readthedocs.org>`_ is available on RTD.
 
-Post Syntax Overview
+Commands
+------------
+
+1. Create a site::
+
+   liquidluck init
+
+2. Search for a theme::
+
+   liquidluck search
+
+3. Install a theme::
+
+   liquidluck install moment
+
+4. Build articles::
+
+   liquidluck build
+
+5. Preview server::
+
+   liquidluck server
+
+More information with ``liquidluck help``.
+
+
+Write a post
 ----------------------
 
 A post in markdown::
@@ -78,6 +104,7 @@ Features
 - Category, Tag, Post, Page, Feed and everything a blog should have
 - Beautiful and valid syntax supports
 - Full customizable theme supports
+- Global theme gallery, site theme gallery, site template
 - No extension system (Is this a feature? YES!)
 - GitHub and BitBucket web hook service
 - Live preview server
@@ -88,7 +115,7 @@ Compatibility
 
 + Markup:
 
-  - restructedText_
+  - restructedText_ (you need install docutils by yourself)
   - markdown_
 
 + Python:
