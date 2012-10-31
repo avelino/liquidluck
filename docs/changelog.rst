@@ -3,6 +3,15 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+Version 3.5
+------------
+
+Released on Oct 31th, 2012
+
++ fix ``liquidluck search`` unicode bug #57
++ add theme.debug vars for preview server
+
+
 Version 3.4
 ------------
 
