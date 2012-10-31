@@ -301,6 +301,9 @@ def start_server():
         import tornado.web
         if g.output_directory == ROOT:
             #: if this is a liquidluck project, build the site
+            variables = settings.theme.get('vars', {})
+            variables.update({'debug': True})
+            settings.theme['vars'] = variables
             load_posts(settings.config['source'])
             write_posts()
             logging.info('Theme directory: %s' % g.theme_directory)
