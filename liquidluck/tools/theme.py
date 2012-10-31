@@ -1,7 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
-import codecs
 from liquidluck.options import g
-from liquidluck.utils import to_unicode
+from liquidluck.utils import to_unicode, utf8
 
 
 def __fetch_themes():
@@ -29,6 +31,9 @@ def __filter_themes(content):
 
     repos = json_decode(content)
     themes = {}
+    if 'repositories' not in repos and 'message' in repos:
+        print repos['message']
+        return {}
     for theme in repos['repositories']:
         fork = theme['fork']
         if not fork:
@@ -39,19 +44,22 @@ def __filter_themes(content):
     return themes
 
 
-def __load_themes():
+def __load_themes(force=False):
     import time
     import tempfile
     path = os.path.join(tempfile.gettempdir(), 'liquidluck.json')
 
     if not os.path.exists(path) or \
-       os.stat(path).st_mtime + 600 < time.time():
+       os.stat(path).st_mtime + 600 < time.time() or \
+       force:
         content = __fetch_themes()
-        f = codecs.open(path, 'w', 'utf-8')
-        f.write(content)
+        if "repositories" not in content:
+            return content
+        f = open(path, 'w')
+        f.write(utf8(content))
         f.close()
 
-    content = to_unicode(codecs.open(path, 'r', 'utf-8').read())
+    content = to_unicode(open(path).read())
     return __filter_themes(content)
 
 
@@ -66,10 +74,7 @@ URL: https://github.com/%(username)s/liquidluck-theme-%(name)s
 
 
 def search(keyword=None, clean=False, force=False):
-    if force:
-        themes = __filter_themes(__fetch_themes())
-    else:
-        themes = __load_themes()
+    themes = __load_themes(force)
     available = {}
 
     if keyword:
