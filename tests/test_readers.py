@@ -2,7 +2,6 @@
 
 import os.path
 import datetime
-from liquidluck.options import settings
 from liquidluck.readers.base import BaseReader, Post
 from liquidluck.readers.markdown import MarkdownReader
 from liquidluck.readers.restructuredtext import RestructuredTextReader
@@ -21,43 +20,6 @@ class TestPost(object):
     def test_author(self):
         post = Post('filepath', 'content', title='title', meta=self.meta)
         assert str(post.author) == 'lepture'
-
-    def test_embed_author(self):
-        post = Post('filepath', 'content', title='title', meta=self.meta)
-        assert post.embed_author == 'lepture'
-
-        settings.author = {
-            'default': 'lepture',
-            'vars': {
-                'lepture': {
-                    'name': 'Hsiaoming Yang',
-                }
-            }
-        }
-        post = Post('filepath', 'content', title='title', meta=self.meta)
-        assert post.embed_author == 'Hsiaoming Yang'
-
-        settings.author = {
-            'vars': {
-                'lepture': {
-                    'email': 'lepture@me.com',
-                }
-            }
-        }
-        post = Post('filepath', 'content', title='title', meta=self.meta)
-        assert post.embed_author == (
-            '<a href="mailto:lepture@me.com">lepture</a>')
-
-        settings.author = {
-            'vars': {
-                'lepture': {
-                    'website': 'http://lepture.com',
-                }
-            }
-        }
-        post = Post('filepath', 'content', title='title', meta=self.meta)
-        assert post.embed_author == (
-            '<a href="http://lepture.com">lepture</a>')
 
     def test_date(self):
         post = Post('filepath', 'content', title='title', meta=self.meta)
