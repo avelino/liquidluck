@@ -3,6 +3,12 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+Version 3.6
+------------
+
++ ``clean_filepath`` is replaced by ``folder``
+
+
 Version 3.5
 ------------
 

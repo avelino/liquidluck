@@ -165,15 +165,23 @@ class Post(object):
         return os.path.splitext(path)[0]
 
     @property
-    def clean_filepath(self):
+    def folder(self):
         path = self.filepath
         if path.startswith(g.source_directory):
             return path[len(g.source_directory) + 1:]
         return path
 
     @property
+    def clean_filepath(self):
+        logging.warn(
+            'clean_filepath for permalink is deprecated since 3.6, '
+            'you should use folder instead.\n'
+            'e.g. permalink="{{folder}}/{{filename}}.html"')
+        return self.folder
+
+    @property
     def clean_folder(self):
-        return os.path.split(self.clean_filepath)[0]
+        return os.path.split(self.folder)[0]
 
     def __getattr__(self, key):
         try:

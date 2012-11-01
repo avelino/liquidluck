@@ -82,6 +82,7 @@ Metadata that Felix Felicis supports natively:
 + tags -- tags are seprated by comma
 + category
 + summary
++ folder  -- relative filepath, for example ``/home/user/blog/content/a/a.md``, folder will be ``a``
 + author  -- see :ref:`multi-authors` for detail
 + template  -- see :ref:`template` for detail
 
