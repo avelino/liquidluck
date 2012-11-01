@@ -101,25 +101,6 @@ class Post(object):
         return Author(self.meta.get('author', author))
 
     @property
-    def embed_author(self):
-        """define in settings::
-
-            authors = {
-                "lepture": {
-                    "name": "Hsiaoming Yang",
-                    "website": "http://lepture.com",
-                    "email": "lepture@me.com",
-                }
-            }
-        """
-        author = self.author
-        if author.website:
-            return '<a href="%s">%s</a>' % (author.website, author.name)
-        if author.email:
-            return '<a href="mailto:%s">%s</a>' % (author.email, author.name)
-        return author.name
-
-    @property
     def date(self):
         return to_datetime(self.meta.get('date'))
 
@@ -134,11 +115,7 @@ class Post(object):
 
     @property
     def category(self):
-        category = self.meta.get('category', None)
-        if category:
-            return category
-        #: historical reason
-        return self.meta.get('folder', None)
+        return self.meta.get('category', None)
 
     @property
     def tags(self):
@@ -150,12 +127,12 @@ class Post(object):
         return [tag.strip() for tag in tags.split(",")]
 
     @property
-    def summary(self):
-        return self.meta.get('summary', None)
-
-    @property
     def template(self):
         return self.meta.get('template', None)
+
+    @property
+    def folder(self):
+        return os.path.split(self.relative_filepath)[0]
 
     @property
     def filename(self):
@@ -165,7 +142,7 @@ class Post(object):
         return os.path.splitext(path)[0]
 
     @property
-    def folder(self):
+    def relative_filepath(self):
         path = self.filepath
         if path.startswith(g.source_directory):
             return path[len(g.source_directory) + 1:]
@@ -174,14 +151,18 @@ class Post(object):
     @property
     def clean_filepath(self):
         logging.warn(
-            'clean_filepath for permalink is deprecated since 3.6, '
-            'you should use folder instead.\n'
-            'e.g. permalink="{{folder}}/{{filename}}.html"')
-        return self.folder
+            'clean_filepath is deprecated since 3.6, '
+            'you should use relative_filepath instead.'
+        )
+        return self.relative_filepath
 
     @property
     def clean_folder(self):
-        return os.path.split(self.folder)[0]
+        logging.warn(
+            'clean_folder is deprecated since 3.6, '
+            'you should use folder instead.'
+        )
+        return self.folder
 
     def __getattr__(self, key):
         try:
