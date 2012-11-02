@@ -59,6 +59,7 @@ case "$words[1]" in
     fi;;
   server)
     _arguments \
+      '(-d --debug)'{-d,--debug}'[set theme.debug=True]' \
       '(-p --port)'{-p,--port}'[webhook server port]' \
       '(-s --settings)'{-s,--settings}'[specify a setting file]' ;;
   search)

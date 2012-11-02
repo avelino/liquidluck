@@ -16,7 +16,7 @@ documentation['help'] = """Felix Felicis %(version)s
 Usage:
     liquidluck init [-s <file>|--settings=<file>]
     liquidluck build [-s <file>|--settings=<file>] [-v|--verbose]
-    liquidluck server [-s <file>|--settings=<file>] [-p <port>|--port=<port>]
+    liquidluck server [-d|--debug] %(server)s
     liquidluck search [<theme>] [-c|--clean] [-f|--force]
     liquidluck install <theme> [-g|--global]
     liquidluck webhook (start|stop|restart) %(webhook)s
@@ -26,6 +26,7 @@ Usage:
 Options:
     -h --help               show this screen.
     -v --verbose            show more log.
+    -d --debug              set theme.debug=True for server
     -s --settings=<file>    specify a setting file.
     -p --port=<port>        specify the server port.
     -f --force              search a theme without cache
@@ -34,7 +35,8 @@ Options:
     --version               show version.
 """ % {
     'version': liquidluck.__version__,
-    'webhook': '[-s <file>|--settings=<file>] [-p <port>|--port=<port>]'
+    'webhook': '[-s <file>|--settings=<file>] [-p <port>|--port=<port>]',
+    'server': '[-s <file>|--settings=<file>] [-p <port>|--port=<port>]',
 }
 
 documentation['init'] = """
@@ -58,13 +60,16 @@ Options:
 
 documentation['server'] = """
 Usage:
-    liquidluck server [-s <file>|--settings=<file>] [-p <port>|--port=<port>]
+    liquidluck server [-d|--debug] %(server)s
 
 Options:
     -h --help               show this screen.
+    -d --debug              set theme.debug=True for server
     -s --settings=<file>    specify a setting file.
     -p --port=<port>        specify the server port.
-"""
+""" % {
+    'server': '[-s <file>|--settings=<file>] [-p <port>|--port=<port>]',
+}
 
 documentation['search'] = """
 Usage:
@@ -136,12 +141,15 @@ def main():
         else:
             generator.build(arg_settings)
     elif command == 'server':
+        arg_debug = args.get('--debug')
+        if arg_debug:
+            print('debug mode on')
         if arg_settings and os.path.exists(arg_settings):
             generator.load_settings(arg_settings)
         else:
             print('setting file not found')
             server.config(arg_port)
-            server.start_server()
+            server.start_server(arg_debug)
 
         permalink = settings.config.get('permalink')
         if permalink.endswith('.html'):
@@ -151,7 +159,7 @@ def main():
         else:
             _type = 'clean'
         server.config(arg_port, g.output_directory, _type)
-        server.start_server()
+        server.start_server(arg_debug)
     elif command == 'search':
         theme.search(arg_theme, arg_clean, arg_force)
     elif command == 'install':

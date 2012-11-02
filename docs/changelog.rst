@@ -6,10 +6,12 @@ All history since the new Felix Felicis are listed here:
 Version 3.6
 ------------
 
+Released on Nov 2nd, 2012
+
 + ``clean_folder`` is replaced by ``folder``
 + ``clean_filepath`` is replaced by ``relative_filepath``
 + delete ``Post.embed_author``
-+ many bugfix
++ livereload server work again
 
 
 Version 3.5
