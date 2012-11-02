@@ -108,6 +108,9 @@ class ArchiveFeedWriter(ArchiveWriter):
 class FileWriter(BaseWriter):
     writer_name = 'file'
 
+    def __init__(self):
+        g.resource['files'] = g.pure_files
+
     def start(self):
         l = len(g.source_directory) + 1
         for f in g.pure_files:

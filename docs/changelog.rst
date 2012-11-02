@@ -12,6 +12,7 @@ Released on Nov 2nd, 2012
 + ``clean_filepath`` is replaced by ``relative_filepath``
 + delete ``Post.embed_author``
 + livereload server work again
++ add ``resource.files`` params
 
 
 Version 3.5
