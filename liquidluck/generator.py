@@ -109,6 +109,9 @@ def load_posts(path):
         return None
 
     for filepath in walk_dir(path):
+        if os.path.abspath(g.output_directory) in \
+           os.path.abspath(filepath):
+            continue
         post = detect_reader(filepath)
         if not post:
             g.pure_files.append(filepath)

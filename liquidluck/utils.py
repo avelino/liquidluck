@@ -46,6 +46,12 @@ def import_object(name):
 
 def walk_dir(dest):
     for root, dirs, files in os.walk(dest):
+        if '.git' in dirs:
+            dirs.remove('.git')
+        if '.hg' in dirs:
+            dirs.remove('.hg')
+        if '.svn' in dirs:
+            dirs.remove('.svn')
         for f in files:
             path = os.path.join(root, f)
             yield path
