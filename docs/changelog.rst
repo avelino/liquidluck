@@ -9,6 +9,7 @@ Version 3.6
 + ``clean_folder`` is replaced by ``folder``
 + ``clean_filepath`` is replaced by ``relative_filepath``
 + delete ``Post.embed_author``
++ many bugfix
 
 
 Version 3.5
