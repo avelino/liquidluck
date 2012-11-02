@@ -175,7 +175,7 @@ class LiveReloadHandler(WebSocketHandler):
                 self.reload_browser()
             return
 
-        if self._is_changed(g.source_directory, 4):
+        if self._is_changed(g.source_directory):
             # clean posts
             g.public_posts = []
             g.secure_posts = []
@@ -204,7 +204,7 @@ class LiveReloadHandler(WebSocketHandler):
                 logging.error('Error sending message', exc_info=True)
                 LiveReloadHandler.waiters.remove(waiter)
 
-    def _is_changed(self, path, flags=0):
+    def _is_changed(self, path):
         def is_file_changed(path):
             if not os.path.isfile(path):
                 return False
@@ -212,13 +212,13 @@ class LiveReloadHandler(WebSocketHandler):
             _, ext = os.path.splitext(path)
             theme = settings.theme.get('vars') or {}
 
-            ignores = theme.get('reload_ignore') or []
-            ignores.extend(['.pyc', '.pyo', '.swp'])
-            if flags > 0 and ext in ignores:
-                return False
-
-            matches = theme.get('reload_match') or []
-            if flags > 1 and ext not in matches:
+            if g.output_directory == g.source_directory:
+                matches = theme.get('reload_match') or []
+                matches.extend(['.md', '.mkd', '.markdown', '.rst'])
+                if ext not in matches:
+                    return False
+            elif os.path.abspath(g.output_directory) in \
+                    os.path.abspath(path):
                 return False
 
             modified = int(os.stat(path).st_mtime)
@@ -301,9 +301,6 @@ def start_server():
         import tornado.web
         if g.output_directory == ROOT:
             #: if this is a liquidluck project, build the site
-            variables = settings.theme.get('vars', {})
-            variables.update({'debug': True})
-            settings.theme['vars'] = variables
             load_posts(settings.config['source'])
             write_posts()
             logging.info('Theme directory: %s' % g.theme_directory)
