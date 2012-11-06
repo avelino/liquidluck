@@ -98,8 +98,10 @@ def load_posts(path):
     for name in settings.reader.get('active'):
         try:
             readers.append(import_object(name))
-        except ImportError:
+        except ImportError as e:
             logging.error("Can't enable %s" % name)
+            if g.interrupt:
+                raise e
 
     def detect_reader(filepath):
         for Reader in readers:
