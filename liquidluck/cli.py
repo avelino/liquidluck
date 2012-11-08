@@ -15,7 +15,7 @@ documentation['help'] = """Felix Felicis %(version)s
 
 Usage:
     liquidluck init [-s <file>|--settings=<file>]
-    liquidluck build [-s <file>|--settings=<file>] [-v|--verbose]
+    liquidluck build [-s <file>|--settings=<file>] [-q|--quiet] [-v|--verbose]
     liquidluck server [-d|--debug] %(server)s
     liquidluck search [<theme>] [-c|--clean] [-f|--force]
     liquidluck install <theme> [-g|--global]
@@ -26,6 +26,7 @@ Usage:
 Options:
     -h --help               show this screen.
     -v --verbose            show more log.
+    -q --quiet              show less log.
     -d --debug              set theme.debug=True for server
     -s --settings=<file>    specify a setting file.
     -p --port=<port>        specify the server port.
@@ -50,11 +51,12 @@ Options:
 
 documentation['build'] = """
 Usage:
-    liquidluck build [-s <file>|--settings=<file>] [-v|--verbose]
+    liquidluck build [-s <file>|--settings=<file>] [-q|--quiet] [-v|--verbose]
 
 Options:
     -h --help               show this screen.
     -v --verbose            show more log.
+    -q --quiet              show less log.
     -s --settings=<file>    specify a setting file.
 """
 
@@ -116,8 +118,11 @@ def main():
 
     arg_settings = args.get('--settings') or generator.find_settings()
     arg_verbose = args.get('--verbose')
+    arg_quiet = args.get('--quiet')
     if arg_verbose:
         enable_pretty_logging('debug')
+    elif arg_quiet:
+        enable_pretty_logging('warn')
     else:
         enable_pretty_logging('info')
     arg_port = args.get('--port') or '8000'
