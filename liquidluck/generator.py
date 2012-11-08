@@ -110,9 +110,14 @@ def load_posts(path):
                 return reader.run()
         return None
 
+    output = os.path.abspath(g.output_directory)
+    source = os.path.abspath(g.source_directory)
+    if output == source:
+        logging.warn('Output and source are the same directory')
+
     for filepath in walk_dir(path):
-        if os.path.abspath(g.output_directory) in \
-           os.path.abspath(filepath):
+        if source in output and source != output and \
+           output in os.path.abspath(filepath):
             continue
         post = detect_reader(filepath)
         if not post:
