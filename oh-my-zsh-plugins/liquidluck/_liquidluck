@@ -31,6 +31,7 @@ _arguments \
   '(-s --settings)'{-s,--settings}'[specify a setting file]' \
   '(-c --clean)'{-c,--clean}'[show name only]' \
   '(-h --help)'{-h,--help}'[show help]' \
+  '(-q --quiet)'{-q,--quiet}'[give less output]' \
   '(-v --verbose)'{-v,--verbose}'[give more output]' \
   '(-p --port)'{-p,--port}'[webhook server port]' \
   '*:: :->subcmds' && return 0
@@ -44,6 +45,7 @@ case "$words[1]" in
   build)
     _arguments \
       '(-s --settings)'{-s,--settings}'[specify a setting file]' \
+      '(-q --quiet)'{-q,--quiet}'[give less output]' \
       '(-v --verbose)'{-v,--verbose}'[give more output]' ;;
   init)
     _arguments \
