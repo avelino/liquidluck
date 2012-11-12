@@ -149,6 +149,9 @@ def write_posts():
 def build(config='settings.py', output=None):
     load_settings(config)
     if output:
-        g.output_directory = os.path.abspath(output)
+        output = os.path.abspath(output)
+        g.static_directory = g.static_directory.replace(
+            g.output_directory, output, 1)
+        g.output_directory = output
     load_posts(settings.config.get('source'))
     write_posts()
