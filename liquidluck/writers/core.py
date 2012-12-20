@@ -37,7 +37,7 @@ class PageWriter(BaseWriter):
     def start(self):
         l = len(g.source_directory) + 1
         for post in g.pure_pages:
-            template = post.template or self._template
+            template = post.template.strip() if post.template else self._template
             filename = os.path.splitext(post.filepath[l:])[0] + '.html'
             dest = os.path.join(g.output_directory, filename)
             self.render({'post': post}, template, dest)
