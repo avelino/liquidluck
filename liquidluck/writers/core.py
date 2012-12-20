@@ -16,11 +16,11 @@ class PostWriter(BaseWriter):
 
     def start(self):
         for post in g.public_posts:
-            template = post.template or self._template
+            template = (post.template or self._template).strip()
             self.render({'post': post}, template, self._dest_of(post))
 
         for post in g.secure_posts:
-            template = post.template or self._template
+            template = (post.template or self._template).strip()
             self.render({'post': post}, template, self._dest_of(post))
 
     def _dest_of(self, post):
@@ -37,7 +37,7 @@ class PageWriter(BaseWriter):
     def start(self):
         l = len(g.source_directory) + 1
         for post in g.pure_pages:
-            template = post.template.strip() if post.template else self._template
+            template = (post.template or self._template).strip()
             filename = os.path.splitext(post.filepath[l:])[0] + '.html'
             dest = os.path.join(g.output_directory, filename)
             self.render({'post': post}, template, dest)
