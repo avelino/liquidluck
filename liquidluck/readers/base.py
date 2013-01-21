@@ -132,7 +132,7 @@ class Post(object):
 
     @property
     def folder(self):
-        return os.path.split(self.relative_filepath)[0]
+        return os.path.split(self.relative_filepath)[0].replace('\\','/') # handle backslash in windows
 
     @property
     def filename(self):
