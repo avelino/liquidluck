@@ -90,7 +90,7 @@ def _read(abspath):
     if not os.path.exists(abspath):
         return None
 
-    f = open(abspath)
+    f = open(abspath, 'rb')
     content = f.read()
     f.close()
     return content
