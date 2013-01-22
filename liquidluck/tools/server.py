@@ -66,23 +66,31 @@ def _autoindex(abspath):
     return html
 
 
-def _read(abspath):
-    filepath = abspath
-    if abspath.endswith('/'):
-        #: this is index
-        filepath = os.path.join(abspath, 'index.html')
+def translate_path(path):
+    abspath = os.path.join(ROOT, path)
+    #: directory, '' indicates it's root
+    if path == '' or path.endswith('/'):
+        #: index file
+        filepath = os.path.join(ROOT, path, 'index.html')
         if not os.path.exists(filepath) and PERMALINK == 'slash':
-            filepath = abspath.rstrip('/') + '.html'
-        elif not os.path.exists(filepath):
-            return _autoindex(abspath)
+            abspath = os.path.join(ROOT, path.rstrip('/') + '.html')
+        elif os.path.exists(filepath):
+            abspath = filepath
 
     elif not os.path.exists(abspath):
-        filepath = abspath + '.html'
+        abspath += '.html'
 
-    if not os.path.exists(filepath):
+    return os.path.normpath(abspath)
+
+
+def _read(abspath):
+    if os.path.isdir(abspath):
+        return _autoindex(abspath)
+
+    if not os.path.exists(abspath):
         return None
 
-    f = open(filepath)
+    f = open(abspath)
     content = f.read()
     f.close()
     return content
@@ -90,14 +98,18 @@ def _read(abspath):
 
 def wsgi_app(environ, start_response):
     path = environ['PATH_INFO'].lstrip('/')
-    abspath = os.path.join(ROOT, path)
+    abspath = translate_path(path)
     headers = []
-    mime_type, encoding = mimetypes.guess_type(abspath)
-    if mime_type:
-        headers.append(('Content-type', mime_type))
-    else:
+    if os.path.isdir(abspath) or not os.path.exists(abspath):
         headers.append(('Content-type', 'text/html'))
+    else:
+        mime_type, encoding = mimetypes.guess_type(abspath)
+        if mime_type:
+            headers.append(('Content-type', mime_type))
+        else:
+            headers.append(('Content-type', 'application/octet-stream'))
 
+    logging.info(headers)
     body = _read(abspath)
 
     if body is None:
