@@ -24,6 +24,8 @@ An example in markdown::
     - date: 2012-12-12 12:12        <-------- this is meta
     - tags: python, blog, web
 
+    Here is the description.
+
     --------------------------      <-------- this seprate meta and content
 
     Hello World! Welcome to the     <-------- this is content
