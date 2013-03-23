@@ -15,7 +15,7 @@ documentation['help'] = """Felix Felicis %(version)s
 
 Usage:
     liquidluck init [-s <file>|--settings=<file>]
-    liquidluck build [-s <file>|--settings=<file>] [-v|--verbose]
+    liquidluck build [-s <file>|--settings=<file>] %(build)s
     liquidluck server [-d|--debug] %(server)s
     liquidluck search [<theme>] [-c|--clean] [-f|--force]
     liquidluck install <theme> [-g|--global]
@@ -26,8 +26,10 @@ Usage:
 Options:
     -h --help               show this screen.
     -v --verbose            show more log.
+    -q --quiet              show less log.
     -d --debug              set theme.debug=True for server
     -s --settings=<file>    specify a setting file.
+    -o --output=<output>    overwrite output directory.
     -p --port=<port>        specify the server port.
     -f --force              search a theme without cache
     -c --clean              show theme name only.
@@ -35,6 +37,7 @@ Options:
     --version               show version.
 """ % {
     'version': liquidluck.__version__,
+    'build': '[-o <output>|--output=<output>] [-q|--quiet] [-v|--verbose]',
     'webhook': '[-s <file>|--settings=<file>] [-p <port>|--port=<port>]',
     'server': '[-s <file>|--settings=<file>] [-p <port>|--port=<port>]',
 }
@@ -50,13 +53,17 @@ Options:
 
 documentation['build'] = """
 Usage:
-    liquidluck build [-s <file>|--settings=<file>] [-v|--verbose]
+    liquidluck build [-s <file>|--settings=<file>] %(build)s
 
 Options:
     -h --help               show this screen.
     -v --verbose            show more log.
+    -q --quiet              show less log.
     -s --settings=<file>    specify a setting file.
-"""
+    -o --output=<output>    overwrite output directory.
+""" % {
+    'build': '[-o <output>|--output=<output>] [-q|--quiet] [-v|--verbose]',
+}
 
 documentation['server'] = """
 Usage:
@@ -116,8 +123,11 @@ def main():
 
     arg_settings = args.get('--settings') or generator.find_settings()
     arg_verbose = args.get('--verbose')
+    arg_quiet = args.get('--quiet')
     if arg_verbose:
         enable_pretty_logging('debug')
+    elif arg_quiet:
+        enable_pretty_logging('warn')
     else:
         enable_pretty_logging('info')
     arg_port = args.get('--port') or '8000'
@@ -130,6 +140,7 @@ def main():
     if command == 'init':
         generator.create_settings(arg_settings)
     elif command == 'build':
+        arg_output = args.get('--output')
         if not arg_settings:
             answer = raw_input(
                 "Can't find your setting files, "
@@ -139,7 +150,7 @@ def main():
                 return
             generator.create_settings(arg_settings)
         else:
-            generator.build(arg_settings)
+            generator.build(arg_settings, arg_output)
     elif command == 'server':
         arg_debug = args.get('--debug')
         if arg_debug:

@@ -3,6 +3,17 @@ Changelog
 
 All history since the new Felix Felicis are listed here:
 
+Version 3.7
+------------
+
+Released on Nov 9th, 2012
+
++ code improvement (not bugfix)
++ add option quiet for ``liquidluck build``
++ add option output for ``liquidluck build``
++ livereload server more reliable
+
+
 Version 3.6
 ------------
 

@@ -97,13 +97,16 @@ def install(keyword=None, widely=False):
         return
     if '/' in keyword:
         user, name = keyword.split('/')
-        if name.startswith('liquidluck-theme-'):
+        if not name:
+            keyword = user
+            name = 'liquidluck-theme'
+        elif name.startswith('liquidluck-theme-'):
             keyword = name.replace('liquidluck-theme-', '', 1)
         else:
             keyword = name
             name = 'liquidluck-theme-%s' % name
 
-        repo = 'https://github.com/%s/%s' % (user, name)
+        repo = 'git://github.com/%s/%s' % (user, name)
     else:
         themes = __load_themes()
         if keyword not in themes:

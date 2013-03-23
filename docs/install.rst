@@ -47,3 +47,22 @@ use Felix Felicis. You will need it somewhere else.
 
 .. _misaka: http://misaka.61924.nl
 .. _sundown: https://github.com/tanoku/sundown
+
+
+Install on Windows
+-------------------
+
+It is strongly suggested that you use Cygwin_ as the environment.
+
+You should install these packages:
+
+- python interpreters 2.x (or 3.x)
+- make (Devel -- the GNU version of make)
+- gcc (gcc-core and gcc-g++)
+- git (Devel -- Fast version control ....)
+- ca-certificates
+
+Then head over to setuptools_ and install it, you will get ``easy_install``.
+
+.. _setuptools: http://pypi.python.org/pypi/setuptools
+.. _Cygwin: http://www.cygwin.com

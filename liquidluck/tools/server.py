@@ -5,7 +5,7 @@ import mimetypes
 import logging
 from wsgiref.simple_server import make_server
 from liquidluck.options import g, settings
-from liquidluck.utils import to_unicode, UnicodeDict
+from liquidluck.utils import to_unicode, UnicodeDict, walk_dir
 from liquidluck.generator import load_posts, write_posts
 try:
     import tornado.web
@@ -181,6 +181,7 @@ class LiveReloadHandler(WebSocketHandler):
             g.secure_posts = []
             g.pure_files = []
             g.pure_pages = []
+            g.resource = {}
 
             load_posts(settings.config['source'])
             write_posts()
@@ -235,18 +236,9 @@ class LiveReloadHandler(WebSocketHandler):
             logging.info('file changed: %s' % path)
             return True
 
-        for root, dirs, files in os.walk(path):
-            if '.git' in dirs:
-                dirs.remove('.git')
-            if '.hg' in dirs:
-                dirs.remove('.hg')
-            if '.svn' in dirs:
-                dirs.remove('.svn')
-
-            for f in files:
-                path = os.path.join(root, f)
-                if is_file_changed(path):
-                    return True
+        for f in walk_dir(path):
+            if is_file_changed(f):
+                return True
 
         return False
 

@@ -61,17 +61,15 @@ class MarkdownReader(BaseReader):
                 body += line
 
         f.close()
-
         body = to_unicode(body)
-        meta = self._parse_meta(header)
-        #: keep body in meta data as source text
-        meta['source_text'] = body
-        _toc = m.Markdown(m.HtmlTocRenderer(), 0)
-        meta['toc'] = _toc.render(body)
-        content = markdown(body)
+        meta = self._parse_meta(header, body)
+        content = self._parse_content(body)
         return self.post_class(self.filepath, content, meta=meta)
 
-    def _parse_meta(self, header):
+    def _parse_content(self, body):
+        return markdown(body)
+
+    def _parse_meta(self, header, body):
         header = m.html(to_unicode(header))
         titles = re.findall(r'<h1>(.*)</h1>', header)
         if not titles:
@@ -91,10 +89,15 @@ class MarkdownReader(BaseReader):
         desc = re.findall(r'<p>(.*?)</p>', header, re.S)
         if desc:
             meta['description'] = '\n\n'.join(desc)
+
+        #: keep body in meta data as source text
+        meta['source_text'] = body
+        _toc = m.Markdown(m.HtmlTocRenderer(), 0)
+        meta['toc'] = _toc.render(body)
         return meta
 
 
-class JuneRender(m.HtmlRenderer, m.SmartyPants):
+class LiquidRender(m.HtmlRenderer, m.SmartyPants):
     def paragraph(self, text):
         text = cjk_nowrap(text)
         return '<p>%s</p>\n' % text
@@ -103,19 +106,13 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
         if not lang or lang == '+' or lang == '-':
             return '\n<pre><code>%s</code></pre>\n' % escape(text.strip())
 
-        inject = False
-        if lang.endswith('-'):
-            show = False
-        else:
-            show = True
-
-        if lang.endswith('+') or not show:
+        hide = lang.endswith('-')
+        inject = lang.endswith('+') or lang.endswith('-')
+        if inject:
             lang = lang[:-1]
-            if lang in ('javascript', 'js', 'css', 'html'):
-                inject = True
+        inject = inject and lang in ('javascript', 'js', 'css', 'html')
 
-        lexer = get_lexer_by_name(lang, stripall=True)
-
+        html = ''
         if inject:
             if lang == 'javascript' or lang == 'js':
                 tpl = '\n<script>\n%s</script>\n'
@@ -125,13 +122,12 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
                 tpl = '\n<div class="insert-code">%s</div>\n'
 
             html = tpl % text
-        else:
-            html = ''
 
-        if not show:
+        if hide and inject:
             return html
 
         variables = settings.reader.get('vars') or {}
+        lexer = get_lexer_by_name(lang, stripall=True)
         formatter = HtmlFormatter(
             noclasses=variables.get('highlight_inline', False),
             linenos=variables.get('highlight_linenos', False),
@@ -158,6 +154,10 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
         return '<a href="%s">%s</a>' % (link, title)
 
 
+#: compatible
+JuneRender = LiquidRender
+
+
 def markdown(text):
     text = to_unicode(text)
     regex = re.compile(r'^````(\w+)', re.M)
@@ -165,7 +165,7 @@ def markdown(text):
     regex = re.compile(r'^`````(\w+)', re.M)
     text = regex.sub(r'`````\1-', text)
 
-    render = JuneRender(flags=m.HTML_USE_XHTML | m.HTML_TOC)
+    render = LiquidRender(flags=m.HTML_USE_XHTML | m.HTML_TOC)
     md = m.Markdown(
         render,
         extensions=(

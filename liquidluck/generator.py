@@ -98,8 +98,10 @@ def load_posts(path):
     for name in settings.reader.get('active'):
         try:
             readers.append(import_object(name))
-        except ImportError:
+        except ImportError as e:
             logging.error("Can't enable %s" % name)
+            if g.interrupt:
+                raise e
 
     def detect_reader(filepath):
         for Reader in readers:
@@ -108,9 +110,14 @@ def load_posts(path):
                 return reader.run()
         return None
 
+    output = os.path.abspath(g.output_directory)
+    source = os.path.abspath(g.source_directory)
+    if output == source:
+        logging.warn('Output and source are the same directory')
+
     for filepath in walk_dir(path):
-        if os.path.abspath(g.output_directory) in \
-           os.path.abspath(filepath):
+        if source in output and source != output and \
+           output in os.path.abspath(filepath):
             continue
         post = detect_reader(filepath)
         if not post:
@@ -139,7 +146,12 @@ def write_posts():
         writer.run()
 
 
-def build(config='settings.py'):
+def build(config='settings.py', output=None):
     load_settings(config)
+    if output:
+        output = os.path.abspath(output)
+        g.static_directory = g.static_directory.replace(
+            g.output_directory, output, 1)
+        g.output_directory = output
     load_posts(settings.config.get('source'))
     write_posts()

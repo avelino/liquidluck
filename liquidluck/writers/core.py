@@ -20,6 +20,7 @@ class PostWriter(BaseWriter):
             self.render({'post': post}, template, self._dest_of(post))
 
         for post in g.secure_posts:
+            template = post.template or self._template
             self.render({'post': post}, template, self._dest_of(post))
 
     def _dest_of(self, post):
