@@ -8,7 +8,9 @@ if major >= 3:
     kwargs['use_2to3'] = True
 
 from setuptools import setup
-install_requires = ['Jinja2', 'Pygments', 'misaka', 'docopt', 'PyYAML']
+install_requires = [
+    'Jinja2', 'Pygments', 'misaka', 'docopt', 'PyYAML', 'docutils'
+]
 
 
 import liquidluck

@@ -2,6 +2,8 @@
 
 - tags: tag1, tag2
 
+Here is a description.
+
 ------
 
 first line

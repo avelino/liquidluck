@@ -10,6 +10,8 @@ Syntax::
     - category: life
     - tags: tag1, tag2
 
+    Here is the description.
+
     -----------------
 
     Your content here. And it supports code highlight.
@@ -83,6 +85,10 @@ class MarkdownReader(BaseReader):
             key = item[:index].rstrip()
             value = item[index + 1:].lstrip()
             meta[key] = value
+
+        desc = re.findall(r'<p>(.*?)</p>', header, re.S)
+        if desc:
+            meta['description'] = '\n\n'.join(desc)
 
         #: keep body in meta data as source text
         meta['source_text'] = body

@@ -2,3 +2,5 @@ docutils
 Jinja2
 Pygments
 misaka
+docopt
+PyYAML
