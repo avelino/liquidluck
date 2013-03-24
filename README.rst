@@ -1,8 +1,8 @@
 Felix Felicis
 ==============
 
-.. image:: https://secure.travis-ci.org/lepture/liquidluck.png?branch=develop
-    :target: https://secure.travis-ci.org/lepture/liquidluck
+.. image:: https://travis-ci.org/lepture/liquidluck.png?branch=master
+    :target: https://travis-ci.org/lepture/liquidluck
 
 
 Felix Felicis (aka ``liquidluck``) is a simple lightweight static blog generator
