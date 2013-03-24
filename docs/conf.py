@@ -11,7 +11,10 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys
+import os
+import time
+
 sys.path.append(os.path.abspath('_themes'))
 sys.path.append(os.path.abspath('.'))
 
@@ -43,7 +46,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Felix Felicis'
-copyright = u'2012, <a href="http://lepture.com">Hsiaoming Yang</a>'
+copyright = (u'2012-%s, <a href="http://lepture.com">Hsiaoming Yang</a>'
+             % time.strftime('%Y'))
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
