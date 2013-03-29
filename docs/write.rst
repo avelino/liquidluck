@@ -44,7 +44,7 @@ An example in markdown::
     ````
 
 
-An example in reStructuredText (you need to install docutils by yourself)::
+An example in reStructuredText::
 
     Felix Felicis
     ================

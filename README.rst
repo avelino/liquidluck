@@ -115,7 +115,7 @@ Compatibility
 
 + Markup:
 
-  - restructedText_ (you need install docutils by yourself)
+  - restructedText_
   - markdown_
 
 + Python:

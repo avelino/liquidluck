@@ -27,10 +27,7 @@ Syntax::
 
 import logging
 from xml.dom import minidom
-try:
-    from docutils import nodes
-except ImportError:
-    logging.warn("You need install docutils library")
+from docutils import nodes
 from docutils.core import publish_parts
 from docutils.parsers.rst import directives, Directive
 from pygments.formatters import HtmlFormatter
