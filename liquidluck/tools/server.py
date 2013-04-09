@@ -102,6 +102,9 @@ def wsgi_app(environ, start_response):
 
     if body is None:
         start_response('404 Not Found', headers)
+        body = _read(os.path.join(ROOT, '404.html'))
+        if body:
+            yield body
     else:
         start_response('200 OK', headers)
         yield body
@@ -255,7 +258,9 @@ class IndexHandler(RequestHandler):
         body = _read(abspath)
 
         if body is None:
-            self.send_error(404)
+            body = _read(os.path.join(ROOT, '404.html'))
+            self.set_status(404)
+            self.write(body or 'Not Found')
             return
         ua = self.request.headers.get("User-Agent", 'bot').lower()
         if 'msie' not in ua:
