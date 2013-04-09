@@ -4,7 +4,7 @@
 Configuration
 ==============
 
-Felix Felicis support **yaml** **python** and **json** format config file.
+Felix Felicis support **yaml**, **python** and **json** format config file.
 You can create the config file with::
 
     $ liquidluck init
