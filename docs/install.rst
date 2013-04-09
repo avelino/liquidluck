@@ -1,7 +1,7 @@
 .. _installation:
 
 Installation
-=============
+============
 
 If you are familiar with Python, it is strongly suggested that you install
 everything in virtualenv.
