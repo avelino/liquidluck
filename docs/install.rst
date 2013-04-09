@@ -16,7 +16,7 @@ If you are on Linux or Mac OS X, you are the lucky one::
 
     $ sudo pip -U install liquidluck
 
-If no pip available, try easy_install::
+If pip is not available, try ``easy_install``::
 
     $ sudo easy_install -U liquidluck
 
@@ -36,8 +36,8 @@ If you prefer git, that is great. You can get the very latest code at GitHub::
 Mac User Attention
 ---------------------
 
-We use misaka_ (python wrapper for sundown_) as the Markdown engine. It requires
-C compiler, which means you should install Xcode.
+We use misaka_ (Python wrapper for sundown_) as the Markdown engine.
+It requires a C compiler, which means you should install Xcode.
 
 Then open Xcode's preference (command + ,), select `Downloads` tab, and install
 `Command Line Tools`.
