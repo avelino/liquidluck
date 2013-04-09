@@ -43,7 +43,7 @@ Then open Xcode's preference (command + ,), select `Downloads` tab, and install
 `Command Line Tools`.
 
 I strongly suggest that you install the `Command Line Tools`, even if you don't
-use Felix Felicis. You will need it somewhere else.
+use Felix Felicis. You may need it at some point.
 
 .. _misaka: http://misaka.61924.nl
 .. _sundown: https://github.com/tanoku/sundown
