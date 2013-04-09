@@ -23,23 +23,23 @@ Commands
 
 1. Create a site::
 
-   liquidluck init
+    liquidluck init
 
 2. Search for a theme::
 
-   liquidluck search
+    liquidluck search
 
 3. Install a theme::
 
-   liquidluck install moment
+    liquidluck install moment
 
 4. Build articles::
 
-   liquidluck build
+    liquidluck build
 
 5. Preview server::
 
-   liquidluck server
+    liquidluck server
 
 More information with ``liquidluck help``.
 
