@@ -3,11 +3,8 @@
 Installation
 ============
 
-If you are familiar with Python, it is strongly suggested that you install
-everything in virtualenv.
+It is strongly recommended that you install everything in virtualenv_.
 
-If you are a pythoner, and you have no idea about virtualenv, please do search
-the internet.
 
 Distribute and Pip
 ------------------
@@ -19,7 +16,6 @@ If you are on Linux or Mac OS X, you are the lucky one::
 If pip is not available, try ``easy_install``::
 
     $ sudo easy_install -U liquidluck
-
 
 Sorry, I have no knowledge about Windows, but it really works on Windows.
 Cygwin and MinGW would make a better life with UNIX software on Windows.
@@ -62,7 +58,7 @@ It is strongly suggested that you use Cygwin_ as the environment.
 
 You should install these packages:
 
-- python interpreters 2.x (or 3.x)
+- Python interpreters 2.x (or 3.x)
 - make (Devel -- the GNU version of make)
 - gcc (gcc-core and gcc-g++)
 - git (Devel -- Fast version control ....)
@@ -72,3 +68,4 @@ Then head over to setuptools_ and install it, you will get ``easy_install``.
 
 .. _setuptools: http://pypi.python.org/pypi/setuptools
 .. _Cygwin: http://www.cygwin.com
+.. _virtualenv: http://www.virtualenv.org
