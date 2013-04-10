@@ -1,20 +1,54 @@
 {% extends "layout.html" %}
 
-{% block main %}
-<h1>{{post.title}}</h1>
-
-<div class="entry-content">
-    {{post.content}}
-</div>
-
-<hr class="end" />
-<div class="entry-list">
-    {% for post in resource.posts[:6] %}
-    <div class="entry-item">
-        <time class="updated" datetime="{{post.date|xmldatetime}}">{{post.date.strftime("%b, %d, %Y")}}</time>
-        <a href="{{ post|permalink }}">{{post.title}}</a>
-    </div>
-    {% endfor %}
-</div>
-
+{% block afterjs %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    var container  = $("#main").find(".container");
+    var url = window.location.pathname;
+    if (url.split('/')[3] == 'tag') {
+        // fetch the json and populate the page
+        var tagChunk = url.split('/tag/');
+        if (tagChunk[1].indexOf("+") > -1) {
+            var delimiter = "+";
+        } else {
+            var delimiter = "/";
+        }
+        var tags = tagChunk.split(delimiter);
+        $.getJSON("/tags.json", function(data){
+            var tagTitle, entryItem, timeEl, linkEl;
+            var list = $('<ul class="entry-list"></ul>');
+            for (var i=0; i<tags.length; i++) {
+                tag = tags[i];
+                if (tags.length > 1) {
+                    tagTitle = $('<li id="links" class="entry-item entry-item-title"></li>');
+                    tagTitle.append($('<a href="#'+ tag +'">'+ tag +'</a>'));
+                    list.append(tagTitle);
+                }
+                if (!!tag) {
+                    $.each(data.tag, function(index, value) {
+                        entryItem = $('<li class="entry-item"></li>');
+                        timeEl = $('<time class="updated">'+ value.datetime.split("T")[0] +'</time>');
+                        timeEl.attr('datetime', value.datetime);
+                        linkEl = $('<a>'+ value.title +'</a>');
+                        linkEl.attr('href', value.url);
+                        entryItem.append(timeEl);
+                        entryItem.append(linkEl);
+                        list.append(entryItem);
+                    });
+                }
+            }
+            container.append(list);
+        });
+        if(container.is(':empty')){
+            var errorMsg = $('<div id="error-msg">No posts found.</div>');
+            container.append(errorMsg);
+        }
+    } else {
+        // show the error
+        var errorMsg = $('<div id="error-msg">The page you requested was not found.</div>');
+        container.append(errorMsg);
+    }
+});
+</script>
 {% endblock %}
