@@ -3,7 +3,7 @@
 {% block title %}{{post.title}} - {{site.name}}{% endblock %}
 {% block afterstyle %}
 <link rel="canonical" href="{{post|permalink}}" />
-{% if post.summary %}<meta name="description" content="{{post.summary}}" />{% endif %}
+{% if post.description %}<meta name="description" content="{{post.description }}" />{% endif %}
 {% endblock %}
 
 {% block main -%}
