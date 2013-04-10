@@ -10,7 +10,7 @@ If you do not, header over to the :ref:`installation` section.
 Create a website
 ------------------
 
-Now, you have Felix Felicis installed. Let's create a website::
+Now that you have Felix Felicis installed, let's create a website::
 
     $ cd ~
     $ mkdir website
