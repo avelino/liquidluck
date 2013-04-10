@@ -62,7 +62,7 @@ That means the website is created, so you can test it now::
 
 Open your browser: http://127.0.0.1:8000.
 
-Felix Felicis provided a more powerful :ref:`preview-server`, you should check it.
+For more on the Felix Felicis server, see :ref:`preview-server`.
 
 
 Write more
