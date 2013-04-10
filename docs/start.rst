@@ -29,11 +29,7 @@ See what happens::
 Create a Post
 ---------------
 
-Create a post::
-
-    $ touch content/hello-world.md
-
-Write with you favorite editor, for example vim::
+Create a post with your favorite editor, for example::
 
     $ vim content/hello-world.md
 
