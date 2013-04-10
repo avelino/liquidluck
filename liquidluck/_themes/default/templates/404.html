@@ -6,10 +6,11 @@
 $(document).ready(function(){
     var container  = $("#main").find(".container");
     var url = window.location.pathname;
-    if (url.split('/')[3] == 'tag') {
-        // fetch the json and populate the page
-        var tagChunk = url.split('/tag/');
-        if (tagChunk[1].indexOf("+") > -1) {
+    if (url.split('/')[1] == 'tag') {
+        // Fetch the JSON and populate the page.
+        var postFoundFlag = false;
+        var tagChunk = url.split('/tag/')[1];
+        if (tagChunk.indexOf("+") > -1) {
             var delimiter = "+";
         } else {
             var delimiter = "/";
@@ -20,13 +21,14 @@ $(document).ready(function(){
             var list = $('<ul class="entry-list"></ul>');
             for (var i=0; i<tags.length; i++) {
                 tag = tags[i];
-                if (tags.length > 1) {
-                    tagTitle = $('<li id="links" class="entry-item entry-item-title"></li>');
-                    tagTitle.append($('<a href="#'+ tag +'">'+ tag +'</a>'));
-                    list.append(tagTitle);
-                }
-                if (!!tag) {
-                    $.each(data.tag, function(index, value) {
+                if (!!data[tag]) {
+                    postFoundFlag = true;
+                    if (tags.length > 1) {
+                        tagTitle = $('<li id="links" class="entry-item entry-item-title"></li>');
+                        tagTitle.append($('<a href="#'+ tag +'">'+ tag +'</a>'));
+                        list.append(tagTitle);
+                    }
+                    $.each(data[tag], function(index, value) {
                         entryItem = $('<li class="entry-item"></li>');
                         timeEl = $('<time class="updated">'+ value.datetime.split("T")[0] +'</time>');
                         timeEl.attr('datetime', value.datetime);
@@ -38,17 +40,47 @@ $(document).ready(function(){
                     });
                 }
             }
-            container.append(list);
+            // If posts were found for the specified tag(s), then show the post links
+            // else show the error message.
+            if (postFoundFlag) {
+                container.append(list);
+            } else {
+                var tagText;
+                if (tags.length > 1) {
+                    var lastTag = tags.pop();
+                    tagText = 'tags ' + tags.join(', ') + ' and ' + lastTag;
+                } else {
+                    tagText = 'tag ' + tags[0];
+                }
+                var errorMsg = $('<div id="error-msg">No posts found for '+ tagText +'.</div>');
+                container.append(errorMsg);
+            }
         });
-        if(container.is(':empty')){
-            var errorMsg = $('<div id="error-msg">No posts found.</div>');
-            container.append(errorMsg);
-        }
     } else {
-        // show the error
-        var errorMsg = $('<div id="error-msg">The page you requested was not found.</div>');
-        container.append(errorMsg);
+        // Show the default content.
+        $("#hidden-content").show();
     }
 });
 </script>
+{% endblock %}
+
+{% block main %}
+<div id="hidden-content">
+<h1>{{post.title}}</h1>
+
+<div class="entry-content">
+    {{post.content}}
+</div>
+
+<hr class="end" />
+<div class="entry-list">
+    {% for post in resource.posts[:6] %}
+    <div class="entry-item">
+        <time class="updated" datetime="{{post.date|xmldatetime}}">{{post.date.strftime("%b, %d, %Y")}}</time>
+        <a href="{{ post|permalink }}">{{post.title}}</a>
+    </div>
+    {% endfor %}
+</div>
+</div>
+
 {% endblock %}
