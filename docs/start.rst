@@ -56,7 +56,7 @@ Now that you have written a post, let's create the website::
     $ ls
     content     deploy      settings.py
 
-The website is created, you can test your website::
+That means the website is created, so you can test it now::
 
     $ liquidluck server
 
