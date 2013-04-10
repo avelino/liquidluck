@@ -60,7 +60,7 @@ That means the website is created, so you can test it now::
 
     $ liquidluck server
 
-Open your browser: ``http://127.0.0.1:8000``
+Open your browser: http://127.0.0.1:8000.
 
 Felix Felicis provided a more powerful :ref:`preview-server`, you should check it.
 
