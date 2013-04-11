@@ -17,7 +17,7 @@ There are three parts in each post:
 + content
 
 
-An example in markdown::
+An example in Markdown::
 
     # Felix Felicis                 <-------- this is title
 
