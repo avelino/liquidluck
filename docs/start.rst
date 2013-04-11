@@ -10,7 +10,7 @@ If you do not, header over to the :ref:`installation` section.
 Create a website
 ------------------
 
-Now, you have Felix Felicis installed. Let's create a website::
+Now that you have Felix Felicis installed, let's create a website::
 
     $ cd ~
     $ mkdir website
@@ -29,11 +29,7 @@ See what happens::
 Create a Post
 ---------------
 
-Create a post::
-
-    $ touch content/hello-world.md
-
-Write with you favorite editor, for example vim::
+Create a post with your favorite editor, for example::
 
     $ vim content/hello-world.md
 
@@ -60,13 +56,13 @@ Now that you have written a post, let's create the website::
     $ ls
     content     deploy      settings.py
 
-The website is created, you can test your website::
+That means the website is created, so you can test it now::
 
     $ liquidluck server
 
-Open your browser: ``http://127.0.0.1:8000``
+Open your browser: http://127.0.0.1:8000.
 
-Felix Felicis provided a more powerful :ref:`preview-server`, you should check it.
+For more on the Felix Felicis server, see :ref:`preview-server`.
 
 
 Write more
