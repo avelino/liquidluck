@@ -37,11 +37,11 @@ An example in Markdown::
     }
     ```
 
-    ````css                         <-------- if code wrapped with 4 `, the code
-    a {                                       will be injected to this page
-        color: black;
-    }
-    ````
+    ````css                         <-------- if code is wrapped with 4 Grave
+    a {                                       accent characters ("````"),
+        color: black;                         it will be injected to this page;
+    }                                         ``css`` specifies the language
+    ````                                      for syntax highlighting
 
 
 An example in reStructuredText::
