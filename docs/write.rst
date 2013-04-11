@@ -14,7 +14,7 @@ There are three parts in each post:
 
 + title -- ``Hello World`` in the example
 + meta -- ``date``, ``category``, ``tags`` in the example
-+ content -- everything below the first ``-------``
++ content
 
 
 An example in markdown::
