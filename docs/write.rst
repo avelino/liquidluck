@@ -26,7 +26,7 @@ An example in Markdown::
 
     Here is the description.
 
-    --------------------------      <-------- this seprate meta and content
+    --------------------------      <-------- this separates meta and content
 
     Hello World! Welcome to the     <-------- this is content
     Felix Felicis World.
