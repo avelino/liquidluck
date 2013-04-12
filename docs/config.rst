@@ -146,7 +146,8 @@ own writer to Felix Felics, head over to :ref:`development`.
 Writers Variables
 `````````````````
 
-Every writer can define its own variable, for example the archive write, if you set::
+Every writer can define its own variables, for example for the archive writer,
+if you set::
 
     writer = {
         'vars': {
@@ -154,7 +155,7 @@ Every writer can define its own variable, for example the archive write, if you 
         }
     }
 
-The archive page will be write to **archive.html** instead of **index.html**.
+The archive page will be written to **archive.html** instead of **index.html**.
 
 Available writers variables (but you won't need to change them):
 
@@ -170,7 +171,7 @@ Available writers variables (but you won't need to change them):
 
 
 Useful Issues
----------------
+-------------
 
 - https://github.com/lepture/liquidluck/issues/25
 - https://github.com/lepture/liquidluck/issues/26
