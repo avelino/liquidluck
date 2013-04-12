@@ -55,32 +55,35 @@ $(document).ready(function(){
                 var errorMsg = $('<div id="error-msg">No posts found for '+ tagText +'.</div>');
                 container.append(errorMsg);
             }
+        }).fail(function(){
+            var errorMsg = $('<div id="error-msg">Unable to fetch the tag data.</div>');
+            container.append(errorMsg);
         });
     } else {
         // Show the default content.
-        $("#hidden-content").show();
+        $("#default-content").show();
     }
 });
 </script>
 {% endblock %}
 
 {% block main %}
-<div id="hidden-content">
-<h1>{{post.title}}</h1>
+<div id="default-content">
+    <h1>{{post.title}}</h1>
 
-<div class="entry-content">
-    {{post.content}}
-</div>
-
-<hr class="end" />
-<div class="entry-list">
-    {% for post in resource.posts[:6] %}
-    <div class="entry-item">
-        <time class="updated" datetime="{{post.date|xmldatetime}}">{{post.date.strftime("%b, %d, %Y")}}</time>
-        <a href="{{ post|permalink }}">{{post.title}}</a>
+    <div class="entry-content">
+        {{post.content}}
     </div>
-    {% endfor %}
-</div>
+
+    <hr class="end" />
+    <div class="entry-list">
+        {% for post in resource.posts[:6] %}
+        <div class="entry-item">
+            <time class="updated" datetime="{{post.date|xmldatetime}}">{{post.date.strftime("%b, %d, %Y")}}</time>
+            <a href="{{ post|permalink }}">{{post.title}}</a>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock %}
