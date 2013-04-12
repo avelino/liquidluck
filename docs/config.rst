@@ -123,7 +123,7 @@ There are two readers in Felix Felicis, one is Markdown, and the other is reStru
 Customize Reader
 ````````````````
 
-Issues that contain information on readers:
+This issue contains information on readers:
 
 - https://github.com/lepture/liquidluck/issues/26
 
@@ -131,7 +131,7 @@ Issues that contain information on readers:
 Reader Variables
 ````````````````
 
-Issues that contain information on readers variables:
+This issues contains information on reader variables:
 
 - https://github.com/lepture/liquidluck/issues/25
 
