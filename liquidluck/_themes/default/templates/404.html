@@ -20,7 +20,7 @@ $(document).ready(function(){
             var tagTitle, entryItem, timeEl, linkEl;
             var list = $('<ul class="entry-list"></ul>');
             for (var i=0; i<tags.length; i++) {
-                tag = tags[i];
+                tag = tags[i].toLowerCase();
                 if (!!data[tag]) {
                     postFoundFlag = true;
                     if (tags.length > 1) {
