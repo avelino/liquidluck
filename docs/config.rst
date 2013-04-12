@@ -115,13 +115,13 @@ personal blogging.
 
 
 Readers
-----------
+-------
 
 There are two readers in Felix Felicis, one is Markdown, and the other is reStructuredText.
 
 
 Customize Reader
-``````````````````
+````````````````
 
 Issues that contain information on readers:
 
@@ -129,7 +129,7 @@ Issues that contain information on readers:
 
 
 Reader Variables
-```````````````````
+````````````````
 
 Issues that contain information on readers variables:
 
@@ -137,14 +137,14 @@ Issues that contain information on readers variables:
 
 
 Writers
----------
+-------
 
 There are many writers in Felix Felicis, and you can add more. If you want to add your
 own writer to Felix Felics, head over to :ref:`development`.
 
 
 Writers Variables
-````````````````````
+`````````````````
 
 Every writer can define its own variable, for example the archive write, if you set::
 
