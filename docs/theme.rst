@@ -117,7 +117,7 @@ And edit this post.html:
     {% endblock %}
 
 
-And edit your settings, enable readability::
+And edit your settings to enable Readability::
 
     template = {
         'vars': {
