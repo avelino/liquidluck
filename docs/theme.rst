@@ -129,9 +129,9 @@ And edit your settings to enable Readability::
 Variables
 ----------
 
-There are two levels of variables, global and templatable. Global means that this
-variable can be accessed in every template, and templatable means that this variable
-can be accessed in specify template.
+There are two levels of variables, global and templatable. Global means that a
+variable can be accessed in every template, and templatable means that a variable
+can be accessed in specific template.
 
 
 Global Variables
