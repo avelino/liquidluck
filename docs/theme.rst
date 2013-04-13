@@ -3,11 +3,9 @@
 Theme
 ========
 
-Template engine of Felix Felicis (liquidluck) is Jinja. It would be great if
-you have a little knowledge on `Jinja Template`_. The basic syntax is simple,
-you should know them.
+The template engine of Felix Felicis (liquidluck) is Jinja_.
+The basic syntax is simple; I encourage you to learn it.
 
-.. _`Jinja Template`: http://jinja.pocoo.org/
 
 
 You can learn how to design your own theme by demo:
@@ -66,7 +64,7 @@ For example, you are using the default theme, which means in your settings::
     }
 
 
-You want to make some changes on the post page (like adding readability),
+If you want to make some changes on the post page (like adding Readability),
 in your blog directory, create a post.html template::
 
     your_blog/
@@ -189,7 +187,7 @@ Global Variables
         }
     }
 
-  And it can be access in template by ``{{template.readability}}``, this is very useful.
+  And it can be accessed in template by ``{{template.readability}}``.
 
 - writer, this variable tells you which writer is rendering this page now::
 
@@ -232,7 +230,7 @@ Functions
 Filters
 ---------
 
-Filter is an important concept in `Jinja Template`_.
+Filter is an important concept in Jinja_.
 
 Default Filters
 ~~~~~~~~~~~~~~~~
@@ -253,4 +251,6 @@ Contributors
 
 If you have designed a theme, you can submit it to the `Theme Gallery`_
 
+
 .. _`Theme Gallery`: https://github.com/lepture/liquidluck/wiki/Themes
+.. _Jinja: http://jinja.pocoo.org
