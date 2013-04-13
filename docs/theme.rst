@@ -49,7 +49,7 @@ A glance of a theme::
 
 
 You don't need to copy a ``feed.xml`` file. Only ``archive.html``, ``post.html``
-and ``page.html`` are required. But you can add more.
+and ``page.html`` are required, but you can add more.
 
 .. _template:
 
