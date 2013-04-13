@@ -203,7 +203,7 @@ Global Variables
 Templatable Variables
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Templatable variables are only accessed in specify templates.
+Templatable variables are only accessed in specific templates.
 
 - pagination, available in ``archive.html``
 - post, available in ``post.html`` and ``page.html``
