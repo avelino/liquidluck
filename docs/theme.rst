@@ -37,7 +37,7 @@ Structure
 A glance of a theme::
 
     your_theme/
-        settings.py                <---- theme variables
+        theme.py                <---- theme variables
         filters.py                 <---- filters defined by theme
         static/                    <---- static files
             style.css
