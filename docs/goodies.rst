@@ -68,7 +68,7 @@ Then, start webhook daemon in your blog::
     $ liquidluck webhook start -p 9876
 
 
-Configure webhook on GitHub or BitBucket. We take GitHub as an example.
+Configure webhook on GitHub or BitBucket.
 
 Head over to your blog source repo admin, select **Service Hooks**
 
