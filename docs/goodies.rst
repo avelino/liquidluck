@@ -18,8 +18,10 @@ Preview your blog with::
     $ liquidluck server -p 8888
     $ liquidluck server -p 8888 -s settings.py
 
-Preview server now support livereload, when you are editing a post, it will
-auto compile and auto refresh the browser for you. **Added in version 1.12**
+The preview server now supports livereload.
+This means that when you are editing a post,
+it will auto-build the site and auto refresh the browser for you.
+This feature was **Added in version 1.12**.
 
 To enable livereload, your should install tornado::
 
