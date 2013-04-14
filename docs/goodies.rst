@@ -60,7 +60,7 @@ First, you need to install Felix Felicis on your server::
 
     $ pip install liquidluck
 
-Second, your blog repo on your server::
+Second, clone your blog repo to your server::
 
     $ git clone git://path/to/your/repo blog
 
