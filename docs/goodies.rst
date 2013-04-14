@@ -86,4 +86,5 @@ If your server ip is 88.88.88.88, you can add a URL::
 
     http://88.88.88.88:9876/webhook
 
-And when you push to GitHub, your server will update the repo and generate the whole site.
+And when you push to GitHub/Bitbucket,
+your server will update the repo and generate the whole site.
