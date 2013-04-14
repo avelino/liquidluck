@@ -72,7 +72,7 @@ Then, start webhook daemon in your blog::
 
 Configure webhook on GitHub or BitBucket.
 
-Head over to your blog source repo admin, select **Service Hooks**
+Head over to your blog source repo admin and select **Service Hooks**:
 
 .. image:: media/github.jpg
     :alt: github service hook
