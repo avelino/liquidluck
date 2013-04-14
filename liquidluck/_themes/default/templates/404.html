@@ -16,7 +16,12 @@ $(document).ready(function(){
             var delimiter = "/";
         }
         var tags = tagChunk.split(delimiter);
-        $.getJSON("/tags.json", function(data){
+        {% if site.prefix %}
+        var prefix = "/{{ site.prefix }}";
+        {% else %}
+        var prefix = "";
+        {% endif %}
+        $.getJSON(prefix + "/tags.json", function(data){
             var tagTitle, entryItem, timeEl, linkEl;
             var list = $('<ul class="entry-list"></ul>');
             for (var i=0; i<tags.length; i++) {
