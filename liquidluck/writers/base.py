@@ -8,10 +8,13 @@ Writer, write your content to html.
 '''
 
 
+import sys
 import os
 import re
 import datetime
 import logging
+
+import six
 from jinja2 import Environment, FileSystemLoader
 from jinja2 import contextfilter
 import liquidluck
@@ -25,6 +28,10 @@ from liquidluck.options import settings
 from liquidluck.options import g
 from liquidluck.filters import xmldatetime, feed_updated, wiki_link
 from liquidluck.filters import content_url, tag_url, year_url, static_url
+
+PY3 = False
+if sys.version_info[:2] >= (3, 3):
+    PY3 = True
 
 
 class BaseWriter(object):
@@ -97,10 +104,10 @@ class Pagination(object):
 
     def iter_pages(self, edge=4):
         if self.page <= edge:
-            return range(1, min(self.pages, 2 * edge + 1) + 1)
+            return list(range(1, min(self.pages, 2 * edge + 1) + 1))
         if self.page + edge > self.pages:
-            return range(max(self.pages - 2 * edge, 1), self.pages + 1)
-        return range(self.page - edge, min(self.pages, self.page + edge) + 1)
+            return list(range(max(self.pages - 2 * edge, 1), self.pages + 1))
+        return list(range(self.page - edge, min(self.pages, self.page + edge) + 1))
 
     @property
     def pages(self):
@@ -192,10 +199,16 @@ def load_jinja():
     if os.path.exists(theme_config):
         logging.warn('settings.py in theme is deprecated since 3.4')
         logging.warn('the name should be changed to theme.py')
-        execfile(theme_config, {}, config)
+        if PY3:
+            six.exec_(compile(open(theme_config).read(), theme_config, 'exec'), {}, config)
+        else:
+            execfile(theme_config, {}, config)
     theme_config = os.path.join(theme, 'theme.py')
     if os.path.exists(theme_config):
-        execfile(theme_config, {}, config)
+        if PY3:
+            six.exec_(compile(open(theme_config).read(), theme_config, 'exec'), {}, config)
+        else:
+            execfile(theme_config, {}, config)
 
     #: user can reset theme variables
     config.update(settings.theme.get('vars') or {})
@@ -224,13 +237,16 @@ def load_jinja():
     config = {}
     theme_config = os.path.join(theme, 'filters.py')
     if os.path.exists(theme_config):
-        execfile(theme_config, {}, config)
+        if PY3:
+            six.exec_(compile(open(theme_config).read(), theme_config, 'exec'), {}, config)
+        else:
+            execfile(theme_config, {}, config)
 
     jinja.filters.update(config)
 
     #: load filters from settings
     filters = settings.template.get("filters") or {}
-    for k, v in filters.items():
+    for k, v in list(filters.items()):
         jinja.filters.update({k: import_object(v)})
 
     #: default filters

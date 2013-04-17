@@ -10,6 +10,9 @@ from liquidluck.options import enable_pretty_logging
 from liquidluck.options import g, settings
 from docopt import docopt
 
+if sys.version_info[:2] >= (3, 3):
+    raw_input = input
+
 documentation = {}
 documentation['help'] = """Felix Felicis %(version)s
 

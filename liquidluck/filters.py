@@ -52,7 +52,7 @@ def content_url(ctx, base, *args):
         prefix = '/'
         args.insert(0, base)
 
-    args = map(lambda o: to_unicode(o).strip('/'), args)
+    args = [to_unicode(o).strip('/') for o in args]
     url = '/'.join(args).replace('//', '/').replace(' ', '-')
     url = prefix + url.lstrip('/')
     url = to_unicode(fix_index(url.lower()))

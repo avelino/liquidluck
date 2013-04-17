@@ -9,6 +9,9 @@ from liquidluck.options import g, settings
 from liquidluck.utils import import_object, walk_dir, parse_settings
 from liquidluck.writers.base import load_jinja, find_theme
 
+if sys.version_info[:2] >= (3, 3):
+    raw_input = input
+
 
 def create_settings(filepath):
     if not filepath:

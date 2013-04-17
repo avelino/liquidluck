@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
 import os
 from liquidluck.options import g
 from liquidluck.utils import to_unicode, utf8
@@ -32,7 +33,7 @@ def __filter_themes(content):
     repos = json_decode(content)
     themes = {}
     if 'repositories' not in repos and 'message' in repos:
-        print repos['message']
+        print(repos['message'])
         return {}
     for theme in repos['repositories']:
         fork = theme['fork']

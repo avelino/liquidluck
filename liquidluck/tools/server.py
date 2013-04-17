@@ -83,6 +83,8 @@ def _read(abspath):
         return None
 
     f = open(filepath)
+    if filepath.endswith('.png'):
+        return None
     content = f.read()
     f.close()
     return content

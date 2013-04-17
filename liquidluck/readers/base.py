@@ -7,12 +7,16 @@ Reader, read content, parse to html.
 :license: BSD
 '''
 
+import sys
 import os
 import logging
 import datetime
 import re
 from liquidluck.options import settings, g
 from liquidluck.utils import to_datetime, import_object
+
+if sys.version_info[:2] >= (3, 3):
+    basestring = str
 
 
 class BaseReader(object):
