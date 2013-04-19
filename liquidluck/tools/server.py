@@ -296,7 +296,7 @@ def start_server(debug=False):
         variables.update({'debug': True})
         settings.theme['vars'] = variables
     if RequestHandler is object:
-        logging.info('Start server at %s:%s' % (HOST, PORT))
+        logging.info('Start server at http://%s:%s' % (HOST, PORT))
         make_server(HOST, int(PORT), wsgi_app).serve_forever()
     else:
         import tornado.web
