@@ -291,12 +291,13 @@ class ThemeStaticHandler(RequestHandler):
 
 
 def start_server(debug=False):
+    message = 'Starting server at http://%s:%s' % (HOST, PORT)
     if debug:
         variables = settings.theme.get('vars', {})
         variables.update({'debug': True})
         settings.theme['vars'] = variables
     if RequestHandler is object:
-        logging.info('Start server at %s:%s' % (HOST, PORT))
+        logging.info(message)
         make_server(HOST, int(PORT), wsgi_app).serve_forever()
     else:
         import tornado.web
@@ -313,7 +314,7 @@ def start_server(debug=False):
         ]
         app = tornado.web.Application(handlers=handlers, default_host=HOST)
         app.listen(int(PORT))
-        logging.info('Start server at %s:%s' % (HOST, PORT))
+        logging.info(message)
         tornado.ioloop.IOLoop.instance().start()
 
 
