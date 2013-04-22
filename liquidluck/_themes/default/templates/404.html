@@ -17,6 +17,7 @@ $(document).ready(function() {
         }
         tagChunk = tagChunk.replace(RegExp('[+/]+$'), '');
         tagChunk = tagChunk.replace(RegExp('^[+/]+'), '');
+        tagChunk = tagChunk.toLowerCase();
         var tags = tagChunk.split(delimiter);
         {% if site.prefix %}
         var prefix = "/{{ site.prefix }}";
