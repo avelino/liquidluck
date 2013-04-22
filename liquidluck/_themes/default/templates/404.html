@@ -3,7 +3,7 @@
 {% block afterjs %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
-$(document).ready(function(){
+$(document).ready(function() {
     var container  = $("#main").find(".container");
     var url = window.location.pathname;
     if (url.split('/')[1] == 'tag') {
@@ -23,8 +23,8 @@ $(document).ready(function(){
         {% else %}
         var prefix = "";
         {% endif %}
-        $.getJSON(prefix + "/tags.json", function(data){
-            var tagTitle, entryItem, timeEl, linkEl;
+        $.getJSON(prefix + "/tags.json", function(data) {
+            var tagTitle, entryItem, timeEl, linkEl, postsWithAllTags;
             var list = $('<ul class="entry-list"></ul>');
             var allPostsForTags = []
             for (var i=0; i<tags.length; i++) {
@@ -36,7 +36,6 @@ $(document).ready(function(){
                     return;
                 }
             }
-            var postsWithAllTags;
             if (tags.length > 1)
                 postsWithAllTags = allPostsForTags.reduce(intersect);
             else
@@ -61,7 +60,7 @@ $(document).ready(function(){
             } else {
                 noPostFoundMessage();
             }
-        }).fail(function(){
+        }).fail(function() {
             var errorMsg = $('<div id="error-msg">Unable to fetch the tag data.</div>');
             container.append(errorMsg);
         });
