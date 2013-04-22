@@ -15,6 +15,8 @@ $(document).ready(function(){
         } else {
             var delimiter = "/";
         }
+        tagChunk = tagChunk.replace(RegExp('[+/]+$'), '');
+        tagChunk = tagChunk.replace(RegExp('^[+/]+'), '');
         var tags = tagChunk.split(delimiter);
         {% if site.prefix %}
         var prefix = "/{{ site.prefix }}";
@@ -24,41 +26,40 @@ $(document).ready(function(){
         $.getJSON(prefix + "/tags.json", function(data){
             var tagTitle, entryItem, timeEl, linkEl;
             var list = $('<ul class="entry-list"></ul>');
+            var allPostsForTags = []
             for (var i=0; i<tags.length; i++) {
-                tag = tags[i].toLowerCase();
-                if (!!data[tag]) {
-                    postFoundFlag = true;
-                    if (tags.length > 1) {
-                        tagTitle = $('<li id="links" class="entry-item entry-item-title"></li>');
-                        tagTitle.append($('<a href="#'+ tag +'">'+ tag +'</a>'));
-                        list.append(tagTitle);
-                    }
-                    $.each(data[tag], function(index, value) {
-                        entryItem = $('<li class="entry-item"></li>');
-                        timeEl = $('<time class="updated">'+ value.datetime.split("T")[0] +'</time>');
-                        timeEl.attr('datetime', value.datetime);
-                        linkEl = $('<a>'+ value.title +'</a>');
-                        linkEl.attr('href', value.url);
-                        entryItem.append(timeEl);
-                        entryItem.append(linkEl);
-                        list.append(entryItem);
-                    });
+                if (data[tags[i]] != undefined && data[tags[i]] != null) {
+                    allPostsForTags.push(data[tags[i]]);
                 }
+                else {
+                    noPostFoundMessage();
+                    return;
+                }
+            }
+            var postsWithAllTags;
+            if (tags.length > 1)
+                postsWithAllTags = allPostsForTags.reduce(intersect);
+            else
+                postsWithAllTags = allPostsForTags[0];
+            if (!!postsWithAllTags) {
+                postFoundFlag = true;
+                $.each(postsWithAllTags, function(index, value) {
+                    entryItem = $('<li class="entry-item"></li>');
+                    timeEl = $('<time class="updated">'+ value.datetime.split("T")[0] +'</time>');
+                    timeEl.attr('datetime', value.datetime);
+                    linkEl = $('<a>'+ value.title +'</a>');
+                    linkEl.attr('href', value.url);
+                    entryItem.append(timeEl);
+                    entryItem.append(linkEl);
+                    list.append(entryItem);
+                });
             }
             // If posts were found for the specified tag(s), then show the post links
             // else show the error message.
             if (postFoundFlag) {
                 container.append(list);
             } else {
-                var tagText;
-                if (tags.length > 1) {
-                    var lastTag = tags.pop();
-                    tagText = 'tags ' + tags.join(', ') + ' and ' + lastTag;
-                } else {
-                    tagText = 'tag ' + tags[0];
-                }
-                var errorMsg = $('<div id="error-msg">No posts found for '+ tagText +'.</div>');
-                container.append(errorMsg);
+                noPostFoundMessage();
             }
         }).fail(function(){
             var errorMsg = $('<div id="error-msg">Unable to fetch the tag data.</div>');
@@ -67,6 +68,32 @@ $(document).ready(function(){
     } else {
         // Show the default content.
         $("#default-content").show();
+    }
+
+    // intersect function takes two arrays of posts objects
+    // and returns an array containing common posts
+    function intersect(a, b) {
+        var results = [],
+            temp = [];
+        for (var i=0; i<a.length; i++) {
+            temp.push(a[i]["url"]);
+        }
+        for (var j=0; j<b.length; j++) {
+            if ($.inArray(b[j]["url"], temp) > -1)
+                results.push(b[j]);
+        }
+        return results;
+    }
+    function noPostFoundMessage() {
+        var tagText;
+        if (tags.length > 1) {
+            var lastTag = tags.pop();
+            tagText = 'tags ' + tags.join(', ') + ' and ' + lastTag;
+        } else {
+            tagText = 'tag ' + tags[0];
+        }
+        var errorMsg = $('<div id="error-msg">No post found with '+ tagText +'.</div>');
+        container.append(errorMsg);
     }
 });
 </script>
