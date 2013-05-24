@@ -41,6 +41,9 @@ from liquidluck.readers.base import BaseReader
 from liquidluck.options import settings
 from liquidluck.utils import to_unicode, cjk_nowrap, import_object
 
+if sys.version_info[:2] >= (3, 3):
+    basestring = str
+
 
 class MarkdownReader(BaseReader):
     SUPPORT_TYPE = ['md', 'mkd', 'markdown']

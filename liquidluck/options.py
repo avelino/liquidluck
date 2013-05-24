@@ -6,6 +6,8 @@ import logging.handlers
 import sys
 import time
 
+if sys.version_info[:2] >= (3, 3):
+    unicode = str
 
 # For pretty log messages, if available
 try:

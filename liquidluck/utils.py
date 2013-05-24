@@ -1,10 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 import re
 import os
 import shutil
 import datetime
+import sys
+
+import six
+
+PY3 = False
+if sys.version_info[:2] >= (3, 3):
+    PY3 = True
+    unicode = str
+    basestring = str
 
 
 def to_unicode(value):
@@ -92,7 +103,7 @@ class UnicodeDict(dict):
 def cjk_nowrap(text):
     start = u'\u4e00'
     end = u'\u9fff'
-    pattern = ur'([%s-%s]+?)' % (start, end)
+    pattern = r'([%s-%s]+?)' % (start, end)
     cjk = re.compile(pattern + r'(\n|\r\n|\r)' + pattern)
     text = cjk.sub(r'\1\3', text)
     return text
@@ -122,7 +133,7 @@ def to_datetime(value):
 
 
 def get_relative_base(path):
-    length = len(filter(lambda o: o, path.split(os.path.sep)))
+    length = len([o for o in path.split(os.path.sep) if o])
     if length > 1:
         return '/'.join(['..' for i in range(length - 1)])
     return '.'
@@ -138,7 +149,10 @@ def parse_settings(path, filetype=None):
 
     def parse_py_settings(path):
         config = {}
-        execfile(path, {}, config)
+        if PY3:
+            six.exec_(compile(open(path).read(), path, 'exec'), {}, config)
+        else:
+            execfile(path, {}, config)
         return config
 
     def parse_yaml_settings(path):

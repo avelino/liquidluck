@@ -129,7 +129,7 @@ class Pygments(Directive):
             lexer = TextLexer()
         # take an arbitrary option if more than one is given
 
-        formatter = self.options and VARIANTS[self.options.keys()[0]] \
+        formatter = self.options and VARIANTS[list(self.options.keys())[0]] \
                 or DEFAULT
         parsed = highlight('\n'.join(self.content), lexer, formatter)
         return [nodes.raw('', parsed, format='html')]

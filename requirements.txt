@@ -4,3 +4,4 @@ Pygments
 misaka
 docopt
 PyYAML
+six

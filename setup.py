@@ -2,14 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import sys
-kwargs = {}
-major, minor = sys.version_info[:2]
-if major >= 3:
-    kwargs['use_2to3'] = True
 
 from setuptools import setup
 install_requires = [
-    'Jinja2', 'Pygments', 'misaka', 'docopt', 'PyYAML', 'docutils'
+    'Jinja2', 'Pygments', 'misaka', 'docopt', 'PyYAML', 'docutils', 'six',
 ]
 
 
@@ -48,5 +44,4 @@ setup(
         'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Text Processing :: Markup',
     ],
-    **kwargs
 )

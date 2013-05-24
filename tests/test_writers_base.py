@@ -12,13 +12,13 @@ ROOT = os.path.abspath(os.path.dirname(__file__))
 
 class TestPagination(object):
     def test_pages(self):
-        p = Pagination(range(6), 1, 3)
+        p = Pagination(list(range(6)), 1, 3)
         assert p.pages == 2
 
-        p = Pagination(range(5), 1, 3)
+        p = Pagination(list(range(5)), 1, 3)
         assert p.pages == 2
 
-        p = Pagination(range(7), 1, 3)
+        p = Pagination(list(range(7)), 1, 3)
         assert p.pages == 3
 
     def test_items(self):
