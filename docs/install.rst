@@ -30,7 +30,7 @@ If you prefer git, that is great. You can get the very latest code at GitHub::
 
 Then, still in that virtualenv_ environment, run these commands::
 
-    $ cd liquidluck && python setup.py develop
+    $ cd liquidluck && python setup.py install
 
 That is, move to the git repo, and install liquidluck.
 
