@@ -26,6 +26,7 @@ def _update():
 
     if os.path.isdir(os.path.join(CWDPATH, '.hg')):
         _call('hg pull')
+        _call('hg update')
         return
 
 
