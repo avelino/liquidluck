@@ -51,12 +51,17 @@ class Post(object):
 
     @property
     def updated(self):
+        if not os.path.exists(self.filepath):
+            return None
         mtime = os.stat(self.filepath).st_mtime
         return datetime.datetime.fromtimestamp(mtime)
 
     @property
     def date(self):
-        return to_datetime(self.meta.get('date'))
+        date = self.meta.get('date')
+        if not date:
+            return None
+        return to_datetime(date)
 
     @property
     def public(self):
