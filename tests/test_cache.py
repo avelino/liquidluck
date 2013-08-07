@@ -6,7 +6,7 @@ import tempfile
 
 def test_memcache():
     cache = Cache()
-    assert cache.get('foo') == None
+    assert cache.get('foo') is None
 
     cache.set('foo', 'foo')
     assert cache.has('foo')
@@ -28,7 +28,7 @@ def test_memcache():
 def test_filecache():
     cachedir = tempfile.mkdtemp()
     cache = Cache(cachedir)
-    assert cache.get('foo') == None
+    assert cache.get('foo') is None
 
     cache.set('foo', 'foo')
     assert cache.has('foo')
