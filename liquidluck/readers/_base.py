@@ -91,7 +91,7 @@ class BaseReader(object):
     filetypes = []
     post_class = Post
 
-    def __init__(self, source, cache):
+    def __init__(self, source, cache=None):
         self._source = source
         self._cache = cache
 
@@ -102,6 +102,8 @@ class BaseReader(object):
 
     def load(self, filepath):
         """Loading post from a cache."""
+        if not self._cache:
+            return self.read(filepath)
         key = hashlib.md5(filepath).hexdigest()
         ret = self._cache.get(key)
         if ret:
@@ -114,8 +116,9 @@ class BaseReader(object):
 
     def read(self, filepath):
         """Read and parse from a filepath."""
-        logger.debug('read', filepath)
+        logger.debug('read %s', filepath)
         if not self.support(filepath):
+            logger.debug('%s is not supported', filepath)
             return
 
         with open(filepath) as f:
