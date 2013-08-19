@@ -18,9 +18,17 @@ from .._compat import to_datetime, to_unicode
 logger = logging.getLogger('liquidluck')
 
 
+class Author(object):
+    def __init__(self, author, config=None):
+        self.author = author
+        self._config = config
+
+
 class Post(object):
-    def __init__(self, source, filepath, content, meta=None):
+    def __init__(self, source, filepath, content, meta=None, config=None):
         self._source = source
+        self._config = config
+
         self.filepath = filepath
         self.content = content
         if not meta:
@@ -87,13 +95,43 @@ class Post(object):
         return [tag.strip() for tag in tags.split(",")]
 
 
+class CachedItem(object):
+    """A cached item for index."""
+    def __init__(self, cache, meta):
+        self._cache = cache
+        self.meta = meta
+
+    @property
+    def content(self):
+        if hasattr(self, '_content'):
+            return self._content
+        post = self._cache.get(self.key)
+        return post.content
+
+    def __getattr__(self, key):
+        try:
+            return object.__getattribute__(self, key)
+        except AttributeError:
+            try:
+                return self.meta.get(key)
+            except ValueError:
+                raise AttributeError('No such attribute: %s' % key)
+
+    def __getitem__(self, key):
+        return self.meta.get(key)
+
+    def keys(self):
+        return self.meta.keys()
+
+
 class BaseReader(object):
     filetypes = []
     post_class = Post
 
-    def __init__(self, source, cache=None):
+    def __init__(self, source, cache=None, config=None):
         self._source = source
         self._cache = cache
+        self._config = config
 
     def support(self, filepath):
         """Detect if the reader supports this file."""
@@ -124,7 +162,13 @@ class BaseReader(object):
         with open(filepath) as f:
             text = to_unicode(f.read())
             content, meta = self.parse(text)
-            post = self.post_class(self._source, filepath, content, meta)
+            post = self.post_class(
+                source=self._source,
+                filepath=filepath,
+                content=content,
+                meta=meta,
+                config=self._config
+            )
             return post
 
     def parse(self, text):
