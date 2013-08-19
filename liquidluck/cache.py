@@ -9,6 +9,7 @@
 """
 
 import os
+import time
 import shutil
 try:
     import cPickle as pickle
@@ -44,7 +45,10 @@ class Cache(object):
         :param key: key of the cache.
         """
         if not self._cachedir:
-            return self._memcache.get(key)
+            item = self._memcache.get(key)
+            if not item:
+                return None
+            return item[0]
         cachefile = os.path.join(self._cachedir, key)
         if not os.path.exists(cachefile):
             return None
@@ -58,7 +62,7 @@ class Cache(object):
         :param value: data to be stored in the cache.
         """
         if not self._cachedir:
-            self._memcache[key] = value
+            self._memcache[key] = (value, time.time())
             return self
         cachefile = os.path.join(self._cachedir, key)
         with open(cachefile, 'wb') as f:
@@ -84,3 +88,15 @@ class Cache(object):
             self._memcache = {}
         elif os.path.exists(self._cachedir):
             shutil.rmtree(self._cachedir)
+
+    def mtime(self, key):
+        """Modified time for the cache of the given key."""
+        if not self._cachedir:
+            item = self._memcache.get(key)
+            if not item:
+                return None
+            return item[1]
+        cachefile = os.path.join(self._cachedir, key)
+        if os.path.exists(cachefile):
+            return os.stat(cachefile).st_mtime
+        return None
