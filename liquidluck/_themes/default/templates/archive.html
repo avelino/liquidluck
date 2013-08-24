@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}{{pagination.title|title}} - {{site.name}}{% endblock %}
+{% block title %}{{pagination.title|string|title}} - {{site.name}}{% endblock %}
 
 {% block main %}
 <ul class="entry-list">
