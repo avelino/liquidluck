@@ -8,22 +8,40 @@
     :copyright: (c) 2013 by Hsiaoming Yang
 """
 
+import os
 
-# storing global configuration
-_cache = {}
+
+class Option(dict):
+    """Dict object class for storing data."""
+
+    _defaults = {
+        'source_directory': 'content',
+        'output_directory': '_site',
+    }
+
+    def __getattr__(self, key):
+        if key in self:
+            return self[key]
+        if key in self._defaults:
+            return self._defaults[key]
+        return None
+
+    def __setattr__(self, key, value):
+        self[key] = value
+
+    def __delattr__(self, key):
+        try:
+            del self[key]
+        except KeyError:
+            raise AttributeError
+
+
+# liquidluck directory
+_directory_ = os.path.abspath(os.path.dirname(__file__))
 
 # default configuration
-_defaults = {
-}
-
-
-def set(key, value):
-    _cache[key] = value
-    return _cache
-
-
-def get(key):
-    return _cache.get(key, _defaults.get(key))
+theme = os.path.join(_directory_, '_themes', 'default')
+theme_gallery = os.path.expanduser('~/.liquidluck-themes')
 
 
 def parse_config_file(filepath):

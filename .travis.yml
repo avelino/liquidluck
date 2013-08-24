@@ -8,6 +8,10 @@ install:
     - pip install docutils
     - python setup.py install
 
+branches:
+    only:
+        - master
+
 script:
     - cd tests
     - nosetests

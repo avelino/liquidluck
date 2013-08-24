@@ -28,3 +28,6 @@ install: clean-build clean-pyc
 
 testing: clean-build
 	nosetests -v
+
+coverage:
+	@nosetests --with-coverage --cover-package=liquidluck --cover-html
