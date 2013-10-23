@@ -31,7 +31,7 @@ Syntax::
 
 import re
 import logging
-import misaka as m
+import hoedown as m
 
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
