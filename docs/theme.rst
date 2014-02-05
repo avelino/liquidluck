@@ -3,11 +3,9 @@
 Theme
 ========
 
-Template engine of Felix Felicis (liquidluck) is Jinja. It would be great if
-you have a little knowledge on `Jinja Template`_. The basic syntax is simple,
-you should know them.
+The template engine of Felix Felicis (liquidluck) is Jinja_.
+The basic syntax is simple; I encourage you to learn it.
 
-.. _`Jinja Template`: http://jinja.pocoo.org/
 
 
 You can learn how to design your own theme by demo:
@@ -37,7 +35,7 @@ Structure
 A glance of a theme::
 
     your_theme/
-        settings.py                <---- theme variables
+        theme.py                <---- theme variables
         filters.py                 <---- filters defined by theme
         static/                    <---- static files
             style.css
@@ -49,7 +47,7 @@ A glance of a theme::
 
 
 You don't need to copy a ``feed.xml`` file. Only ``archive.html``, ``post.html``
-and ``page.html`` are required. But you can add more.
+and ``page.html`` are required, but you can add more.
 
 .. _template:
 
@@ -66,7 +64,7 @@ For example, you are using the default theme, which means in your settings::
     }
 
 
-You want to make some changes on the post page (like adding readability),
+If you want to make some changes on the post page (like adding Readability),
 in your blog directory, create a post.html template::
 
     your_blog/
@@ -117,7 +115,7 @@ And edit this post.html:
     {% endblock %}
 
 
-And edit your settings, enable readability::
+And edit your settings to enable Readability::
 
     template = {
         'vars': {
@@ -129,9 +127,9 @@ And edit your settings, enable readability::
 Variables
 ----------
 
-There are two levels of variables, global and templatable. Global means that this
-variable can be accessed in every template, and templatable means that this variable
-can be accessed in specify template.
+There are two levels of variables, global and templatable. Global means that a
+variable can be accessed in every template, and templatable means that a variable
+can be accessed in specific template.
 
 
 Global Variables
@@ -189,7 +187,7 @@ Global Variables
         }
     }
 
-  And it can be access in template by ``{{template.readability}}``, this is very useful.
+  And it can be accessed in template by ``{{template.readability}}``.
 
 - writer, this variable tells you which writer is rendering this page now::
 
@@ -203,7 +201,7 @@ Global Variables
 Templatable Variables
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Templatable variables are only accessed in specify templates.
+Templatable variables are only accessed in specific templates.
 
 - pagination, available in ``archive.html``
 - post, available in ``post.html`` and ``page.html``
@@ -232,7 +230,7 @@ Functions
 Filters
 ---------
 
-Filter is an important concept in `Jinja Template`_.
+Filter is an important concept in Jinja_.
 
 Default Filters
 ~~~~~~~~~~~~~~~~
@@ -253,4 +251,6 @@ Contributors
 
 If you have designed a theme, you can submit it to the `Theme Gallery`_
 
+
 .. _`Theme Gallery`: https://github.com/lepture/liquidluck/wiki/Themes
+.. _Jinja: http://jinja.pocoo.org
