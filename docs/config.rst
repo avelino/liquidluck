@@ -4,8 +4,8 @@
 Configuration
 ==============
 
-Felix Felicis support **yaml**, **python** and **json** format config file.
-You can create the config file with::
+Felix Felicis configuration file supports **YAML**, **Python** and **JSON**
+formats. You can create the config file with::
 
     $ liquidluck init
 
@@ -13,89 +13,9 @@ You can create the config file with::
 Overview
 ----------
 
-The default **python** format config file::
+The default **Python** format config file:
 
-    # -*- coding: utf-8 -*-
-    #: settings for liquidluck
-
-    #: site information
-    #: all variables can be accessed in template with ``site`` namespace.
-    #: for instance: {{site.name}}
-    site = {
-        "name": "Felix Felicis",  # your site name
-        "url": "http://lab.lepture.com/liquidluck/",  # your site url
-        # "prefix": "blog",
-    }
-
-    #: this config defined information of your site
-    #: 1. where the resources  2. how should the site be generated
-    config = {
-        "source": "content",
-        "output": "deploy",
-        "static": "deploy/static",
-        "static_prefix": "/static/",
-        "permalink": "{{date.year}}/{{filename}}.html",
-        "relative_url": False,
-        "perpage": 30,
-        "feedcount": 20,
-        "timezone": "+08:00",
-    }
-
-
-    author = {
-        "default": "nickname",
-        "vars": {}
-    }
-
-    #: active readers
-    reader = {
-        "active": [
-            "liquidluck.readers.markdown.MarkdownReader",
-            # uncomment to activate rST reader
-            # "liquidluck.readers.restructuredtext.RestructuredTextReader",
-        ],
-        "vars": {}
-    }
-
-    #: active writers
-    writer = {
-        "active": [
-            "liquidluck.writers.core.PostWriter",
-            "liquidluck.writers.core.PageWriter",
-            "liquidluck.writers.core.ArchiveWriter",
-            "liquidluck.writers.core.ArchiveFeedWriter",
-            "liquidluck.writers.core.FileWriter",
-            "liquidluck.writers.core.StaticWriter",
-            "liquidluck.writers.core.YearWriter",
-            "liquidluck.writers.core.CategoryWriter",
-            # "liquidluck.writers.core.CategoryFeedWriter",
-            # "liquidluck.writers.core.TagWriter",
-            # "liquidluck.writers.core.TagCloudWriter",
-        ],
-        "vars": {
-            # uncomment if you want to reset archive page
-            # "archive_output": "archive.html",
-        }
-    }
-
-    #: theme variables
-    theme = {
-        "name": "default",
-
-        # theme variables are defined by theme creator
-        # you can access theme in template with ``theme`` namespace
-        # for instance: {{theme.disqus}}
-        "vars": {
-            #"disqus": "your_short_name",
-            #"analytics": "UA-21475122-1",
-        }
-    }
-
-    #: template variables
-    template = {
-        "vars": {},
-        "filters": {},
-    }
+.. literalinclude:: ../liquidluck/tools/_settings.py
 
 
 Permalink
@@ -195,38 +115,39 @@ personal blogging.
 
 
 Readers
-----------
+-------
 
 There are two readers in Felix Felicis, one is Markdown, and the other is reStructuredText.
 
 
 Customize Reader
-``````````````````
+````````````````
 
-Issues that contain information on readers:
+This issue contains information on readers:
 
 - https://github.com/lepture/liquidluck/issues/26
 
 
 Reader Variables
-```````````````````
+````````````````
 
-Issues that contain information on readers variables:
+This issues contains information on reader variables:
 
 - https://github.com/lepture/liquidluck/issues/25
 
 
 Writers
----------
+-------
 
 There are many writers in Felix Felicis, and you can add more. If you want to add your
 own writer to Felix Felics, head over to :ref:`development`.
 
 
 Writers Variables
-````````````````````
+`````````````````
 
-Every writer can define its own variable, for example the archive write, if you set::
+Every writer can define its own variables, for example for the archive writer,
+if you set::
 
     writer = {
         'vars': {
@@ -234,7 +155,7 @@ Every writer can define its own variable, for example the archive write, if you 
         }
     }
 
-The archive page will be write to **archive.html** instead of **index.html**.
+The archive page will be written to **archive.html** instead of **index.html**.
 
 Available writers variables (but you won't need to change them):
 
@@ -250,7 +171,7 @@ Available writers variables (but you won't need to change them):
 
 
 Useful Issues
----------------
+-------------
 
 - https://github.com/lepture/liquidluck/issues/25
 - https://github.com/lepture/liquidluck/issues/26
