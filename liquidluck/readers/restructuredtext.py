@@ -49,7 +49,6 @@ class RestructuredTextReader(BaseReader):
         content = f.read()
         f.close()
 
-        
         parts = publish_parts(
             content, writer_name='html',
             settings_overrides=self.extra_setting,
