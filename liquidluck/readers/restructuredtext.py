@@ -40,6 +40,7 @@ from liquidluck.utils import to_unicode, utf8
 
 class RestructuredTextReader(BaseReader):
     SUPPORT_TYPE = ['rst', 'rst.txt', 'restructuredtext']
+    extra_setting = {'initial_header_level': '2'}
 
     def render(self):
         f = open(self.filepath)
@@ -48,10 +49,9 @@ class RestructuredTextReader(BaseReader):
         content = f.read()
         f.close()
 
-        extra_setting = {'initial_header_level': '2'}
         parts = publish_parts(
             content, writer_name='html',
-            settings_overrides=extra_setting,
+            settings_overrides=self.extra_setting,
         )
         title = parts['title']
         body = parts['body']
