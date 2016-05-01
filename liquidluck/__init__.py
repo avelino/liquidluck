@@ -31,4 +31,4 @@
 
 __version__ = '3.8.1'
 __author__ = 'Hsiaoming Yang <me@liquidluck.com>'
-__homepage__ = 'http://lab.lepture.com/liquidluck/'
+__homepage__ = 'https://github.com/avelino/liquidluck'
