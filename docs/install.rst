@@ -30,7 +30,7 @@ Install with GIT
 
 If you prefer git, that is great. You can get the very latest code at GitHub::
 
-    $ git clone http://github.com/lepture/liquidluck.git
+    $ git clone http://github.com/avelino/liquidluck.git
 
 
 Mac User Attention
