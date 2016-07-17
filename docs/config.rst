@@ -23,7 +23,7 @@ The default **python** format config file::
     #: for instance: {{site.name}}
     site = {
         "name": "Felix Felicis",  # your site name
-        "url": "http://lab.lepture.com/liquidluck/",  # your site url
+        "url": "https://github.com/avelino/liquidluck",  # your site url
         # "prefix": "blog",
     }
 
@@ -145,7 +145,7 @@ A good example of nginx conf for slash style permalink: `nginx.conf`_.
 
 Issues about permalink:
 
-- https://github.com/lepture/liquidluck/issues/21
+- https://github.com/avelino/liquidluck/issues/21
 
 .. _`nginx.conf`: https://github.com/lepture/lepture.com/blob/master/nginx.conf
 
@@ -205,7 +205,7 @@ Customize Reader
 
 Issues that contain information on readers:
 
-- https://github.com/lepture/liquidluck/issues/26
+- https://github.com/avelino/liquidluck/issues/26
 
 
 Reader Variables
@@ -213,7 +213,7 @@ Reader Variables
 
 Issues that contain information on readers variables:
 
-- https://github.com/lepture/liquidluck/issues/25
+- https://github.com/avelino/liquidluck/issues/25
 
 
 Writers
@@ -252,8 +252,8 @@ Available writers variables (but you won't need to change them):
 Useful Issues
 ---------------
 
-- https://github.com/lepture/liquidluck/issues/25
-- https://github.com/lepture/liquidluck/issues/26
-- https://github.com/lepture/liquidluck/issues/30
-- https://github.com/lepture/liquidluck/issues/32
-- https://github.com/lepture/liquidluck/issues/34
+- https://github.com/avelino/liquidluck/issues/25
+- https://github.com/avelino/liquidluck/issues/26
+- https://github.com/avelino/liquidluck/issues/30
+- https://github.com/avelino/liquidluck/issues/32
+- https://github.com/avelino/liquidluck/issues/34

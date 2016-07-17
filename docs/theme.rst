@@ -253,4 +253,4 @@ Contributors
 
 If you have designed a theme, you can submit it to the `Theme Gallery`_
 
-.. _`Theme Gallery`: https://github.com/lepture/liquidluck/wiki/Themes
+.. _`Theme Gallery`: https://github.com/avelino/liquidluck/wiki/Themes

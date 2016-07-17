@@ -95,7 +95,7 @@ Metadata that Felix Felicis created itself:
 + filepath
 + clean_filepath
 + filename
-+ clean_title  -- https://github.com/lepture/liquidluck/issues/32
++ clean_title  -- https://github.com/avelino/liquidluck/issues/32
 + updated
 
 

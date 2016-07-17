@@ -89,7 +89,7 @@ class Post(object):
 
     @property
     def clean_title(self):
-        #: https://github.com/lepture/liquidluck/issues/32
+        #: https://github.com/avelino/liquidluck/issues/32
         title = re.sub(
             r'[<>,~!#&\{\}\(\)\[\]\.\*\^\$\?]', ' ', self.title
         )

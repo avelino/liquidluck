@@ -6,7 +6,7 @@
 #: for instance: {{site.name}}
 site = {
     "name": "Felix Felicis",  # your site name
-    "url": "http://lab.lepture.com/liquidluck/",  # your site url
+    "url": "https://github.com/avelino/liquidluck",  # your site url
     # "prefix": "blog",
 }
 
