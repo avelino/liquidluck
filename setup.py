@@ -12,7 +12,7 @@ if major >= 3:
     kwargs['use_2to3'] = True
 
 install_requires = [
-    'Jinja2', 'Pygments', 'hoedown', 'docopt', 'PyYAML', 'docutils'
+    'Jinja2', 'Pygments', 'hoedown<=0.2', 'docopt', 'PyYAML', 'docutils'
 ]
 
 author, author_email = parseaddr(liquidluck.__author__)
