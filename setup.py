@@ -12,7 +12,7 @@ if major >= 3:
     kwargs['use_2to3'] = True
 
 install_requires = [
-    'Jinja2', 'Pygments', 'hoedown', 'docopt', 'PyYAML', 'docutils'
+    'Jinja2', 'Pygments', 'hoedown<=0.2', 'docopt', 'PyYAML', 'docutils'
 ]
 
 author, author_email = parseaddr(liquidluck.__author__)
@@ -45,6 +45,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Text Processing :: Markup',
     ],
