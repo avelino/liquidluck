@@ -6,9 +6,8 @@ The name of "Felix Felicis" comes from Harry Porter;
 It is a magic potion that gives the drinker luck.
 
 If you want to contribute to this project, fork liquidluck_ and send a
-pull request for your changes. Have a glance at :ref:`development` section
-for details. If you just want to use it, you should watch the project for
-updates.
+pull request for your changes.
+If you just want to use it, you should watch the project for updates.
 
 .. _liquidluck: https://github.com/lepture/liquidluck
 
@@ -25,7 +24,6 @@ User's Guide
     config
     design
     theme
-    develop
     goodies
     changelog
 

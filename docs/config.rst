@@ -219,8 +219,7 @@ Issues that contain information on readers variables:
 Writers
 ---------
 
-There are many writers in Felix Felicis, and you can add more. If you want to add your
-own writer to Felix Felics, head over to :ref:`development`.
+There are many writers in Felix Felicis, and you can add more.
 
 
 Writers Variables
