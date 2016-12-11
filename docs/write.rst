@@ -14,10 +14,10 @@ There are three parts in each post:
 
 + title -- ``Hello World`` in the example
 + meta -- ``date``, ``category``, ``tags`` in the example
-+ content -- everything below the first ``-------``
++ content
 
 
-An example in markdown::
+An example in Markdown::
 
     # Felix Felicis                 <-------- this is title
 
@@ -26,7 +26,7 @@ An example in markdown::
 
     Here is the description.
 
-    --------------------------      <-------- this seprate meta and content
+    --------------------------      <-------- this separates meta and content
 
     Hello World! Welcome to the     <-------- this is content
     Felix Felicis World.
@@ -37,11 +37,11 @@ An example in markdown::
     }
     ```
 
-    ````css                         <-------- if code wrapped with 4 `, the code
-    a {                                       will be injected to this page
-        color: black;
-    }
-    ````
+    ````css                         <-------- if code is wrapped with 4 Grave
+    a {                                       accent characters ("````"),
+        color: black;                         it will be injected to this page;
+    }                                         ``css`` specifies the language
+    ````                                      for syntax highlighting
 
 
 An example in reStructuredText::
@@ -81,14 +81,14 @@ Metadata that Felix Felicis supports natively:
 
 + date
 + public  -- default is ``true``, if set to ``false``, this post won't be included in archive
-+ tags -- tags are seprated by comma
++ tags -- tags are seprated by commas
 + category
 + summary
-+ folder  -- relative filepath, for example ``/home/user/blog/content/a/a.md``, folder will be ``a``
-+ author  -- see :ref:`multi-authors` for detail
-+ template  -- see :ref:`template` for detail
++ folder  -- relative filepath, for example in ``/home/user/blog/content/a/a.md``, the folder will be ``a``
++ author  -- see :ref:`multi-authors` for details
++ template  -- see :ref:`template` for details
 
-which means you can access them in template with a shortcut, for example: ``{{post.tags}}``.
+You can access them in templates with shortcuts. For example: ``{{post.tags}}``.
 
 Metadata that Felix Felicis created itself:
 
@@ -102,8 +102,8 @@ Metadata that Felix Felicis created itself:
 Page
 ------
 
-Page is the same as post, except that post contains date, page doesn't,
-post follows permalink, page doesn't.
+Page is the same as post, except that post contains date, and page doesn't.
+Also, post follows permalink, while page doesn't.
 
 A example of page in Markdown::
 
@@ -136,7 +136,7 @@ and it will be rendered to::
         a_folder/
             page2.html
 
-It will ignore the ``site.prefix``, and therefore, if your settings::
+It will ignore the ``site.prefix``, and therefore, if your settings look like::
 
     site = {
         'name': '...',
@@ -144,7 +144,7 @@ It will ignore the ``site.prefix``, and therefore, if your settings::
         'prefix': 'blog',
     }
 
-and you want to you pages to be rendered to ``blog`` folder, you have to::
+and you want your pages to be rendered to ``blog`` folder, you have to::
 
     content/
         blog/               <--------- place your pages under the prefix folder
