@@ -31,6 +31,7 @@ LIVERELOAD = os.path.join(
 
 
 def config(port=None, root=None, permalink=None):
+    global HOST
     global PORT
     global ROOT
     global PERMALINK
