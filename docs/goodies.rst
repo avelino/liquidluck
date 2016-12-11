@@ -18,8 +18,10 @@ Preview your blog with::
     $ liquidluck server -p 8888
     $ liquidluck server -p 8888 -s settings.py
 
-Preview server now support livereload, when you are editing a post, it will
-auto compile and auto refresh the browser for you. **Added in version 1.12**
+The preview server now supports livereload.
+This means that when you are editing a post,
+it will auto-build the site and auto refresh the browser for you.
+This feature was **Added in version 1.12**.
 
 To enable livereload, your should install tornado::
 
@@ -58,7 +60,7 @@ First, you need to install Felix Felicis on your server::
 
     $ pip install liquidluck
 
-Second, your blog repo on your server::
+Second, clone your blog repo to your server::
 
     $ git clone git://path/to/your/repo blog
 
@@ -68,9 +70,9 @@ Then, start webhook daemon in your blog::
     $ liquidluck webhook start -p 9876
 
 
-Configure webhook on GitHub or BitBucket. We take GitHub as an example.
+Configure webhook on GitHub or BitBucket.
 
-Head over to your blog source repo admin, select **Service Hooks**
+Head over to your blog source repo admin and select **Service Hooks**:
 
 .. image:: media/github.jpg
     :alt: github service hook
@@ -84,4 +86,5 @@ If your server ip is 88.88.88.88, you can add a URL::
 
     http://88.88.88.88:9876/webhook
 
-And when you push to GitHub, your server will update the repo and generate the whole site.
+And when you push to GitHub/Bitbucket,
+your server will update the repo and generate the whole site.
