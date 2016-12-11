@@ -41,7 +41,8 @@
       "liquidluck.writers.core.CategoryWriter",
       "liquidluck.writers.core.CategoryFeedWriter",
       "liquidluck.writers.core.TagWriter",
-      "liquidluck.writers.core.TagCloudWriter"
+      "liquidluck.writers.core.TagCloudWriter",
+      "liquidluck.writers.contrib.TagJSONWriter"
     ],
     "vars": {
     }
