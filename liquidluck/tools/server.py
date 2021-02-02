@@ -82,7 +82,11 @@ def _read(abspath):
     if not os.path.exists(filepath):
         return None
 
-    f = open(filepath)
+    mime_type, encoding = mimetypes.guess_type(abspath)
+    if not mime_type:
+        mime_type = 'text/html'
+
+    f = open(filepath, "r" if mime_type == "text/html" else "rb")
     content = f.read()
     f.close()
     return content
@@ -262,6 +266,11 @@ class IndexHandler(RequestHandler):
             self.set_status(404)
             self.write(body or 'Not Found')
             return
+
+        if mime_type != "text/html":
+            self.finish(body)
+            return
+
         ua = self.request.headers.get("User-Agent", 'bot').lower()
         if 'msie' not in ua:
             body = body.replace(
