@@ -14,7 +14,7 @@ Distribute and Pip
 
 If you are on Linux or Mac OS X, you are the lucky one::
 
-    $ sudo pip -U install liquidluck
+    $ sudo pip install -U liquidluck
 
 If no pip available, try easy_install::
 
